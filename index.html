@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shampoo Recommendation Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            max-width: 350px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .chat {
+            margin: 10px 0;
+        }
+        .bot {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .buttons {
+            margin: 10px 0;
+        }
+        .buttons button {
+            margin-right: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button1 {
+            background-color: #3498db;
+            color: white;
+        }
+        .button2 {
+            background-color: #2ecc71;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+		<div id="chat">
+			<p class="chat bot"><h3>Shampoo Recommendation Chatbot</h3></p>
+		</div>
+        <div class="buttons">
+            <p><button class="button1" onclick="selectOption('en1')">English Scenario 1</button>
+            <button class="button1" onclick="selectOption('en2')">English Scenario 2</button></p>
+            <p><button class="button2" onclick="selectOption('ko1')">Korean Scenario 1</button>
+            <button class="button2" onclick="selectOption('ko2')">Korean Scenario 2</button></p>
+        </div>
+    </div>
+
+    <script>
+        function selectOption(option) {
+			window.location.href=option+'.html';
+        }
+    </script>
+</body>
+</html>

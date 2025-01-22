@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shampoo Recommendation Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chatbot-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .bot {
+            color: #333;
+        }
+        .user {
+            color: #007BFF;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container" id="chatbot">
+        <div class="message bot" id="bot-message">Hi there! May I help you? 😊<br>What’s on your mind about getting soft, shiny hair? ✨</div>
+        <div class="button-container" id="button-container">
+            <button onclick="selectOption('Natural Ingredients')">Natural Ingredients</button>
+            <button onclick="selectOption('Speedy effect')">Speedy effect</button>
+        </div>
+    </div>
+
+    <script>
+        function selectOption(option) {
+            const chatbot = document.getElementById('chatbot');
+            const buttonContainer = document.getElementById('button-container');
+            buttonContainer.style.display = 'none';
+
+            // Display user choice
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.textContent = option;
+            chatbot.appendChild(userMessage);
+
+            // Display chatbot response
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.innerHTML = "My name is Boodlebot! 😊<br>" +
+                    "Have you been feeling frustrated with dry and dull hair? 😢<br>" +
+                    "Don’t worry! With shampoos full of natural goodness and soothing scents, I’ll make every shampoo session a happy, relaxing moment for you! 🛁💕<br>" +
+                    "How about we work together to transform your hair into silky and shiny strands? 🌟";
+
+                chatbot.appendChild(botMessage);
+
+                const newButtonContainer = document.createElement('div');
+                newButtonContainer.className = 'button-container';
+                newButtonContainer.innerHTML = `<button onclick="showRecommendation()">See recommended shampoos</button>`;
+                chatbot.appendChild(newButtonContainer);
+            }, 1000);
+        }
+
+        function showRecommendation() {
+            const chatbot = document.getElementById('chatbot');
+            const buttons = chatbot.querySelector('.button-container');
+            buttons.style.display = 'none';
+
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.innerHTML = "I’ve got the perfect shampoo for you if you’re dreaming of shiny, healthy hair! 😊<br>" +
+                    "This shampoo is packed with naturally derived ingredients, so it’s super safe to use, and it works wonders on both your hair and scalp. 💆‍♀️✨<br>" +
+                    "Plus, G150’s special and gentle fragrance will turn your daily shampooing into a relaxing experience. 🌸<br>" +
+                    "Now you can easily care for your hair and enjoy a little self-care at home! 🏡💖<br>" +
+                    "What do you think? Did my recommendation make you smile? 😊";
+
+                chatbot.appendChild(botMessage);
+
+                const newButtonContainer = document.createElement('div');
+                newButtonContainer.className = 'button-container';
+                newButtonContainer.innerHTML = `<button onclick="goToPurchase()">Go to purchase</button>` +
+                    `<button onclick="seeOtherRecommendations()">Other recommendations</button>`;
+                chatbot.appendChild(newButtonContainer);
+            }, 1000);
+        }
+
+        function goToPurchase() {
+            alert('Redirecting to purchase page!');
+        }
+
+        function seeOtherRecommendations() {
+            alert('Showing other shampoo recommendations!');
+        }
+    </script>
+</body>
+</html>

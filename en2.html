@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G150 Shampoo Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .chat {
+            margin: 10px 0;
+        }
+        .bot {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .buttons {
+            margin: 10px 0;
+        }
+        .buttons button {
+            margin-right: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button1 {
+            background-color: #3498db;
+            color: white;
+        }
+        .button2 {
+            background-color: #2ecc71;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div id="chat">
+        <p class="chat bot">Hi, please let us know the purpose of the shampoo you're looking for.<br>
+        We will provide you with precise answers and recommendations tailored to your needs.</p>
+        <div class="buttons">
+            <button class="button1" onclick="showExpertBot('Scalp Troubleshooting')">Scalp Troubleshooting</button>
+            <button class="button2" onclick="showExpertBot('Healthy Hair Care')">Healthy Hair Care</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function showExpertBot(choice) {
+    const chat = document.getElementById('chat');
+    chat.innerHTML += `<p class='chat'><strong>You:</strong> ${choice}</p>`;
+    chat.innerHTML += `<p class='chat bot'>I'm ExpertBot. I've analyzed more than 20,000 data points to recommend the best clinically proven products for you.<br>
+    To get a recommendation, click the button below.</p>`;
+
+    chat.innerHTML += `<div class='buttons'>
+        <button class="button1" onclick="showG150Details()">Look into G150 shampoo</button>
+    </div>`;
+}
+
+function showG150Details() {
+    const chat = document.getElementById('chat');
+    chat.innerHTML += `<p class='chat bot'>G150 shampoo is optimized for hair health and strengthening. This product stands out with the following three key features:</p>
+    <ul>
+        <li>It contains powerful ingredients such as amino acids, panthenol, salicylic acid, and keratin, which nourish and strengthen the hair.</li>
+        <li>It uses over 95% plant-derived ingredients for natural and healthy hair care.</li>
+        <li>It is free from harmful substances like parabens, artificial colors, and artificial fragrances, minimizing stress on the scalp and hair.</li>
+    </ul>
+    <p class='chat bot'>Additionally, the effectiveness of hair improvement has been proven through clinical trials conducted by a team of PhD-level researchers. If you are struggling with lack of shine and reduced elasticity, G150 shampoo, with its patented plant-derived ingredients, will help minimize scalp irritation and provide quick results.</p>
+    <p class='chat bot'>Are you satisfied with the recommended product? If you’d like to purchase, click the 'Buy Now' button. If you’d like to see other recommendations, click the 'See Other Recommendations' button.</p>
+    <div class='buttons'>
+        <button class="button1" onclick="buyNow()">Buy Now</button>
+        <button class="button2" onclick="otherRecommendations()">See Other Recommendations</button>
+    </div>`;
+}
+
+function buyNow() {
+    alert("Redirecting to purchase page...");
+    // Implement purchase redirection here
+}
+
+function otherRecommendations() {
+    alert("Showing other recommendations...");
+    // Implement other recommendations logic here
+}
+</script>
+
+</body>
+</html>
