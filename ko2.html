@@ -1,104 +1,195 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G150 샴푸 챗봇</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        .chat-box {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .message {
-            margin: 15px 0;
-        }
-        .bot {
-            font-weight: bold;
-            color: #007BFF;
-        }
-        .user {
-            font-weight: bold;
-            color: #28a745;
-        }
-        .button {
-            display: inline-block;
-            margin: 10px 5px;
-            padding: 10px 15px;
-            color: #fff;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G150 엑스퍼트봇</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .chatbot-container {
+      width: 90%;
+      max-width: 400px;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #79b0a1;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .chat {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 10px;
+      animation: fadeIn 0.5s;
+    }
+
+    .message.bot {
+      justify-content: flex-start;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message .bubble {
+      max-width: 70%;
+      padding: 10px;
+      border-radius: 15px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.bot .bubble {
+      background-color: #e8f5e9;
+      color: #333333;
+      border-radius: 15px 15px 15px 0;
+    }
+
+    .message.user .bubble {
+      background-color: #79b0a1;
+      color: #ffffff;
+      border-radius: 15px 15px 0 15px;
+    }
+
+    .button-container {
+      padding: 10px;
+      border-top: 1px solid #f0f0f0;
+      background-color: #ffffff;
+      text-align: center;
+    }
+
+    .button-container button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #79b0a1;
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .button-container button:hover {
+      background-color: #5d8b79;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-box">
-        <div class="message bot">안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요.<br>용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.</div>
-        <button class="button" onclick="showScalpOptions()">두피문제해결</button>
-        <button class="button" onclick="showHealthyHairOptions()">건강한 모발관리</button>
-
-        <div id="response" class="message bot" style="display:none;"></div>
+  <div class="chatbot-container">
+    <div class="header">G150 부들봇</div>
+    <div class="chat" id="chat">
+      <!-- 대화 메시지가 여기 추가됩니다 -->
     </div>
+    <div class="button-container" id="buttons">
+      <!-- 버튼이 여기 추가됩니다 -->
+    </div>
+  </div>
 
-    <script>
-        function showScalpOptions() {
-            document.getElementById('response').style.display = 'block';
-            document.getElementById('response').innerHTML = `
-                <div>저는 엑스퍼트봇입니다.<br>
-                2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다.</div>
-                <button class="button" onclick="showG150Details()">G150 샴푸 추천보기</button>
-            `;
-        }
+  <script>
+    const chat = document.getElementById("chat");
+    const buttons = document.getElementById("buttons");
 
-        function showHealthyHairOptions() {
-            document.getElementById('response').style.display = 'block';
-            document.getElementById('response').innerHTML = `
-                <div>저는 엑스퍼트봇입니다.<br>
-                2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다.</div>
-                <button class="button" onclick="showG150Details()">G150 샴푸 추천보기</button>
-            `;
-        }
+    function addMessage(text, sender = "bot") {
+      const message = document.createElement("div");
+      message.classList.add("message", sender);
+      const bubble = document.createElement("div");
+      bubble.classList.add("bubble");
+      bubble.innerText = text;
+      message.appendChild(bubble);
+      chat.appendChild(message);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-        function showG150Details() {
-            document.getElementById('response').innerHTML = `
-                <div>G150 샴푸는 모발 건강과 강화에 최적화된 제품입니다. 이 제품은 다음과 같은 세 가지 핵심 특성으로 차별화됩니다:
-                    <ol>
-                        <li>풍부한 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분을 함유하여 모발을 강화하고 영양을 공급합니다.</li>
-                        <li>95% 이상의 식물유래 성분을 사용하여 자연 친화적이고 건강한 모발 관리를 제공합니다.</li>
-                        <li>파라벤, 인공색소, 인공향료 등의 유해 성분을 배제하여 두피와 모발에 부담을 최소화합니다.</li>
-                    </ol>
-                    또한, 박사급 연구진의 임상 시험을 통해 모발 개선 효과가 입증되었습니다.<br>
-                    윤기 부족과 탄력 저하가 고민이라면, 특허 받은 식물유래 성분을 기반으로 한 G150 샴푸를 사용하시면 두피 자극을 최소화하면서 빠른 효과를 경험하실 수 있습니다.
-                </div>
-                <button class="button" onclick="purchase()">구매하러가기</button>
-                <button class="button" onclick="seeOtherRecommendations()">다른 추천보기</button>
-            `;
-        }
+    function setButtons(buttonList) {
+      buttons.innerHTML = "";
+      buttonList.forEach((btn) => {
+        const button = document.createElement("button");
+        button.innerText = btn.text;
+        button.onclick = btn.onClick;
+        buttons.appendChild(button);
+      });
+    }
 
-        function purchase() {
-            alert('구매 페이지로 이동합니다!');
-            // 구매 페이지 링크 추가
-        }
+    function startChat() {
+      addMessage("안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요.");
+      addMessage("용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.");
+      setButtons([
+        { text: "두피문제해결", onClick: showBotIntroduction },
+        { text: "건강한 모발관리", onClick: showBotIntroduction },
+      ]);
+    }
 
-        function seeOtherRecommendations() {
-            alert('다른 추천 제품을 보여드립니다!');
-            // 다른 추천 페이지 링크 추가
-        }
-    </script>
+    function showBotIntroduction() {
+      buttons.innerHTML = "";
+      setTimeout(() => {
+        addMessage("저는 엑스퍼트봇입니다.");
+        addMessage("2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다.");
+        setTimeout(() => {
+          setButtons([{ text: "G150 샴푸 추천보기", onClick: showRecommendation }]);
+        }, 1500);
+      }, 1000);
+    }
+
+    function showRecommendation() {
+      buttons.innerHTML = "";
+      setTimeout(() => {
+        addMessage("G150 샴푸는 모발 건강과 강화에 최적화된 제품입니다.");
+        addMessage(
+          "1. 풍부한 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분을 함유하여 모발을 강화하고 영양을 공급합니다."
+        );
+        addMessage(
+          "2. 95% 이상의 식물유래 성분을 사용하여 자연 친화적이고 건강한 모발 관리를 제공합니다."
+        );
+        addMessage(
+          "3. 파라벤, 인공색소, 인공향료 등의 유해 성분을 배제하여 두피와 모발에 부담을 최소화합니다."
+        );
+        setTimeout(() => {
+          setButtons([
+            { text: "구매하러가기", onClick: () => alert("구매 페이지로 이동합니다.") },
+            { text: "다른 추천보기", onClick: () => alert("다른 추천 보기 페이지로 이동합니다.") },
+          ]);
+        }, 1500);
+      }, 1000);
+    }
+
+    startChat();
+  </script>
 </body>
 </html>
