@@ -110,7 +110,7 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-header">엑스퍼트봇</div>
+        <div class="chat-header">G150 엑스퍼트봇</div>
         <div class="chat-body" id="chatBody">
             <div class="chat-message chatbot">
                 <div class="chat-bubble">안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요. 용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.</div>
@@ -157,8 +157,6 @@
             const shampooMessage = document.createElement('div');
             shampooMessage.className = 'chat-message chatbot';
             shampooMessage.innerHTML = `<div class='chat-bubble'>
-                두피와 모발의 건강을 위해 추천드립니다. 
-                shampooImage.src = "images/shampoo.jpg";C:\Users\DSCOM\Desktop\2월(AR)\자극물\6_20200815_123858.mp4_200815\20200815_114739.jpg
                 G150 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br>
                 1. 풍부한 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분을 함유하여 모발을 강화하고 영양을 공급합니다.<br>
                 2. 95% 이상의 식물유래 성분을 사용하여 자연 친화적이고 건강한 모발 관리를 제공합니다.<br>
@@ -167,7 +165,7 @@
 
             const imageContainer = document.createElement('div');
             imageContainer.className = 'shampoo-image';
-            imageContainer.innerHTML = `<img src='https://via.placeholder.com/300x200.png?text=G150+샴푸+이미지' alt='G150 샴푸'>`;
+            imageContainer.innerHTML = `<shampooImage.src = "images/shampoo.jpg"; // C:\Users\DSCOM\Desktop\2월(AR)\자극물\6_20200815_123858.mp4_200815\20200815_114739.jpg' alt='G150 Root Boosting 샴푸'>`;
 
             const buttonFooter = document.createElement('div');
             buttonFooter.className = 'chat-footer';
