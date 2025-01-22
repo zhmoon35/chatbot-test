@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>엑스퍼트봇</title>
+    <title>ExpertBot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,170 +15,138 @@
             align-items: center;
             height: 100vh;
         }
-
-        .chat-container {
+        #chat-container {
             width: 400px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #ffffff;
             border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            background-color: #d9d9d9;
-            color: #333;
-            padding: 15px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .chat-body {
-            flex: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             overflow-y: auto;
-            background-color: #f9f9f9;
+            max-height: 90%;
         }
-
-        .chat-message {
+        .bot-message, .user-message {
             margin: 10px 0;
             display: flex;
-            align-items: flex-start;
         }
-
-        .chatbot {
+        .bot-message {
             justify-content: flex-start;
         }
-
-        .user {
+        .user-message {
             justify-content: flex-end;
-            text-align: right;
         }
-
-        .chat-bubble {
-            max-width: 70%;
+        .message {
             padding: 10px 15px;
-            border-radius: 15px;
-            line-height: 1.4;
-        }
-
-        .chatbot .chat-bubble {
-            background-color: #d9d9d9;
-            color: #333;
-            border-bottom-left-radius: 0;
-        }
-
-        .user .chat-bubble {
-            background-color: #b3d9ff;
-            color: #333;
-            border-bottom-right-radius: 0;
-        }
-
-        .chat-footer {
-            background-color: #fff;
-            padding: 15px;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .button {
-            padding: 10px 20px;
-            background-color: #d9d9d9;
-            color: #333;
-            border: none;
             border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
+            max-width: 70%;
         }
-
-        .button:hover {
-            background-color: #b3b3b3;
+        .bot-message .message {
+            background-color: #dcdcdc;
+            color: #000;
         }
-
-        .shampoo-image {
-            margin-top: 15px;
+        .user-message .message {
+            background-color: #87CEFA;
+            color: #fff;
+        }
+        .button-container {
             text-align: center;
+            margin-top: 10px;
         }
-
-        .shampoo-image img {
-            max-width: 100%;
-            border-radius: 10px;
+        button {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">G150 엑스퍼트봇</div>
-        <div class="chat-body" id="chatBody">
-            <div class="chat-message chatbot">
-                <div class="chat-bubble">안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요. 용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.</div>
-            </div>
-            <div class="chat-footer">
-                <button class="button" onclick="addMessage('두피문제해결')">두피문제해결</button>
-                <button class="button" onclick="addMessage('건강한 모발관리')">건강한 모발관리</button>
-            </div>
-        </div>
+    <div id="chat-container">
+        <!-- Chat will be dynamically added here -->
     </div>
 
     <script>
-        function addMessage(choice) {
-            const chatBody = document.getElementById('chatBody');
+        const chatContainer = document.getElementById('chat-container');
 
-            // Add user message
-            const userMessage = document.createElement('div');
-            userMessage.className = 'chat-message user';
-            userMessage.innerHTML = `<div class='chat-bubble'>${choice}</div>`;
-            chatBody.appendChild(userMessage);
+        const conversation = [
+            {
+                type: 'bot',
+                message: '안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요. 용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.',
+                buttons: [
+                    { text: '두피 문제 해결', nextIndex: 1 },
+                    { text: '건강한 모발 관리', nextIndex: 2 }
+                ]
+            },
+            {
+                type: 'bot',
+                message: '저는 엑스퍼트봇입니다. 2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다. 추천을 원하시면 아래 버튼을 눌러주세요.',
+                buttons: [
+                    { text: 'G150 샴푸 추천 보기', nextIndex: 3 }
+                ]
+            },
+            {
+                type: 'bot',
+                shampooImage.src = "images/shampoo.jpg"; C:\Users\DSCOM\Desktop\2월(AR)\자극물\6_20200815_123858.mp4_200815\20200815_114739.jpg
+                message: 'G150 Root-Boosting 샴푸는 모발 건강과 강화에 최적화된 제품입니다.\n1. 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분 함유.\n2. 95% 이상의 식물유래 성분 사용.\n3. 파라벤, 인공색소, 인공향료 등의 유해 성분 배제.\n추천드린 제품이 마음에 드셨나요?',
+                buttons: [
+                    { text: '구매하러 가기', nextIndex: null },
+                    { text: '다른 추천 보기', nextIndex: null }
+                ]
+            }
+        ];
 
-            // Add chatbot response
-            setTimeout(() => {
-                const botMessage = document.createElement('div');
-                botMessage.className = 'chat-message chatbot';
+        let currentIndex = 0;
 
-                if (choice === '두피문제해결' || choice === '건강한 모발관리') {
-                    botMessage.innerHTML = `<div class='chat-bubble'>저는 엑스퍼트봇입니다. 2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다. 추천을 원하시면 아래 버튼을 눌러주세요.</div>`;
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add(type === 'bot' ? 'bot-message' : 'user-message');
 
-                    const buttonFooter = document.createElement('div');
-                    buttonFooter.className = 'chat-footer';
-                    buttonFooter.innerHTML = `<button class="button" onclick="showShampoo()">G150샴푸추천보기</button>`;
-                    chatBody.appendChild(buttonFooter);
-                }
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message');
+            messageBubble.textContent = text;
 
-                chatBody.appendChild(botMessage);
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }, 1000);
+            messageDiv.appendChild(messageBubble);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function showShampoo() {
-            const chatBody = document.getElementById('chatBody');
+        function addButtons(buttons) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
 
-            const shampooMessage = document.createElement('div');
-            shampooMessage.className = 'chat-message chatbot';
-            shampooMessage.innerHTML = `<div class='chat-bubble'>
-                G150 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br>
-                1. 풍부한 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분을 함유하여 모발을 강화하고 영양을 공급합니다.<br>
-                2. 95% 이상의 식물유래 성분을 사용하여 자연 친화적이고 건강한 모발 관리를 제공합니다.<br>
-                3. 파라벤, 인공색소, 인공향료 등의 유해 성분을 배제하여 두피와 모발에 부담을 최소화합니다.<br>
-            </div>`;
+            buttons.forEach(button => {
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = button.text;
+                buttonElement.onclick = () => {
+                    addMessage('user', button.text);
+                    if (button.nextIndex !== null) {
+                        loadConversation(button.nextIndex);
+                    }
+                };
+                buttonContainer.appendChild(buttonElement);
+            });
 
-            const imageContainer = document.createElement('div');
-            imageContainer.className = 'shampoo-image';
-            imageContainer.innerHTML = `<shampooImage.src = "images/shampoo.jpg"; // C:\Users\DSCOM\Desktop\2월(AR)\자극물\6_20200815_123858.mp4_200815\20200815_114739.jpg' alt='G150 Root Boosting 샴푸'>`;
-
-            const buttonFooter = document.createElement('div');
-            buttonFooter.className = 'chat-footer';
-            buttonFooter.innerHTML = `
-                <button class="button">구매하러가기</button>
-                <button class="button">다른추천보기</button>
-            `;
-
-            chatBody.appendChild(shampooMessage);
-            chatBody.appendChild(imageContainer);
-            chatBody.appendChild(buttonFooter);
-            chatBody.scrollTop = chatBody.scrollHeight;
+            chatContainer.appendChild(buttonContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
+
+        function loadConversation(index) {
+            const step = conversation[index];
+            currentIndex = index;
+            addMessage('bot', step.message);
+            if (step.buttons) {
+                addButtons(step.buttons);
+            }
+        }
+
+        // Start the conversation
+        loadConversation(currentIndex);
     </script>
 </body>
 </html>
+
