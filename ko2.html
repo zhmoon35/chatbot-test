@@ -1,195 +1,186 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G150 엑스퍼트봇</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f8fb;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엑스퍼트봇</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    .chatbot-container {
-      width: 90%;
-      max-width: 400px;
-      background-color: #ffffff;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+        .chat-container {
+            width: 400px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .header {
-      background-color: #79b0a1;
-      color: #ffffff;
-      text-align: center;
-      padding: 10px;
-      font-size: 18px;
-      font-weight: bold;
-    }
+        .chat-header {
+            background-color: #d9d9d9;
+            color: #333;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-    .chat {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-    }
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
 
-    .message {
-      display: flex;
-      margin-bottom: 10px;
-      animation: fadeIn 0.5s;
-    }
+        .chat-message {
+            margin: 10px 0;
+            display: flex;
+            align-items: flex-start;
+        }
 
-    .message.bot {
-      justify-content: flex-start;
-    }
+        .chatbot {
+            justify-content: flex-start;
+        }
 
-    .message.user {
-      justify-content: flex-end;
-    }
+        .user {
+            justify-content: flex-end;
+            text-align: right;
+        }
 
-    .message .bubble {
-      max-width: 70%;
-      padding: 10px;
-      border-radius: 15px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
+        .chat-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+        }
 
-    .message.bot .bubble {
-      background-color: #e8f5e9;
-      color: #333333;
-      border-radius: 15px 15px 15px 0;
-    }
+        .chatbot .chat-bubble {
+            background-color: #d9d9d9;
+            color: #333;
+            border-bottom-left-radius: 0;
+        }
 
-    .message.user .bubble {
-      background-color: #79b0a1;
-      color: #ffffff;
-      border-radius: 15px 15px 0 15px;
-    }
+        .user .chat-bubble {
+            background-color: #b3d9ff;
+            color: #333;
+            border-bottom-right-radius: 0;
+        }
 
-    .button-container {
-      padding: 10px;
-      border-top: 1px solid #f0f0f0;
-      background-color: #ffffff;
-      text-align: center;
-    }
+        .chat-footer {
+            background-color: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+        }
 
-    .button-container button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #79b0a1;
-      color: #ffffff;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+        .button {
+            padding: 10px 20px;
+            background-color: #d9d9d9;
+            color: #333;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-    .button-container button:hover {
-      background-color: #5d8b79;
-    }
+        .button:hover {
+            background-color: #b3b3b3;
+        }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+        .shampoo-image {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .shampoo-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="chatbot-container">
-    <div class="header">G150 엑스퍼트봇</div>
-    <div class="chat" id="chat">
-      <!-- 대화 메시지가 여기 추가됩니다 -->
+    <div class="chat-container">
+        <div class="chat-header">엑스퍼트봇</div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message chatbot">
+                <div class="chat-bubble">안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요. 용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.</div>
+            </div>
+            <div class="chat-footer">
+                <button class="button" onclick="addMessage('두피문제해결')">두피문제해결</button>
+                <button class="button" onclick="addMessage('건강한 모발관리')">건강한 모발관리</button>
+            </div>
+        </div>
     </div>
-    <div class="button-container" id="buttons">
-      <!-- 버튼이 여기 추가됩니다 -->
-    </div>
-  </div>
 
-  <script>
-    const chat = document.getElementById("chat");
-    const buttons = document.getElementById("buttons");
+    <script>
+        function addMessage(choice) {
+            const chatBody = document.getElementById('chatBody');
 
-    function addMessage(text, sender = "bot") {
-      const message = document.createElement("div");
-      message.classList.add("message", sender);
-      const bubble = document.createElement("div");
-      bubble.classList.add("bubble");
-      bubble.innerText = text;
-      message.appendChild(bubble);
-      chat.appendChild(message);
-      chat.scrollTop = chat.scrollHeight;
-    }
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.innerHTML = `<div class='chat-bubble'>${choice}</div>`;
+            chatBody.appendChild(userMessage);
 
-    function setButtons(buttonList) {
-      buttons.innerHTML = "";
-      buttonList.forEach((btn) => {
-        const button = document.createElement("button");
-        button.innerText = btn.text;
-        button.onclick = btn.onClick;
-        buttons.appendChild(button);
-      });
-    }
+            // Add chatbot response
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chat-message chatbot';
 
-    function startChat() {
-      addMessage("안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요.");
-      addMessage("용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.");
-      setButtons([
-        { text: "두피문제해결", onClick: showBotIntroduction },
-        { text: "건강한 모발관리", onClick: showBotIntroduction },
-      ]);
-    }
+                if (choice === '두피문제해결' || choice === '건강한 모발관리') {
+                    botMessage.innerHTML = `<div class='chat-bubble'>저는 엑스퍼트봇입니다. 2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다. 추천을 원하시면 아래 버튼을 눌러주세요.</div>`;
 
-    function showBotIntroduction() {
-      buttons.innerHTML = "";
-      setTimeout(() => {
-        addMessage("저는 엑스퍼트봇입니다.");
-        addMessage("2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다.");
-        setTimeout(() => {
-          setButtons([{ text: "G150 샴푸 추천보기", onClick: showRecommendation }]);
-        }, 1500);
-      }, 1000);
-    }
+                    const buttonFooter = document.createElement('div');
+                    buttonFooter.className = 'chat-footer';
+                    buttonFooter.innerHTML = `<button class="button" onclick="showShampoo()">G150샴푸추천보기</button>`;
+                    chatBody.appendChild(buttonFooter);
+                }
 
-    function showRecommendation() {
-      buttons.innerHTML = "";
-      setTimeout(() => {
-        addMessage("G150 샴푸는 모발 건강과 강화에 최적화된 제품입니다.");
-        addMessage(
-          "1. 풍부한 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분을 함유하여 모발을 강화하고 영양을 공급합니다."
-        );
-        addMessage(
-          "2. 95% 이상의 식물유래 성분을 사용하여 자연 친화적이고 건강한 모발 관리를 제공합니다."
-        );
-        addMessage(
-          "3. 파라벤, 인공색소, 인공향료 등의 유해 성분을 배제하여 두피와 모발에 부담을 최소화합니다."
-        );
-        setTimeout(() => {
-          setButtons([
-            { text: "구매하러가기", onClick: () => alert("구매 페이지로 이동합니다.") },
-            { text: "다른 추천보기", onClick: () => alert("다른 추천 보기 페이지로 이동합니다.") },
-          ]);
-        }, 1500);
-      }, 1000);
-    }
+                chatBody.appendChild(botMessage);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1000);
+        }
 
-    startChat();
-  </script>
+        function showShampoo() {
+            const chatBody = document.getElementById('chatBody');
+
+            const shampooMessage = document.createElement('div');
+            shampooMessage.className = 'chat-message chatbot';
+            shampooMessage.innerHTML = `<div class='chat-bubble'>
+                두피와 모발의 건강을 위해 추천드립니다. 
+                shampooImage.src = "images/shampoo.jpg";C:\Users\DSCOM\Desktop\2월(AR)\자극물\6_20200815_123858.mp4_200815\20200815_114739.jpg
+                G150 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br>
+                1. 풍부한 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분을 함유하여 모발을 강화하고 영양을 공급합니다.<br>
+                2. 95% 이상의 식물유래 성분을 사용하여 자연 친화적이고 건강한 모발 관리를 제공합니다.<br>
+                3. 파라벤, 인공색소, 인공향료 등의 유해 성분을 배제하여 두피와 모발에 부담을 최소화합니다.<br>
+            </div>`;
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'shampoo-image';
+            imageContainer.innerHTML = `<img src='https://via.placeholder.com/300x200.png?text=G150+샴푸+이미지' alt='G150 샴푸'>`;
+
+            const buttonFooter = document.createElement('div');
+            buttonFooter.className = 'chat-footer';
+            buttonFooter.innerHTML = `
+                <button class="button">구매하러가기</button>
+                <button class="button">다른추천보기</button>
+            `;
+
+            chatBody.appendChild(shampooMessage);
+            chatBody.appendChild(imageContainer);
+            chatBody.appendChild(buttonFooter);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
 </body>
 </html>
