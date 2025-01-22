@@ -1,96 +1,195 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>부들봇 - 샴푸 추천 챗봇</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-        }
-        .chat-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        .message {
-            margin: 10px 0;
-        }
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G150 부들봇</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .chatbot-container {
+      width: 90%;
+      max-width: 400px;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #f59bb0;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .chat {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 10px;
+      animation: fadeIn 0.5s;
+    }
+
+    .message.bot {
+      justify-content: flex-start;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message .bubble {
+      max-width: 70%;
+      padding: 10px;
+      border-radius: 15px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.bot .bubble {
+      background-color: #ffe5e8;
+      color: #333333;
+      border-radius: 15px 15px 15px 0;
+    }
+
+    .message.user .bubble {
+      background-color: #f59bb0;
+      color: #ffffff;
+      border-radius: 15px 15px 0 15px;
+    }
+
+    .button-container {
+      padding: 10px;
+      border-top: 1px solid #f0f0f0;
+      background-color: #ffffff;
+      text-align: center;
+    }
+
+    .button-container button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #f59bb0;
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .button-container button:hover {
+      background-color: #d97a93;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-container" id="chat-container">
-        <div class="message" id="message">안녕하세요! 제가 도와드릴까요? 😊<br>부드럽고 윤기 나는 머릿결을 위해 어떤 게 궁금하신가요?</div>
-        <div class="buttons" id="buttons">
-            <button onclick="selectOption(1)">자연성분</button>
-            <button onclick="selectOption(2)">빠른효과</button>
-        </div>
+  <div class="chatbot-container">
+    <div class="header">G150 부들봇</div>
+    <div class="chat" id="chat">
+      <!-- 대화 메시지가 여기 추가됩니다 -->
     </div>
+    <div class="button-container" id="buttons">
+      <!-- 버튼이 여기 추가됩니다 -->
+    </div>
+  </div>
 
-    <script>
-        function selectOption(option) {
-            const chatContainer = document.getElementById('chat-container');
-            if (option === 1 || option === 2) {
-                chatContainer.innerHTML = `
-                    <div class="message">제 이름은 부들봇이에요! 😊<br>
-                    머릿결이 푸석푸석하고 건조해서 속상하셨죠? 😢<br>
-                    걱정 마세요! 자연 성분 가득 담긴 샴푸와 기분 좋은 향기로 매일 샴푸할 때마다 행복한 시간을 만들어 드릴게요! 🛁💕<br>
-                    저와 함께 부들부들 윤기 나는 머릿결로 변신해볼까요?</div>
-                    <div class="buttons">
-                        <button onclick="showRecommendation()">추천샴푸보기</button>
-                    </div>
-                `;
-            }
-        }
+  <script>
+    const chat = document.getElementById("chat");
+    const buttons = document.getElementById("buttons");
 
-        function showRecommendation() {
-            const chatContainer = document.getElementById('chat-container');
-            chatContainer.innerHTML = `
-                <div class="message">고객님처럼 윤기 나는 건강한 머릿결을 원하시는 분들을 위해 딱 준비했어요! 😊<br>
-                이 샴푸는 자연 유래 성분이 듬뿍 들어 있어서 안심하고 사용할 수 있고요, 머릿결과 두피를 건강하게 만들어줘요. 💆‍♀️✨<br>
-                특히 G150만의 은은하고 부드러운 향기로 샴푸하는 순간이 힐링 타임이 될 거예요! 🌸<br>
-                집에서 간편하게 머릿결도 관리하고 힐링도 해보세요! 🏡💖<br>
-                어때요? 제 추천이 마음에 쏙 드셨나요? 😊</div>
-                <div class="buttons">
-                    <button onclick="goToPurchase()">구매하러가기</button>
-                    <button onclick="seeOtherRecommendations()">다른 추천보기</button>
-                </div>
-            `;
-        }
+    function addMessage(text, sender = "bot") {
+      const message = document.createElement("div");
+      message.classList.add("message", sender);
+      const bubble = document.createElement("div");
+      bubble.classList.add("bubble");
+      bubble.innerText = text;
+      message.appendChild(bubble);
+      chat.appendChild(message);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-        function goToPurchase() {
-            alert('구매 페이지로 이동합니다!');
-        }
+    function setButtons(buttonList) {
+      buttons.innerHTML = "";
+      buttonList.forEach((btn) => {
+        const button = document.createElement("button");
+        button.innerText = btn.text;
+        button.onclick = btn.onClick;
+        buttons.appendChild(button);
+      });
+    }
 
-        function seeOtherRecommendations() {
-            alert('다른 추천 제품을 보여드립니다!');
-        }
-    </script>
+    function startChat() {
+      addMessage("제가 도와드릴까요? 😊");
+      addMessage("부드럽고 윤기 나는 머릿결을 위해 어떤 게 궁금하신가요?");
+      setButtons([
+        { text: "자연성분", onClick: showBotIntroduction },
+        { text: "빠른효과", onClick: showBotIntroduction },
+      ]);
+    }
+
+    function showBotIntroduction() {
+      buttons.innerHTML = "";
+      setTimeout(() => {
+        addMessage("제 이름은 부들봇이에요! 😊");
+        addMessage("머릿결이 푸석푸석하고 건조해서 속상하셨죠? 😢");
+        addMessage(
+          "걱정 마세요! 자연 성분 가득 담긴 샴푸와 기분 좋은 향기로 매일 샴푸할 때마다 행복한 시간을 만들어 드릴게요! 🛁💕"
+        );
+        setTimeout(() => {
+          setButtons([{ text: "추천샴푸보기", onClick: showRecommendation }]);
+        }, 1500);
+      }, 1000);
+    }
+
+    function showRecommendation() {
+      buttons.innerHTML = "";
+      setTimeout(() => {
+        addMessage("고객님처럼 윤기 나는 건강한 머릿결을 원하시는 분들을 위해 딱 준비했어요! 😊");
+        addMessage(
+          "이 샴푸는 자연 유래 성분이 듬뿍 들어 있어서 안심하고 사용할 수 있고요, 머릿결과 두피를 건강하게 만들어줘요. 💆‍♀️✨"
+        );
+        addMessage(
+          "특히 G150만의 은은하고 부드러운 향기로 샴푸하는 순간이 힐링 타임이 될 거예요! 🌸"
+        );
+        setTimeout(() => {
+          setButtons([
+            { text: "구매하러가기", onClick: () => alert("구매 페이지로 이동합니다.") },
+            { text: "다른 추천보기", onClick: () => alert("다른 추천 보기 페이지로 이동합니다.") },
+          ]);
+        }, 1500);
+      }, 1000);
+    }
+
+    startChat();
+  </script>
 </body>
 </html>
