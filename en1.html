@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shampoo Recommendation Chatbot</title>
+    <title>G150 Shampoo Recommendation - Silkybot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f9f9f9;
+            background-color: #fff8f0; /* Light peach background */
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,111 +15,169 @@
             align-items: center;
             height: 100vh;
         }
-        .chatbot-container {
-            background-color: #fff;
+        #chat-container {
+            width: 400px;
+            background-color: #fff3e6; /* Soft peach tone */
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: 90%;
-            max-width: 500px;
+            overflow-y: auto;
+            max-height: 90%;
+        }
+        .bot-message, .user-message {
+            margin: 10px 0;
+            display: flex;
+        }
+        .bot-message {
+            justify-content: flex-start;
+        }
+        .user-message {
+            justify-content: flex-end;
         }
         .message {
-            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
         }
-        .bot {
-            color: #333;
+        .bot-message .message {
+            background-color: #ffd8b1; /* Peach bubble */
+            color: #5a372a; /* Warm brown text */
         }
-        .user {
-            color: #007BFF;
+        .user-message .message {
+            background-color: #ffcba4; /* Bright peach bubble */
+            color: #5a372a; /* Warm brown text */
         }
         .button-container {
-            display: flex;
-            flex-direction: column;
+            text-align: center;
+            margin-top: 10px;
         }
         button {
-            background-color: #007BFF;
-            color: white;
+            background-color: #ffad8f; /* Warm peach button */
+            color: #5a372a;
             border: none;
             border-radius: 5px;
-            padding: 10px;
-            margin: 5px 0;
+            padding: 10px 20px;
+            margin: 5px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #e69c7a;
+        }
+        .image-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="chatbot-container" id="chatbot">
-        <div class="message bot" id="bot-message">Hi there! May I help you? 😊<br>What’s on your mind about getting soft, shiny hair? ✨</div>
-        <div class="button-container" id="button-container">
-            <button onclick="selectOption('Natural Ingredients')">Natural Ingredients</button>
-            <button onclick="selectOption('Speedy effect')">Speedy effect</button>
-        </div>
+    <div id="chat-container">
+        <!-- Chat will be dynamically added here -->
     </div>
 
     <script>
-        function selectOption(option) {
-            const chatbot = document.getElementById('chatbot');
-            const buttonContainer = document.getElementById('button-container');
-            buttonContainer.style.display = 'none';
+        const chatContainer = document.getElementById('chat-container');
 
-            // Display user choice
-            const userMessage = document.createElement('div');
-            userMessage.className = 'message user';
-            userMessage.textContent = option;
-            chatbot.appendChild(userMessage);
+        const conversation = [
+            {
+                type: 'bot',
+                message: 'Hello! May I assist you today? 😊\nAre you looking for tips for silky and shiny hair?',
+                buttons: [
+                    { text: 'Natural Ingredients', nextIndex: 1 },
+                    { text: 'Pleasant Fragrance', nextIndex: 1 }
+                ]
+            },
+            {
+                type: 'bot',
+                message: "My name is Silkybot! 😊\nIs your hair feeling dry and dull? 😢\nDon't worry! With shampoos packed with natural ingredients and delightful fragrances, I can make your hair care routine enjoyable and effective! 🛁💕\nShall we work together to transform your hair into silky and shiny locks?",
+                buttons: [
+                    { text: 'See Recommended Shampoo', nextIndex: 2 }
+                ]
+            },
+            {
+                type: 'bot',
+                message: "I have just the right shampoo for someone like you who desires silky, healthy hair! 😊\nGreenist Shampoo is enriched with natural ingredients, making it safe and effective for both your scalp and hair. 💆‍♀️✨\nPlus, with G150's unique gentle and soothing fragrance, every shampoo session becomes a relaxing experience! 🌸",
+                image: 'https://github.com/zhmoon35/chatbot-test/blob/main/G150-Greenist.jpg?raw=true',
+                buttons: [
+                    { text: 'Buy Now', nextIndex: 3 },
+                    { text: 'See Other Recommendations', nextIndex: null }
+                ]
+            },
+            {
+                type: 'bot',
+                message: "Take care of your hair and relax right at home! 🏡💖\nWhat do you think? Did my recommendation hit the spot? 😊",
+                image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
+                buttons: [
+                    { text: 'Purchase Complete', nextIndex: null }
+                ]
+            }
+        ];
 
-            // Display chatbot response
-            setTimeout(() => {
-                const botMessage = document.createElement('div');
-                botMessage.className = 'message bot';
-                botMessage.innerHTML = "My name is Boodlebot! 😊<br>" +
-                    "Have you been feeling frustrated with dry and dull hair? 😢<br>" +
-                    "Don’t worry! With shampoos full of natural goodness and soothing scents, I’ll make every shampoo session a happy, relaxing moment for you! 🛁💕<br>" +
-                    "How about we work together to transform your hair into silky and shiny strands? 🌟";
+        let currentIndex = 0;
 
-                chatbot.appendChild(botMessage);
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add(type === 'bot' ? 'bot-message' : 'user-message');
 
-                const newButtonContainer = document.createElement('div');
-                newButtonContainer.className = 'button-container';
-                newButtonContainer.innerHTML = `<button onclick="showRecommendation()">See recommended shampoos</button>`;
-                chatbot.appendChild(newButtonContainer);
-            }, 1000);
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message');
+            messageBubble.textContent = text;
+
+            messageDiv.appendChild(messageBubble);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function showRecommendation() {
-            const chatbot = document.getElementById('chatbot');
-            const buttons = chatbot.querySelector('.button-container');
-            buttons.style.display = 'none';
+        function addImage(imageUrl) {
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('image-container');
 
-            setTimeout(() => {
-                const botMessage = document.createElement('div');
-                botMessage.className = 'message bot';
-                botMessage.innerHTML = "I’ve got the perfect shampoo for you if you’re dreaming of shiny, healthy hair! 😊<br>" +
-                    "This shampoo is packed with naturally derived ingredients, so it’s super safe to use, and it works wonders on both your hair and scalp. 💆‍♀️✨<br>" +
-                    "Plus, G150’s special and gentle fragrance will turn your daily shampooing into a relaxing experience. 🌸<br>" +
-                    "Now you can easily care for your hair and enjoy a little self-care at home! 🏡💖<br>" +
-                    "What do you think? Did my recommendation make you smile? 😊";
+            const imageElement = document.createElement('img');
+            imageElement.src = imageUrl;
+            imageElement.alt = 'Product Image';
 
-                chatbot.appendChild(botMessage);
-
-                const newButtonContainer = document.createElement('div');
-                newButtonContainer.className = 'button-container';
-                newButtonContainer.innerHTML = `<button onclick="goToPurchase()">Go to purchase</button>` +
-                    `<button onclick="seeOtherRecommendations()">Other recommendations</button>`;
-                chatbot.appendChild(newButtonContainer);
-            }, 1000);
+            imageContainer.appendChild(imageElement);
+            chatContainer.appendChild(imageContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function goToPurchase() {
-            alert('Redirecting to purchase page!');
+        function addButtons(buttons) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            buttons.forEach(button => {
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = button.text;
+                buttonElement.onclick = () => {
+                    addMessage('user', button.text);
+                    if (button.nextIndex !== null) {
+                        loadConversation(button.nextIndex);
+                    }
+                };
+                buttonContainer.appendChild(buttonElement);
+            });
+
+            chatContainer.appendChild(buttonContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function seeOtherRecommendations() {
-            alert('Showing other shampoo recommendations!');
+        function loadConversation(index) {
+            const step = conversation[index];
+            currentIndex = index;
+            addMessage('bot', step.message);
+            if (step.image) {
+                addImage(step.image);
+            }
+            if (step.buttons) {
+                addButtons(step.buttons);
+            }
         }
+
+        // Start the conversation
+        loadConversation(currentIndex);
     </script>
 </body>
 </html>
