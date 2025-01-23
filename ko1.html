@@ -1,196 +1,185 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G150 부들봇</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f8fb;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .chatbot-container {
-      width: 90%;
-      max-width: 400px;
-      background-color: #ffffff;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      background-color: #f59bb0;
-      color: #ffffff;
-      text-align: center;
-      padding: 10px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .chat {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    .message {
-      display: flex;
-      margin-bottom: 10px;
-      animation: fadeIn 0.5s;
-    }
-
-    .message.bot {
-      justify-content: flex-start;
-    }
-
-    .message.user {
-      justify-content: flex-end;
-    }
-
-    .message .bubble {
-      max-width: 70%;
-      padding: 10px;
-      border-radius: 15px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .message.bot .bubble {
-      background-color: #ffe5e8;
-      color: #333333;
-      border-radius: 15px 15px 15px 0;
-    }
-
-    .message.user .bubble {
-      background-color: #f59bb0;
-      color: #ffffff;
-      border-radius: 15px 15px 0 15px;
-    }
-
-    .button-container {
-      padding: 10px;
-      border-top: 1px solid #f0f0f0;
-      background-color: #ffffff;
-      text-align: center;
-    }
-
-    .button-container button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #f59bb0;
-      color: #ffffff;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .button-container button:hover {
-      background-color: #d97a93;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G150 부들봇봇</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff8f0; /* 연한 살구색 배경 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #chat-container {
+            width: 400px;
+            background-color: #fff3e6; /* 부드러운 살구 톤 */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 90%;
+        }
+        .bot-message, .user-message {
+            margin: 10px 0;
+            display: flex;
+        }
+        .bot-message {
+            justify-content: flex-start;
+        }
+        .user-message {
+            justify-content: flex-end;
+        }
+        .message {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+        .bot-message .message {
+            background-color: #ffd8b1; /* 살구빛 말풍선 */
+            color: #5a372a; /* 따뜻한 브라운 텍스트 */
+        }
+        .user-message .message {
+            background-color: #ffcba4; /* 밝은 살구빛 */
+            color: #5a372a; /* 따뜻한 브라운 텍스트 */
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #ffad8f; /* 버튼에 따뜻한 살구빛 */
+            color: #5a372a;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e69c7a;
+        }
+        .image-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="chatbot-container">
-    <div class="header">G150 부들봇</div>
-    <div class="chat" id="chat">
-      <!-- 대화 메시지가 여기 추가됩니다 -->
+    <div id="chat-container">
+        <!-- Chat will be dynamically added here -->
     </div>
-    <div class="button-container" id="buttons">
-      <!-- 버튼이 여기 추가됩니다 -->
-    </div>
-  </div>
 
-  <script>
-    const chat = document.getElementById("chat");
-    const buttons = document.getElementById("buttons");
+    <script>
+        const chatContainer = document.getElementById('chat-container');
 
-    function addMessage(text, sender = "bot") {
-      const message = document.createElement("div");
-      message.classList.add("message", sender);
-      const bubble = document.createElement("div");
-      bubble.classList.add("bubble");
-      bubble.innerText = text;
-      message.appendChild(bubble);
-      chat.appendChild(message);
-      chat.scrollTop = chat.scrollHeight;
-    }
+        const conversation = [
+            {
+                type: 'bot',
+                message: '안녕하세요! 제가 도와드릴까요? 😊\n부드럽고 윤기 나는 머릿결을 위해 어떤 게 궁금하신가요?',
+                buttons: [
+                    { text: '자연 성분', nextIndex: 1 },
+                    { text: '좋은 향기', nextIndex: 1 }
+                ]
+            },
+            {
+                type: 'bot',
+                message: '제 이름은 부들봇이에요! 😊\n머릿결이 푸석푸석하고 건조해서 속상하셨죠? 😢\n걱정 마세요! 자연 성분 가득 담긴 샴푸와 기분 좋은 향기로 매일 샴푸할 때마다 행복한 시간을 만들어 드릴게요! 🛁💕\n저와 함께 부들부들 윤기 나는 머릿결로 변신해볼까요?',
+                buttons: [
+                    { text: '추천 샴푸 보기', nextIndex: 2 }
+                ]
+            },
+            {
+                type: 'bot',
+                message: '고객님처럼 윤기 나는 건강한 머릿결을 원하시는 분들을 위해 딱 준비했어요! 😊\n이 샴푸는 자연 유래 성분이 듬뿍 들어 있어서 안심하고 사용할 수 있고요, 머릿결과 두피를 건강하게 만들어줘요. 💆‍♀️✨\n특히 G150만의 은은하고 부드러운 향기로 샴푸하는 순간이 힐링 타임이 될 거예요! 🌸',
+                image: 'https://raw.githubusercontent.com/your-repo/images/main/shampoo1.jpg',
+                buttons: [
+                    { text: '구매하러 가기', nextIndex: 3 },
+                    { text: '다른 추천 보기', nextIndex: null }
+                ]
+            },
+            {
+                type: 'bot',
+                message: '집에서 간편하게 머릿결도 관리하고 힐링도 해보세요! 🏡💖\n어때요? 제 추천이 마음에 쏙 드셨나요? 😊',
+                image: 'https://raw.githubusercontent.com/your-repo/images/main/shampoo2.jpg',
+                buttons: [
+                    { text: '구매 완료', nextIndex: null }
+                ]
+            }
+        ];
 
-    function setButtons(buttonList) {
-      buttons.innerHTML = "";
-      buttonList.forEach((btn) => {
-        const button = document.createElement("button");
-        button.innerText = btn.text;
-        button.onclick = btn.onClick;
-        buttons.appendChild(button);
-      });
-    }
+        let currentIndex = 0;
 
-    function startChat() {
-      addMessage("제가 도와드릴까요? 😊");
-      addMessage("부드럽고 윤기 나는 머릿결을 위해 어떤 게 궁금하신가요?");
-      setButtons([
-        { text: "자연성분", onClick: showBotIntroduction },
-        { text: "빠른효과", onClick: showBotIntroduction },
-      ]);
-    }
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add(type === 'bot' ? 'bot-message' : 'user-message');
 
-    function showBotIntroduction() {
-      buttons.innerHTML = "";
-      setTimeout(() => {
-        addMessage("제 이름은 부들봇이에요! 😊");
-        addMessage("머릿결이 푸석푸석하고 건조해서 속상하셨죠? 😢");
-        addMessage(
-          "걱정 마세요! 자연 성분 가득 담긴 샴푸와 기분 좋은 향기로 매일 샴푸할 때마다 행복한 시간을 만들어 드릴게요! 🛁💕"
-        );
-        setTimeout(() => {
-          setButtons([{ text: "추천샴푸보기", onClick: showRecommendation }]);
-        }, 1500);
-      }, 1000);
-    }
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message');
+            messageBubble.textContent = text;
 
-    function showRecommendation() {
-      buttons.innerHTML = "";
-      setTimeout(() => {
-        addMessage("고객님처럼 윤기 나는 건강한 머릿결을 원하시는 분들을 위해 딱 준비했어요! 😊");
-        addMessage(
-          "이 샴푸는 자연 유래 성분이 듬뿍 들어 있어서 안심하고 사용할 수 있고요, 머릿결과 두피를 건강하게 만들어줘요. 💆‍♀️✨"
-        );
-        addMessage(
-          "특히 G150만의 은은하고 부드러운 향기로 샴푸하는 순간이 힐링 타임이 될 거예요! 🌸"
-        );
-        setTimeout(() => {
-          setButtons([
-            { text: "구매하러가기", onClick: () => alert("구매 페이지로 이동합니다.") },
-            { text: "다른 추천보기", onClick: () => alert("다른 추천 보기 페이지로 이동합니다.") },
-          ]);
-        }, 1500);
-      }, 1000);
-    }
+            messageDiv.appendChild(messageBubble);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
 
-    startChat();
-  </script>
+        function addImage(imageUrl) {
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('image-container');
+
+            const imageElement = document.createElement('img');
+            imageElement.src = imageUrl;
+            imageElement.alt = 'Product Image';
+
+            imageContainer.appendChild(imageElement);
+            chatContainer.appendChild(imageContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addButtons(buttons) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            buttons.forEach(button => {
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = button.text;
+                buttonElement.onclick = () => {
+                    addMessage('user', button.text);
+                    if (button.nextIndex !== null) {
+                        loadConversation(button.nextIndex);
+                    }
+                };
+                buttonContainer.appendChild(buttonElement);
+            });
+
+            chatContainer.appendChild(buttonContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function loadConversation(index) {
+            const step = conversation[index];
+            currentIndex = index;
+            addMessage('bot', step.message);
+            if (step.image) {
+                addImage(step.image);
+            }
+            if (step.buttons) {
+                addButtons(step.buttons);
+            }
+        }
+
+        // Start the conversation
+        loadConversation(currentIndex);
+    </script>
 </body>
 </html>
+
 
