@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExpertBot</title>
+    <title>G150 Shampoo Recommendation - Silkybot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8e8; /* Soft green background */
+            background-color: #fff8f0; /* Light peach background */
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,16 +17,15 @@
         }
         #chat-container {
             width: 400px;
-            background-color: #ffffff;
+            background-color: #fff3e6; /* Soft peach tone */
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             overflow-y: auto;
             max-height: 90%;
-            line-height: 1.6; /* Improve line spacing for readability */
         }
         .bot-message, .user-message {
-            margin: 15px 0; /* Add space between messages */
+            margin: 10px 0;
             display: flex;
         }
         .bot-message {
@@ -36,45 +35,41 @@
             justify-content: flex-end;
         }
         .message {
-            padding: 12px 18px;
+            padding: 10px 15px;
             border-radius: 20px;
             max-width: 70%;
         }
         .bot-message .message {
-            background-color: #e0f7d4; /* Soft green bubble */
-            color: #374a32; /* Natural dark green text */
-            font-family: 'Georgia', serif; /* Premium font style */
+            background-color: #ffd8b1; /* Peach bubble */
+            color: #5a372a; /* Warm brown text */
         }
         .user-message .message {
-            background-color: #fdf6c2; /* Lemon yellow bubble */
-            color: #5a5a00; /* Deep yellow-green text */
-            font-family: 'Arial', sans-serif;
+            background-color: #ffcba4; /* Bright peach bubble */
+            color: #5a372a; /* Warm brown text */
         }
         .button-container {
             text-align: center;
             margin-top: 10px;
         }
         button {
-            background-color: #9bcf8d; /* Natural green button */
-            color: #374a32; /* Dark green text */
+            background-color: #ffad8f; /* Warm peach button */
+            color: #5a372a;
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
             margin: 5px;
             cursor: pointer;
-            font-family: 'Georgia', serif;
         }
         button:hover {
-            background-color: #86b97a; /* Slightly darker green for hover effect */
+            background-color: #e69c7a;
         }
         .image-container {
             text-align: center;
-            margin: 15px 0; /* Add space around images */
+            margin: 10px 0;
         }
         .image-container img {
             max-width: 100%;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -89,34 +84,34 @@
         const conversation = [
             {
                 type: 'bot',
-                message: 'Hello! Please let me know the purpose of the shampoo you are looking for.\nI will provide precise answers and recommendations tailored to your needs.',
+                message: 'Hello! May I assist you today? 😊\nAre you looking for tips for silky and shiny hair?',
                 buttons: [
-                    { text: 'Scalp Care', nextIndex: 1 },
-                    { text: 'Healthy Hair Maintenance', nextIndex: 1 }
+                    { text: 'Natural Ingredients', nextIndex: 1 },
+                    { text: 'Pleasant Fragrance', nextIndex: 1 }
                 ]
             },
             {
                 type: 'bot',
-                message: 'I am ExpertBot. 😊\nWith analysis of over 20,000 data points and clinically verified results, I recommend the best products for you.\nIf you would like a recommendation, please press the button below.',
+                message: "My name is Silkybot! 😊\nIs your hair feeling dry and dull? 😢\nDon't worry! With shampoos packed with natural ingredients and delightful fragrances, I can make your hair care routine enjoyable and effective! 🛁💕\nShall we work together to transform your hair into silky and shiny locks?",
                 buttons: [
-                    { text: 'View G150 Shampoo Recommendation', nextIndex: 2 }
+                    { text: 'See Recommended Shampoo', nextIndex: 2 }
                 ]
             },
             {
                 type: 'bot',
-                message: 'G150 Greenist Shampoo is optimized for hair health and strength.\n\n1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.\n2. Uses over 95% plant-derived ingredients.\n3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.',
-                image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
+                message: "I have just the right shampoo for someone like you who desires silky, healthy hair! 😊\nGreenist Shampoo is enriched with natural ingredients, making it safe and effective for both your scalp and hair. 💆‍♀️✨\nPlus, with G150's unique gentle and soothing fragrance, every shampoo session becomes a relaxing experience! 🌸",
+                image: 'https://github.com/zhmoon35/chatbot-test/blob/main/G150-Greenist.jpg?raw=true',
                 buttons: [
-                    { text: 'Go to Purchase', nextIndex: 3 },
+                    { text: 'Buy Now', nextIndex: 3 },
                     { text: 'See Other Recommendations', nextIndex: null }
                 ]
             },
             {
                 type: 'bot',
-                message: 'Using G150 Greenist Shampoo can transform your hair into shiny and healthy locks.\n\nCheck out the image below and proceed with your purchase.',
+                message: "Take care of your hair and relax right at home! 🏡💖\nWhat do you think? Did my recommendation hit the spot? 😊",
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
                 buttons: [
-                    { text: 'Complete Purchase', nextIndex: null }
+                    { text: 'Purchase Complete', nextIndex: null }
                 ]
             }
         ];
@@ -186,3 +181,4 @@
     </script>
 </body>
 </html>
+
