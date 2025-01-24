@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G150 샴푸추천 부들봇</title>
+    <title>Silkybot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fff8f0; /* 연한 살구색 배경 */
+            background-color: #fff8f0; /* Light peach background */
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,15 +17,16 @@
         }
         #chat-container {
             width: 400px;
-            background-color: #fff3e6; /* 부드러운 살구 톤 */
+            background-color: #fff3e6; /* Soft peach tone */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             overflow-y: auto;
             max-height: 90%;
+            line-height: 1.8; /* Enhance line spacing */
         }
         .bot-message, .user-message {
-            margin: 10px 0;
+            margin: 15px 0;
             display: flex;
         }
         .bot-message {
@@ -35,24 +36,24 @@
             justify-content: flex-end;
         }
         .message {
-            padding: 10px 15px;
+            padding: 12px 18px;
             border-radius: 20px;
             max-width: 70%;
         }
         .bot-message .message {
-            background-color: #ffd8b1; /* 살구빛 말풍선 */
-            color: #5a372a; /* 따뜻한 브라운 텍스트 */
+            background-color: #ffd8b1; /* Peach bubble */
+            color: #5a372a; /* Warm brown text */
         }
         .user-message .message {
-            background-color: #ffcba4; /* 밝은 살구빛 */
-            color: #5a372a; /* 따뜻한 브라운 텍스트 */
+            background-color: #ffcba4; /* Bright peach bubble */
+            color: #5a372a; /* Warm brown text */
         }
         .button-container {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px; /* Add spacing above buttons */
         }
         button {
-            background-color: #ffad8f; /* 버튼에 따뜻한 살구빛 */
+            background-color: #ffad8f; /* Warm peach button */
             color: #5a372a;
             border: none;
             border-radius: 5px;
@@ -65,7 +66,7 @@
         }
         .image-container {
             text-align: center;
-            margin: 10px 0;
+            margin: 15px 0; /* Add spacing around images */
         }
         .image-container img {
             max-width: 100%;
@@ -84,34 +85,37 @@
         const conversation = [
             {
                 type: 'bot',
-                message: '안녕하세요! 제가 도와드릴까요? 😊<br><br>부드럽고 윤기 나는 머릿결을 위해 어떤 게 궁금하신가요?',
+                message: 'Hello! May I assist you today? 😊<br><br>Are you looking for tips for silky and shiny hair? 💇‍♀️✨',
                 buttons: [
-                    { text: '자연 성분', nextIndex: 1 },
-                    { text: '좋은 향기', nextIndex: 1 }
+                    { text: 'Natural Ingredients', nextIndex: 1 },
+                    { text: 'Pleasant Fragrance', nextIndex: 1 }
                 ]
             },
             {
                 type: 'bot',
-                message: '제 이름은 부들봇이에요! 😊<br><br>머릿결이 푸석푸석하고 건조해서 속상하셨죠? 😢<br><br>걱정 마세요! 자연 성분 가득 담긴 샴푸와 기분 좋은 향기로 매일 샴푸할 때마다 행복한 시간을 만들어 드릴게요! 🛁💕<br><br>저와 함께 부들부들 윤기 나는 머릿결로 변신해볼까요?',
+                message: "My name is Silkybot! 😊<br><br>Is your hair feeling dry and dull? 😢<br><br>Don't worry! 🌼<br><br>With shampoos packed with natural ingredients and delightful fragrances, I can make your hair care routine enjoyable and effective! 🛁💕<br><br>Shall we work together to transform your hair into silky and shiny locks? 🌟", 
                 buttons: [
-                    { text: '추천 샴푸 보기', nextIndex: 2 }
+                    { text: 'See Recommended Shampoo', nextIndex: 2 }
                 ]
             },
             {
                 type: 'bot',
-                message: '고객님처럼 윤기 나는 건강한 머릿결을 원하시는 분들을 위해 딱 준비했어요! 😊<br><br>Greenist 샴푸는 자연 유래 성분이 듬뿍 들어 있어서 안심하고 사용할 수 있고요, 머릿결과 두피를 건강하게 만들어줘요.<br><br>특히 G150 Greenist 샴푸만의 은은하고 부드러운 향기로 샴푸하는 순간이 힐링 타임이 될 거예요! 🌸',
+                message: `I have just the right shampoo for someone like you who desires silky, healthy hair! 🌿😊<br><br>
+Greenist Shampoo is enriched with natural ingredients, making it safe and effective for both your scalp and hair. 💆‍♀️✨<br><br>
+Plus, with G150's unique gentle and soothing fragrance, every shampoo session becomes a relaxing experience! 🌸`, 
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/G150-Greenist.jpg?raw=true',
                 buttons: [
-                    { text: '구매하러 가기', nextIndex: 3 },
-                    { text: '다른 추천 보기', nextIndex: null }
+                    { text: 'Buy Now', nextIndex: 3 },
+                    { text: 'See Other Recommendations', nextIndex: null }
                 ]
             },
             {
                 type: 'bot',
-                message: '집에서 간편하게 머릿결도 관리하고 힐링도 해보세요! 💖<br><br>어때요? 제 추천이 마음에 쏙 드셨나요? 😊',
+                message: `Take care of your hair and relax right at home! 🏡💖<br><br>
+What do you think? Did my recommendation hit the spot? 😊✨`, 
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
                 buttons: [
-                    { text: '구매 완료', nextIndex: null }
+                    { text: 'Purchase Complete', nextIndex: null }
                 ]
             }
         ];
@@ -124,7 +128,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.innerHTML = text; // <br> 태그가 줄바꿈으로 처리되도록 수정
+            messageBubble.innerHTML = text.replace(/\n/g, '<br>'); // <br> 태그가 제대로 렌더링되도록 설정
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
@@ -181,6 +185,5 @@
     </script>
 </body>
 </html>
-
 
 
