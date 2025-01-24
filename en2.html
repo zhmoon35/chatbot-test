@@ -6,8 +6,8 @@
     <title>ExpertBot</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif; /* Modern and clean font */
-            background-color: #f9f9f9; /* Light neutral background */
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
             display: flex;
@@ -24,7 +24,6 @@
             overflow-y: auto;
             max-height: 90%;
             line-height: 1.8;
-            white-space: pre-wrap;
         }
         .bot-message, .user-message {
             margin: 15px 0;
@@ -42,19 +41,19 @@
             max-width: 70%;
         }
         .bot-message .message {
-            background-color: #e8f5e9; /* Soft green bubble */
-            color: #2e7d32; /* Dark green text */
+            background-color: #e8f5e9;
+            color: #2e7d32;
         }
         .user-message .message {
-            background-color: #bbdefb; /* Soft blue bubble */
-            color: #0d47a1; /* Dark blue text */
+            background-color: #bbdefb;
+            color: #0d47a1;
         }
         .button-container {
             text-align: center;
             margin-top: 15px;
         }
         button {
-            background-color: #4caf50; /* Green button */
+            background-color: #4caf50;
             color: white;
             border: none;
             border-radius: 5px;
@@ -102,19 +101,10 @@
             },
             {
                 type: 'bot',
-                message: "G150 Greenist Shampoo is optimized for hair health and strength.\n1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.\n2. Uses over 95% plant-derived ingredients.\n3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.", 
+                message: "G150 Greenist Shampoo is optimized for hair health and strength.<br><br>1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.<br>2. Uses over 95% plant-derived ingredients.<br>3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.<br><br>If you satisfied with my recommendation, click the buy button.", 
                 image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
                 buttons: [
                     { text: 'Buy Now', nextIndex: 3 },
-                    { text: 'See Other Recommendations', nextIndex: null }
-                ]
-            },
-            {
-                 type: 'bot',
-                message: 'G150 Greenist Shampoo is optimized for hair health and strength.\n1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.\n2. Uses over 95% plant-derived ingredients.\n3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.',
-                image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
-                buttons: [
-                    { text: 'Go to Purchase', nextIndex: 3 },
                     { text: 'See Other Recommendations', nextIndex: null }
                 ]
             },
@@ -136,7 +126,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.textContent = text;
+            messageBubble.innerHTML = text; // Use innerHTML for rendering HTML tags like <br><br>
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
