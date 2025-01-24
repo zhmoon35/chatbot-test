@@ -6,8 +6,8 @@
     <title>ExpertBot</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8e8; /* Soft green background */
+            font-family: 'Roboto', sans-serif; /* Modern and clean font */
+            background-color: #f9f9f9; /* Light neutral background */
             margin: 0;
             padding: 0;
             display: flex;
@@ -19,14 +19,15 @@
             width: 400px;
             background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 20px;
             overflow-y: auto;
             max-height: 90%;
-            line-height: 1.6; /* Improve line spacing for readability */
+            line-height: 1.8;
+            white-space: pre-wrap;
         }
         .bot-message, .user-message {
-            margin: 15px 0; /* Add space between messages */
+            margin: 15px 0;
             display: flex;
         }
         .bot-message {
@@ -41,40 +42,37 @@
             max-width: 70%;
         }
         .bot-message .message {
-            background-color: #e0f7d4; /* Soft green bubble */
-            color: #374a32; /* Natural dark green text */
-            font-family: 'Georgia', serif; /* Premium font style */
+            background-color: #e8f5e9; /* Soft green bubble */
+            color: #2e7d32; /* Dark green text */
         }
         .user-message .message {
-            background-color: #fdf6c2; /* Lemon yellow bubble */
-            color: #5a5a00; /* Deep yellow-green text */
-            font-family: 'Arial', sans-serif;
+            background-color: #bbdefb; /* Soft blue bubble */
+            color: #0d47a1; /* Dark blue text */
         }
         .button-container {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         button {
-            background-color: #9bcf8d; /* Natural green button */
-            color: #374a32; /* Dark green text */
+            background-color: #4caf50; /* Green button */
+            color: white;
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
             margin: 5px;
             cursor: pointer;
-            font-family: 'Georgia', serif;
+            font-family: 'Roboto', sans-serif;
         }
         button:hover {
-            background-color: #86b97a; /* Slightly darker green for hover effect */
+            background-color: #388e3c;
         }
         .image-container {
             text-align: center;
-            margin: 15px 0; /* Add space around images */
+            margin: 15px 0;
         }
         .image-container img {
             max-width: 100%;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -89,31 +87,31 @@
         const conversation = [
             {
                 type: 'bot',
-                message: 'Hello! Please let me know the purpose of the shampoo you are looking for.\nI will provide precise answers and recommendations tailored to your needs.',
+                message: 'Welcome! 😊<br><br>How can I help you today? 🌟<br><br>Are you looking for a solution to improve your scalp health or maintain shiny, healthy hair? 💇‍♂️✨',
                 buttons: [
                     { text: 'Scalp Care', nextIndex: 1 },
-                    { text: 'Healthy Hair Maintenance', nextIndex: 1 }
+                    { text: 'Hair Maintenance', nextIndex: 1 }
                 ]
             },
             {
                 type: 'bot',
-                message: 'I am ExpertBot. 😊\nWith analysis of over 20,000 data points and clinically verified results, I recommend the best products for you.\nIf you would like a recommendation, please press the button below.',
+                message: "I am ExpertBot! 🤖<br><br>With analysis of over 20,000 data points and clinically verified results, I recommend the best products for your needs. 🌿✨<br><br>Let me guide you to your perfect match!", 
                 buttons: [
-                    { text: 'View G150 Shampoo Recommendation', nextIndex: 2 }
+                    { text: 'Show Recommendations', nextIndex: 2 }
                 ]
             },
             {
                 type: 'bot',
-                message: 'G150 Greenist Shampoo is optimized for hair health and strength.\n\n1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.\n2. Uses over 95% plant-derived ingredients.\n3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.',
+                message: "Our G150 Greenist Shampoo is designed for optimal hair health. 🌱<br><br>✨ Contains key ingredients like amino acids, panthenol, salicylic acid, and keratin.<br><br>✨ 95% plant-derived components ensure safety and effectiveness.<br><br>✨ Free from harmful additives like parabens, artificial colors, and synthetic fragrances.", 
                 image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
                 buttons: [
-                    { text: 'Go to Purchase', nextIndex: 3 },
-                    { text: 'See Other Recommendations', nextIndex: null }
+                    { text: 'Buy Now', nextIndex: 3 },
+                    { text: 'See Other Options', nextIndex: null }
                 ]
             },
             {
                 type: 'bot',
-                message: 'Using G150 Greenist Shampoo can transform your hair into shiny and healthy locks.\n\nCheck out the image below and proceed with your purchase.',
+                message: "Experience luxurious hair care at home! 🏡💖<br><br>We hope you love our recommendations. Have a question? Feel free to ask! 😊✨", 
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
                 buttons: [
                     { text: 'Complete Purchase', nextIndex: null }
@@ -129,7 +127,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.textContent = text;
+            messageBubble.innerHTML = text;
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
