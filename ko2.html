@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExpertBot</title>
+    <title>G150 샴푸추천 엑스퍼트봇</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f0f5f0; /* 연한 초록색 배경 */
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,12 +17,13 @@
         }
         #chat-container {
             width: 400px;
-            background-color: #ffffff;
+            background-color: #e8f5e9; /* 부드러운 초록 톤 */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             overflow-y: auto;
             max-height: 90%;
+            line-height: 1.8; /* 줄 간격 조정 */
         }
         .bot-message, .user-message {
             margin: 10px 0;
@@ -40,20 +41,20 @@
             max-width: 70%;
         }
         .bot-message .message {
-            background-color: #dcdcdc;
-            color: #000;
+            background-color: #c8e6c9; /* 초록빛 말풍선 */
+            color: #2e7d32; /* 어두운 초록 텍스트 */
         }
         .user-message .message {
-            background-color: #87CEFA;
-            color: #fff;
+            background-color: #a5d6a7; /* 밝은 초록빛 */
+            color: #1b5e20; /* 깊은 초록 텍스트 */
         }
         .button-container {
             text-align: center;
             margin-top: 10px;
         }
         button {
-            background-color: #6c757d;
-            color: #fff;
+            background-color: #4caf50; /* 버튼에 초록색 */
+            color: white;
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
@@ -61,7 +62,7 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #5a6268;
+            background-color: #388e3c;
         }
         .image-container {
             text-align: center;
@@ -75,7 +76,7 @@
 </head>
 <body>
     <div id="chat-container">
-        <!-- Chat will be dynamically added here -->
+        <!-- 대화 내용이 동적으로 추가됩니다 -->
     </div>
 
     <script>
@@ -84,7 +85,7 @@
         const conversation = [
             {
                 type: 'bot',
-                message: '안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요. 용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.',
+                message: '안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요.<br><br>용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.',
                 buttons: [
                     { text: '두피 문제 해결', nextIndex: 1 },
                     { text: '건강한 모발 관리', nextIndex: 1 }
@@ -92,14 +93,14 @@
             },
             {
                 type: 'bot',
-                message: '저는 엑스퍼트봇입니다. 😊\n2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다. 추천을 원하시면 아래 버튼을 눌러주세요.',
+                message: '저는 엑스퍼트봇입니다. 😊<br><br>2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다.<br><br>추천을 원하시면 아래 버튼을 눌러주세요.',
                 buttons: [
                     { text: 'G150 샴푸 추천 보기', nextIndex: 2 }
                 ]
             },
             {
                 type: 'bot',
-                message: 'G150 Greenist 샴푸는 모발 건강과 강화에 최적화된 제품입니다.\n1. 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분 함유.\n2. 95% 이상의 식물유래 성분 사용.\n3. 파라벤, 인공색소, 인공향료 등의 유해 성분 배제.',
+                message: 'G150 Greenist 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br><br>1. 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분 함유.<br>2. 95% 이상의 식물유래 성분 사용.<br>3. 파라벤, 인공색소, 인공향료 등의 유해 성분 배제.',
                 image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
                 buttons: [
                     { text: '구매하러 가기', nextIndex: 3 },
@@ -108,7 +109,7 @@
             },
             {
                 type: 'bot',
-                message: 'G150 Greenist 샴푸를 사용하시면 윤기 있고 건강한 모발로 변신할 수 있습니다. 아래 이미지를 확인하시고 구매를 진행해 보세요.',
+                message: 'G150 Greenist 샴푸를 사용하시면 윤기 있고 건강한 모발로 변신할 수 있습니다.<br><br>아래 이미지를 확인하시고 구매를 진행해 보세요.',
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
                 buttons: [
                     { text: '구매 완료', nextIndex: null }
@@ -124,7 +125,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.textContent = text;
+            messageBubble.innerHTML = text.replace(/\\n/g, '<br>'); // <br> 태그를 올바르게 렌더링
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
@@ -137,7 +138,7 @@
 
             const imageElement = document.createElement('img');
             imageElement.src = imageUrl;
-            imageElement.alt = 'Product Image';
+            imageElement.alt = '제품 이미지';
 
             imageContainer.appendChild(imageElement);
             chatContainer.appendChild(imageContainer);
@@ -176,8 +177,8 @@
             }
         }
 
-        // Start the conversation
+        // 대화 시작
         loadConversation(currentIndex);
     </script>
 </body>
-</html> 
+</html>
