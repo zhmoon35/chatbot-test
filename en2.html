@@ -102,7 +102,7 @@
             },
             {
                 type: 'bot',
-                message: "G150 shampoo is optimized for hair health and strengthening. This product stands out with the following three key features:<br><br>1. It contains powerful ingredients such as amino acids, panthenol, salicylic acid, and keratin, which nourish and strengthen the hair.<br>2. It uses over 95% plant-derived ingredients for natural and healthy hair care.<br>3. It is free from harmful substances like parabens, artificial colors, and artificial fragrances, minimizing stress on the scalp and hair.<br><br>Additionally, the effectiveness of hair improvement has been proven through clinical trials conducted by a team of PhD-level researchers. If you are struggling with lack of shine and reduced elasticity, G150 shampoo, with its patented plant-derived ingredients, will help minimize scalp irritation and provide quick results.<br><br>Are you satisfied with the recommended product? If you’d like to purchase, click the 'Buy Now' button. If you’d like to see other recommendations, click the 'See Other Recommendations' button.", 
+                message: "G150 Greenist Shampoo is optimized for hair health and strength.\n1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.\n2. Uses over 95% plant-derived ingredients.\n3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.", 
                 image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
                 buttons: [
                     { text: 'Buy Now', nextIndex: 3 },
@@ -110,8 +110,17 @@
                 ]
             },
             {
+                 type: 'bot',
+                message: 'G150 Greenist Shampoo is optimized for hair health and strength.\n1. Contains high-functional ingredients such as amino acids, panthenol, salicylic acid, and keratin.\n2. Uses over 95% plant-derived ingredients.\n3. Free of harmful ingredients such as parabens, artificial colors, and synthetic fragrances.',
+                image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
+                buttons: [
+                    { text: 'Go to Purchase', nextIndex: 3 },
+                    { text: 'See Other Recommendations', nextIndex: null }
+                ]
+            },
+            {
                 type: 'bot',
-                message: "Are you satisfied with my recommendations?<br><br>If you'd like to purchase them, please click the 'go to purchase' button, or if you'd like to see other product recommendations, please click the 'see other recommendations' button!", 
+                message: 'Using G150 Greenist Shampoo can transform your hair into shiny and healthy locks. Check out the image below and proceed with your purchase.',
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
                 buttons: [
                     { text: 'Complete Purchase', nextIndex: null }
@@ -127,7 +136,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.innerHTML = text;
+            messageBubble.textContent = text;
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
@@ -184,4 +193,3 @@
     </script>
 </body>
 </html>
-
