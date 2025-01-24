@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>G150 샴푸추천 엑스퍼트봇</title>
     <style>
+        /* 스타일은 제공된 초록 테마로 유지 */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f5f0; /* 연한 초록색 배경 */
+            background-color: #f0f5f0;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,13 +18,13 @@
         }
         #chat-container {
             width: 400px;
-            background-color: #e8f5e9; /* 부드러운 초록 톤 */
+            background-color: #e8f5e9;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             overflow-y: auto;
             max-height: 90%;
-            line-height: 1.8; /* 줄 간격 조정 */
+            line-height: 1.8;
         }
         .bot-message, .user-message {
             margin: 10px 0;
@@ -41,19 +42,19 @@
             max-width: 70%;
         }
         .bot-message .message {
-            background-color: #c8e6c9; /* 초록빛 말풍선 */
-            color: #2e7d32; /* 어두운 초록 텍스트 */
+            background-color: #c8e6c9;
+            color: #2e7d32;
         }
         .user-message .message {
-            background-color: #a5d6a7; /* 밝은 초록빛 */
-            color: #1b5e20; /* 깊은 초록 텍스트 */
+            background-color: #a5d6a7;
+            color: #1b5e20;
         }
         .button-container {
             text-align: center;
             margin-top: 10px;
         }
         button {
-            background-color: #4caf50; /* 버튼에 초록색 */
+            background-color: #4caf50;
             color: white;
             border: none;
             border-radius: 5px;
@@ -100,7 +101,7 @@
             },
             {
                 type: 'bot',
-                message: 'G150 Greenist 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br><br>1. 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분 함유.<br>2. 95% 이상의 식물유래 성분 사용.<br>3. 파라벤, 인공색소, 인공향료 등의 유해 성분 배제.', <br><br> 제품 추천에 만족하신다면 구매버튼을 눌러주세요.
+                message: 'G150 Greenist 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br><br>1. 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분 함유.<br>2. 95% 이상의 식물유래 성분 사용.<br>3. 파라벤, 인공색소, 인공향료 등의 유해 성분 배제.',
                 image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
                 buttons: [
                     { text: '구매하러 가기', nextIndex: 3 },
@@ -125,7 +126,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.innerHTML = text.replace(/\\n/g, '<br>'); // <br> 태그를 올바르게 렌더링
+            messageBubble.innerHTML = text.replace(/\\n/g, '<br>');
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
@@ -177,7 +178,6 @@
             }
         }
 
-        // 대화 시작
         loadConversation(currentIndex);
     </script>
 </body>
