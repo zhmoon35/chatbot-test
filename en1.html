@@ -24,6 +24,7 @@
             overflow-y: auto;
             max-height: 90%;
             line-height: 1.8; /* Enhance line spacing */
+            white-space: pre-wrap; /* Preserve line breaks */
         }
         .bot-message, .user-message {
             margin: 15px 0; /* Add space between messages */
@@ -85,7 +86,7 @@
         const conversation = [
             {
                 type: 'bot',
-                message: 'Hello! 😊\n\nMay I assist you today? 🌟\n\nAre you looking for tips for silky and shiny hair? 💇‍♀️✨',
+                message: 'Hello! 😊<br><br>May I assist you today? 🌟<br><br>Are you looking for tips for silky and shiny hair? 💇‍♀️✨',
                 buttons: [
                     { text: 'Natural Ingredients', nextIndex: 1 },
                     { text: 'Pleasant Fragrance', nextIndex: 1 }
@@ -93,14 +94,14 @@
             },
             {
                 type: 'bot',
-                message: "My name is Silkybot! 😊\n\nIs your hair feeling dry and dull? 😢\n\nDon't worry! 🌼\n\nWith shampoos packed with natural ingredients and delightful fragrances, I can make your hair care routine enjoyable and effective! 🛁💕\n\nShall we work together to transform your hair into silky and shiny locks? 🌟", 
+                message: "My name is Silkybot! 😊<br><br>Is your hair feeling dry and dull? 😢<br><br>Don't worry! 🌼<br><br>With shampoos packed with natural ingredients and delightful fragrances, I can make your hair care routine enjoyable and effective! 🛁💕<br><br>Shall we work together to transform your hair into silky and shiny locks? 🌟", 
                 buttons: [
                     { text: 'See Recommended Shampoo', nextIndex: 2 }
                 ]
             },
             {
                 type: 'bot',
-                message: "I have just the right shampoo for someone like you who desires silky, healthy hair! 🌿😊\n\nGreenist Shampoo is enriched with natural ingredients, making it safe and effective for both your scalp and hair. 💆‍♀️✨\n\nPlus, with G150's unique gentle and soothing fragrance, every shampoo session becomes a relaxing experience! 🌸", 
+                message: "I have just the right shampoo for someone like you who desires silky, healthy hair! 🌿😊<br><br>Greenist Shampoo is enriched with natural ingredients, making it safe and effective for both your scalp and hair. 💆‍♀️✨<br><br>Plus, with G150's unique gentle and soothing fragrance, every shampoo session becomes a relaxing experience! 🌸", 
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/G150-Greenist.jpg?raw=true',
                 buttons: [
                     { text: 'Buy Now', nextIndex: 3 },
@@ -109,7 +110,7 @@
             },
             {
                 type: 'bot',
-                message: "Take care of your hair and relax right at home! 🏡💖\n\nWhat do you think? Did my recommendation hit the spot? 😊✨", 
+                message: "Take care of your hair and relax right at home! 🏡💖<br><br>What do you think? Did my recommendation hit the spot? 😊✨", 
                 image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
                 buttons: [
                     { text: 'Purchase Complete', nextIndex: null }
@@ -125,7 +126,7 @@
 
             const messageBubble = document.createElement('div');
             messageBubble.classList.add('message');
-            messageBubble.textContent = text;
+            messageBubble.innerHTML = text;
 
             messageDiv.appendChild(messageBubble);
             chatContainer.appendChild(messageDiv);
@@ -182,4 +183,3 @@
     </script>
 </body>
 </html>
-
