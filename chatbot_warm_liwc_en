@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Warm Chatbot (EN1 • Low Concreteness)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root{--bg:#fafafa;--panel:#ffffff;--bot:#f3f4f6;--user:#2563eb;--ink:#111}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:780px;margin:0 auto;padding:16px}
+    h1{font-size:18px;margin:8px 0 12px}
+    .chat{height:58vh;min-height:420px;background:var(--panel);border:1px solid #e5e7eb;border-radius:14px;overflow:auto;padding:10px 12px}
+    .bubble{max-width:85%;padding:10px 12px;border-radius:16px;margin:10px 0;box-shadow:0 1px 1px rgba(0,0,0,.04);white-space:pre-wrap}
+    .bot{background:var(--bot)}
+    .user{background:var(--user);color:#fff;margin-left:auto}
+    .composer{display:flex;gap:8px;margin-top:12px}
+    .composer input{flex:1;padding:12px;border:1px solid #e5e7eb;border-radius:12px;font-size:16px}
+    .composer button{padding:12px 16px;border:0;border-radius:12px;background:#111;color:#fff;font-weight:600;cursor:pointer}
+    .meta{font-size:12px;color:#6b7280;margin-top:6px}
+    .notes{margin-top:14px;font-size:12px;color:#374151;line-height:1.5;background:#fff;border:1px dashed #d1d5db;border-radius:10px;padding:10px}
+    .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+    .badge{display:inline-block;font-size:11px;border:1px solid #d1d5db;border-radius:10px;padding:3px 8px;background:#fff}
+    @media (prefers-color-scheme:dark){
+      :root{--bg:#0b0c0f;--panel:#0f1115;--bot:#151821;--ink:#e5e7eb}
+      .composer input{background:#0f1115;color:var(--ink);border-color:#151821}
+      .composer button{background:#e5e7eb;color:#0b0c0f}
+      .notes{background:#0f1115;border-color:#374151}
+      .badge{background:#0f1115;border-color:#374151}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Warm Chatbot (EN1 • Low Concreteness)</h1>
+    <div id="chat" class="chat" role="log" aria-live="polite"></div>
+
+    <div class="composer" role="group" aria-label="Compose">
+      <input id="msg" type="text" placeholder="Type your need (e.g., oily, sensitive, hair-loss, volume, damaged)" autocomplete="off">
+      <button id="send" type="button">Send</button>
+    </div>
+    <div class="row">
+      <button class="badge" onclick="exportLIWCcsv('per_turn')">Export CSV (per_turn)</button>
+      <button class="badge" onclick="exportLIWCcsv('per_user')">Export CSV (user_only)</button>
+    </div>
+
+    <div class="notes">
+      <strong>Research Notes</strong><br>
+      • <u>Kull et al., 2021 (JBR)</u>: chatbot personality via warm greeting.<br>
+      • <u>Ruan et al., 2020</u>: style perception & behavioral logging → LIWC export included.<br>
+      • <u>Jiménez-Barreto et al., 2023 (JIM)</u>: concreteness manipulation. This file fixes it to <em>low</em> (vague, summary style).
+    </div>
+  </div>
+
+  <!-- ========== Logging & LIWC export ========== -->
+  <script>
+  (function(){
+    const pid  = crypto.randomUUID().slice(0,8);
+    const cond = 'warm';   // warm fixed
+    const conc = 'low';    // concreteness fixed to low
+    const lang = 'en';
+    const page = location.pathname.split('/').pop();
+
+    const LOG = { pid, cond, conc, lang, page, started: Date.now(), turns: [] };
+    let lastTs = LOG.started;
+
+    window._trackUser = function(text){
+      const now=Date.now();
+      LOG.turns.push({t:now, who:'user', text:String(text||'').trim(), ms_from_prev:now-lastTs});
+      lastTs=now;
+    };
+    window._trackBot = function(text){
+      const now=Date.now();
+      LOG.turns.push({t:now, who:'bot', text:String(text||'').trim(), ms_from_prev:now-lastTs});
+      lastTs=now;
+    };
+
+    window.exportLIWCcsv=function(mode='per_turn'){
+      const rows=[];
+      if(mode==='per_turn'){
+        LOG.turns.forEach((r,i)=>rows.push({
+          pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,idx:i,who:r.who,ms_from_prev:r.ms_from_prev,
+          text:r.text.replace(/\s+/g,' ').trim()
+        }));
+      }else{
+        const mergedUser=LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
+        rows.push({pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,idx:0,who:'user_all',
+          ms_from_prev:'',text:mergedUser.replace(/\s+/g,' ').trim()});
+      }
+      const header=Object.keys(rows[0]||{text:''});
+      const csv=[header.join(','),...rows.map(r=>header.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download=`liwc_${LOG.pid}_${mode}.csv`; document.body.appendChild(a); a.click(); a.remove();
+    };
+
+    const $chat=document.getElementById('chat'), $msg=document.getElementById('msg'), $send=document.getElementById('send');
+    function addBubble(text, who='bot'){
+      const div=document.createElement('div'); div.className=`bubble ${who==='bot'?'bot':'user'}`;
+      div.textContent=text; $chat.appendChild(div); $chat.scrollTop=$chat.scrollHeight;
+    }
+
+    // Greeting (Warm tone, vague style)
+    function greeting(){
+      const g="Hi! I’m happy to help you. Please tell me what shampoo you need, and we will look at it together.";
+      addBubble(g,'bot'); _trackBot(g);
+    }
+
+    const MAP=[
+      {keys:['oily','oil','sebum','greasy'],slot:'oily'},
+      {keys:['sensitive','itch','irritation','redness'],slot:'sensitive'},
+      {keys:['hair-loss','hairloss','thin','thinning','density'],slot:'hairloss'},
+      {keys:['volume','flat','root','lift'],slot:'volume'},
+      {keys:['damaged','damage','split','dry','frizzy'],slot:'damaged'},
+    ];
+    function detectNeed(s){
+      const t=(s||'').toLowerCase();
+      for(const m of MAP){ if(m.keys.some(k=>t.includes(k))) return m.slot; }
+      return null;
+    }
+
+    // Warm × Low concreteness responses
+    const RESP = {
+      oily:     "For oily scalp, a lighter routine is usually more comfortable. Pay attention to how your hair feels and adjust as needed.",
+      sensitive:"For sensitive scalp, it is safer to reduce possible triggers. Keep an eye on any discomfort.",
+      hairloss: "For hair-loss concerns, it helps to organize washing and drying steps together. Short-term change may differ across people.",
+      volume:   "For volume needs, try to keep the roots from feeling heavy. Check whether the shape holds while drying.",
+      damaged:  "For damaged hair, focus on reducing roughness and making detangling easier. Review periodic care if necessary."
+    };
+
+    function respond(slot){
+      const text = slot ? RESP[slot] :
+        "I couldn’t detect the input. Try one of: oily, sensitive, hair-loss, volume, damaged.";
+      addBubble(text,'bot'); _trackBot(text);
+    }
+
+    function onSend(){
+      const v=$msg.value.trim(); if(!v) return;
+      addBubble(v,'user'); _trackUser(v); $msg.value='';
+      const slot=detectNeed(v); setTimeout(()=>respond(slot), 300);
+    }
+    $send.addEventListener('click', onSend);
+    $msg.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); onSend(); }});
+
+    greeting();
+  })();
+  </script>
+</body>
+</html>
