@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>실험용 챗봇 - WARM</title>
+  <title>Warm 챗봇 (KO1 • Simple Product Mapping)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    :root{--bg:#fafafa;--panel:#fff;--bot:#f3f4f6;--user:#2563eb;--ink:#111}
+    :root{--bg:#fafafa;--panel:#ffffff;--bot:#f3f4f6;--user:#2563eb;--ink:#111}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Apple SD Gothic Neo,Malgun Gothic,sans-serif}
     .wrap{max-width:780px;margin:0 auto;padding:16px}
     h1{font-size:18px;margin:8px 0 12px}
@@ -17,78 +17,50 @@
     .composer input{flex:1;padding:12px;border:1px solid #e5e7eb;border-radius:12px;font-size:16px}
     .composer button{padding:12px 16px;border:0;border-radius:12px;background:#111;color:#fff;font-weight:600;cursor:pointer}
     .meta{font-size:12px;color:#6b7280;margin-top:6px}
-    .notes{margin-top:14px;font-size:12px;color:#374151;line-height:1.5;background:#fff;border:1px dashed #d1d5db;border-radius:10px;padding:10px}
     .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-    .badge{display:inline-block;font-size:11px;border:1px solid #d1d5db;border-radius:10px;padding:6px 10px;background:#fff;cursor:pointer}
+    .badge{display:inline-block;font-size:11px;border:1px solid #d1d5db;border-radius:10px;padding:3px 8px;background:#fff}
     @media (prefers-color-scheme:dark){
       :root{--bg:#0b0c0f;--panel:#0f1115;--bot:#151821;--ink:#e5e7eb}
       .composer input{background:#0f1115;color:var(--ink);border-color:#151821}
       .composer button{background:#e5e7eb;color:#0b0c0f}
-      .notes{background:#0f1115;border-color:#374151}
       .badge{background:#0f1115;border-color:#374151}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>실험용 챗봇 (Warm)</h1>
-    <div class="meta">
-      URL 예: <code>?greet=여기에%20첫%20인사만%20교체</code> &nbsp;|&nbsp; 설문 연동: <code>&survey=설문URL</code>
-    </div>
-
+    <h1>Warm 챗봇 (KO1)</h1>
     <div id="chat" class="chat" role="log" aria-live="polite"></div>
 
     <div class="composer" role="group" aria-label="메시지 작성">
-      <input id="msg" type="text" placeholder="필요 용도 입력 (지성, 민감두피, 탈모케어, 볼륨, 손상모)" autocomplete="off">
+      <input id="msg" type="text" placeholder="필요 용도 입력 (예: 지성, 민감두피, 탈모케어, 볼륨, 손상모 / 매일, 순한, 균형 등)" autocomplete="off">
       <button id="send" type="button">보내기</button>
     </div>
-    <div class="row">
-      <button class="badge" onclick="exportLIWCcsv('per_turn')">Export CSV (per_turn)</button>
-      <button class="badge" onclick="exportLIWCcsv('per_user')">Export CSV (user_only)</button>
-      <button class="badge" onclick="finishAndSendToSurvey()">Finish → Survey</button>
-    </div>
 
-    <div class="notes">
-      <strong>Research Notes</strong><br>
-      • 초기 인사로 성격 조작(Kull et al., 2021).<br>
-      • 텍스트 로그 기반 LIWC/행태지표 수집(Ruan et al., 2020).<br>
-      • Warm/Comp/Control 3조건 설계(본 파일은 Warm).
+    <div class="row">
+      <button class="badge" onclick="exportCSV('per_turn')">Export CSV (per_turn)</button>
+      <button class="badge" onclick="exportCSV('per_user')">Export CSV (user_only)</button>
     </div>
   </div>
 
   <script>
   (function(){
-    // ====== 0) 세팅 ======
-    const qp = new URLSearchParams(location.search);
-    const pid  = qp.get('pid') || crypto.randomUUID().slice(0,8);
-    const surveyUrl = qp.get('survey') || '';
-    const lang = 'ko', page = location.pathname.split('/').pop(), cond = 'warm';
-
-    // ★ 네가 제공한 인사 & 소개 문구 (Warm)
-    const ORIGINAL_GREETING = "안녕하세요! 제가 도와드릴까요? 부드럽고 윤기 나는 머릿결을 위해 어떤 점이 궁금하신가요?";
-    const ORIGINAL_INTRO =
-      "제 이름은 부들봇이에요. 머릿결이 푸석푸석하고 건조해서 속상하셨죠? 걱정하지 마세요. 자연 유래 성분을 담은 샴푸와 기분 좋은 향으로, 매일 샴푸할 때마다 작은 행복을 느끼실 수 있도록 도와드릴게요. 함께 부들부들 윤기 나는 머릿결로 변신해 볼까요?";
-
-    // 첫 인사는 ?greet= 로 교체 가능(소개 문구는 고정 권장)
-    const greetParam = qp.get('greet');
-    const GREETING = greetParam ? decodeURIComponent(greetParam) : ORIGINAL_GREETING;
-
-    // ====== 1) 로깅/내보내기/설문 연동 ======
-    const LOG = { pid, cond, lang, page, started: Date.now(), turns: [] };
+    /* ==============================
+       0) 간단 로깅 (LIWC용 CSV 내보내기)
+       ============================== */
+    const pid  = crypto.randomUUID().slice(0,8);
+    const cond = 'warm';
+    const lang = 'ko';
+    const page = location.pathname.split('/').pop();
+    const LOG  = { pid, cond, lang, page, started: Date.now(), turns: [] };
     let lastTs = LOG.started;
 
-    window._trackUser = function(text){
+    function track(who, text){
       const now = Date.now();
-      LOG.turns.push({ t:now, who:'user', text:String(text||'').trim(), ms_from_prev: now-lastTs });
+      LOG.turns.push({t: now, who, text: String(text||'').trim(), ms_from_prev: now - lastTs});
       lastTs = now;
-    };
-    window._trackBot = function(text){
-      const now = Date.now();
-      LOG.turns.push({ t:now, who:'bot', text:String(text||'').trim(), ms_from_prev: now-lastTs });
-      lastTs = now;
-    };
-
-    window.exportLIWCcsv = function(mode='per_turn'){
+    }
+    window.exportCSV = function(mode='per_turn'){
       const rows=[];
       if(mode==='per_turn'){
         LOG.turns.forEach((r,i)=>rows.push({
@@ -96,11 +68,9 @@
           text:r.text.replace(/\s+/g,' ').trim()
         }));
       }else{
-        const merged = LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
-        rows.push({
-          pid:LOG.pid,cond:LOG.cond,lang:LOG.lang,page:LOG.page,idx:0,who:'user_all',ms_from_prev:'',
-          text:merged.replace(/\s+/g,' ').trim()
-        });
+        const mergedUser = LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
+        rows.push({pid:LOG.pid,cond:LOG.cond,lang:LOG.lang,page:LOG.page,idx:0,who:'user_all',ms_from_prev:'',
+          text:mergedUser.replace(/\s+/g,' ').trim()});
       }
       const header=Object.keys(rows[0]||{text:''});
       const csv=[header.join(','),...rows.map(r=>header.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
@@ -108,73 +78,113 @@
       a.href=URL.createObjectURL(blob); a.download=`liwc_${LOG.pid}_${mode}.csv`; document.body.appendChild(a); a.click(); a.remove();
     };
 
-    window.finishAndSendToSurvey = function(){
-      if(!surveyUrl){ alert('설문 URL이 지정되지 않았습니다. ?survey= 로 전달하세요.'); return; }
-      const ended = Date.now();
-      const payload = btoa(unescape(encodeURIComponent(JSON.stringify({...LOG, ended}))));
-      const url = `${surveyUrl}?pid=${encodeURIComponent(pid)}&cond=${encodeURIComponent(cond)}&lang=${encodeURIComponent(lang)}&log=${encodeURIComponent(payload)}`;
-      location.href = url;
-    };
-
-    // ====== 2) UI ======
+    /* ==============================
+       1) UI 헬퍼
+       ============================== */
     const $chat=document.getElementById('chat'), $msg=document.getElementById('msg'), $send=document.getElementById('send');
     function addBubble(text, who='bot'){
-      const d=document.createElement('div');
-      d.className=`bubble ${who==='bot'?'bot':'user'}`;
-      d.textContent=text;
-      $chat.appendChild(d);
-      $chat.scrollTop=$chat.scrollHeight;
+      const div=document.createElement('div'); div.className=`bubble ${who==='bot'?'bot':'user'}`;
+      div.textContent=text; $chat.appendChild(div); $chat.scrollTop=$chat.scrollHeight;
     }
 
-    // ====== 3) Greeting: 인사 후 600ms 뒤 소개(2턴 출력) ======
-    function greeting(){
-      addBubble(GREETING, 'bot');
-      _trackBot(GREETING);
-      setTimeout(()=>{
-        addBubble(ORIGINAL_INTRO, 'bot');
-        _trackBot(ORIGINAL_INTRO);
-      }, 600);
+    /* ==============================
+       2) Warm 인사 (Kull et al., 2021 근거)
+       ============================== */
+    function greet(){
+      const g="안녕하세요! 와 주셔서 고마워요. 필요한 샴푸 용도를 말씀해 주세요. 편하게 키워드를 써 주셔도 괜찮아요.";
+      addBubble(g,'bot'); track('bot', g);
     }
 
-    // ====== 4) 키워드 매핑 ======
-    const MAP=[
-      {keys:['지성','oily','유분','oil'],slot:'oily'},
-      {keys:['민감','sensitive','자극','가려움','itch'],slot:'sensitive'},
-      {keys:['탈모','hair-loss','hairloss','density'],slot:'hairloss'},
-      {keys:['볼륨','volume','루트','root'],slot:'volume'},
-      {keys:['손상','damaged','손상모','케어','repair'],slot:'damaged'},
+    /* ==============================
+       3) 니즈 분류 키워드 (oily/민감/탈모/볼륨/손상)
+       ============================== */
+    const MAP_NEED = [
+      { keys: ['지성','oily','유분','oil'], slot: 'oily' },
+      { keys: ['민감','sensitive','자극','가려움','itch'], slot: 'sensitive' },
+      { keys: ['탈모','hair-loss','hairloss','density','얇아','가늘'], slot: 'hairloss' },
+      { keys: ['볼륨','volume','루트','root','납작','플랫'], slot: 'volume' },
+      { keys: ['손상','damaged','손상모','케어','repair','갈라짐','푸석'], slot: 'damaged' }
     ];
-    function detectNeed(s){
-      const t=(s||'').toLowerCase();
-      for(const m of MAP){ if(m.keys.some(k=>t.includes(k))) return m.slot; }
+    function detectNeed(text){
+      const t=(text||'').toLowerCase();
+      for(const m of MAP_NEED){ if(m.keys.some(k=>t.includes(k))) return m.slot; }
       return null;
     }
 
-    // ====== 5) Warm 응답(친근/상냥, 전문용어 최소·후기톤 일부 반영 가능) ======
-    const RESP={
-      oily:"지성 두피에는 세정 후 무겁지 않은 사용감이 편해요. 미온수로 두피부터 거품을 만들고 가볍게 문질러 준 뒤 충분히 헹궈 보세요. 말릴 때는 뿌리를 살짝 들어 올리면 하루에 덜 눌려요.",
-      sensitive:"민감 두피는 자극을 줄이는 방향이 안전해요. 손톱 대신 손가락 지문으로 짧게 문지르고 미지근한 물로 오래 헹궈 주세요. 말릴 때는 너무 뜨거운 바람을 피하세요.",
-      hairloss:"탈모 케어를 원하시면 두피를 가볍게 정리하고 드라이할 때 뿌리 방향을 살피는 루틴이 도움이 돼요.",
-      volume:"볼륨을 원하시면 거품을 많이 눌러 바르지 말고, 헹굴 때 뿌리를 가볍게 흔든 뒤 빗으로 뿌리를 세워 말려 보세요.",
-      damaged:"손상 모발은 표면 거칠음을 줄이고 빗질 단계에서 걸림을 확인하는 루틴이 좋아요. 거품을 오래 두지 말고 끝부분부터 천천히 빗어 주세요."
+    /* ==============================
+       4) 제품 추천 키워드 (Scalp/Balance/Daily)
+       ============================== */
+    const MAP_PRODUCTS = {
+      scalp:   ["scalp","두피","oily","oil","sebum","지성","가려움","itch","민감","redness","탈모","hair-loss","thinning","각질"],
+      balance: ["balance","balanced","균형","밸런스","중성","normal","combination","혼합","ph","컨디션 유지"],
+      daily:   ["daily","everyday","매일","데일리","순한","gentle","mild","가족","공용","가볍게","심플","간단","부담없이"]
+    };
+    function countMatches(text, arr){
+      const t=(text||'').toLowerCase();
+      return arr.reduce((n,k)=> n + (t.includes(k) ? 1 : 0), 0);
+    }
+    function recommendProduct(userText){
+      const scores = {
+        scalp:   countMatches(userText, MAP_PRODUCTS.scalp),
+        balance: countMatches(userText, MAP_PRODUCTS.balance),
+        daily:   countMatches(userText, MAP_PRODUCTS.daily)
+      };
+      const order=['scalp','balance','daily'];
+      let best=order[0], bestScore=scores[best];
+      for(const k of order.slice(1)){ if(scores[k] > bestScore){ best=k; bestScore=scores[k]; } }
+      return { key: best, scores };
+    }
+    const PRODUCT_TEXT = {
+      scalp:   "말씀해 주신 내용으로 보아 두피에 초점을 둔 ‘Scalp Shampoo’를 권해 드릴게요.",
+      balance: "설명해 주신 상태에는 전반 균형을 유지하는 ‘Balance Shampoo’가 잘 맞아 보여요.",
+      daily:   "자주, 편하게 쓰고 싶으시면 ‘Daily Shampoo’를 추천드려요."
     };
 
-    function respond(slot){
-      const text = RESP[slot] || "지성/민감두피/탈모케어/볼륨/손상모 중에서 입력해 주세요.";
-      addBubble(text,'bot'); _trackBot(text);
+    /* ==============================
+       5) Warm 본문 응답 (간단)
+       ============================== */
+    const RESP = {
+      oily:     "지성 두피는 대체로 가볍게 마무리되는 루틴이 편해요. 사용 후 느낌을 보면서 빈도를 맞춰 보세요.",
+      sensitive:"민감 두피는 자극을 줄이는 쪽이 안전해요. 사용 중 불편이 있는지 살펴봐 주세요.",
+      hairloss: "탈모 케어는 두피 정리와 건조 단계를 함께 보는 편이 좋아요. 단기간 변화는 개인차가 있어요.",
+      volume:   "볼륨이 필요하면 뿌리가 무겁지 않게 유지해 보세요. 말릴 때 모양이 유지되는지 확인해 보세요.",
+      damaged:  "손상 모발은 거칠음을 줄이고 빗질이 수월하도록 하는 쪽이 좋아요. 필요하면 주기적 관리도 확인해 보세요."
+    };
+
+    /* ==============================
+       6) 메인 처리
+       ============================== */
+    function respondTo(text){
+      // 사용자 말풍선 + 로깅
+      addBubble(text,'user'); track('user', text);
+
+      // 니즈/추천 계산
+      const need = detectNeed(text);
+      const { key: prodKey, scores } = recommendProduct(text);
+
+      // 본문 응답
+      const base = need ? RESP[need]
+                        : "인식하지 못했어요. 지성/민감두피/탈모케어/볼륨/손상모 중에서 입력해 주세요.";
+      addBubble(base,'bot'); track('bot', base);
+
+      // 제품 추천 (연구 확인용 점수 표시: 운영 시 괄호 부분 삭제 가능)
+      const rec = PRODUCT_TEXT[prodKey] + ` (scalp:${scores.scalp}, balance:${scores.balance}, daily:${scores.daily})`;
+      addBubble(rec,'bot'); track('bot', rec);
     }
 
-    // ====== 6) 이벤트 ======
+    /* ==============================
+       7) 이벤트 바인딩
+       ============================== */
     function onSend(){
       const v=$msg.value.trim(); if(!v) return;
-      addBubble(v,'user'); _trackUser(v); $msg.value='';
-      const slot=detectNeed(v); setTimeout(()=>respond(slot), 320);
+      $msg.value='';
+      respondTo(v);
     }
     $send.addEventListener('click', onSend);
     $msg.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); onSend(); }});
 
-    // 시작
-    greeting();
+    // 시작 인사
+    greet();
   })();
   </script>
 </body>
