@@ -27,4 +27,283 @@
     body{
       margin:0; color:var(--ink);
       font-family:system-ui,Segoe UI,Roboto,Apple SD Gothic Neo,Malgun Gothic,sans-serif;
-      background:linear-gradient(180deg,var(--bg-grad-1),var(--bg-grad-2))
+      background:linear-gradient(180deg,var(--bg-grad-1),var(--bg-grad-2));
+      min-height:100vh;
+    }
+    .wrap{max-width:960px;margin:0 auto;padding:16px}
+    /* Top brand hero */
+    .hero{
+      position:relative; overflow:hidden; border-radius:18px;
+      border:1px solid var(--border);
+      box-shadow:0 8px 28px rgba(0,0,0,.06);
+      margin-bottom:16px; background:var(--panel);
+    }
+    .hero img{
+      width:100%; height:180px; object-fit:cover; display:block; filter:saturate(1.05) contrast(1.02);
+    }
+    .bar{
+      position:absolute; inset:12px 12px auto 12px;
+      display:flex; align-items:center; gap:10px;
+      background:var(--bar); backdrop-filter:blur(6px);
+      padding:8px 12px; border-radius:12px; border:1px solid var(--border);
+    }
+    .logo-dot{width:10px;height:10px;border-radius:50%;background:var(--brand)}
+    .bar h1{margin:0;font-size:16px;font-weight:800;color:var(--brand-2)}
+    .badge{font-size:11px;color:#064e3b;border:1px solid #a7f3d0;background:#ecfdf5;padding:2px 8px;border-radius:999px}
+
+    /* Chat frame (phone-like) */
+    .phone{
+      display:grid; grid-template-columns:1fr 360px; gap:16px;
+    }
+    @media (max-width:980px){ .phone{grid-template-columns:1fr} }
+
+    .chat-shell{
+      border:1px solid var(--border); border-radius:24px; background:var(--panel);
+      box-shadow:0 10px 30px rgba(0,0,0,.07);
+      overflow:hidden; display:flex; flex-direction:column; height:70vh; min-height:560px;
+    }
+    .topbar{
+      background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      color:#fff; padding:10px 14px; display:flex; align-items:center; gap:10px;
+    }
+    .avatar{width:26px;height:26px;border-radius:50%;background:#fff}
+    .topbar .title{font-weight:700}
+    .screen{
+      flex:1; padding:12px; overflow:auto; background:
+        radial-gradient(1200px 400px at -20% -30%, #ffffff 0%, rgba(255,255,255,.4) 60%, transparent 80%),
+        linear-gradient(180deg,#ffffff,#f8fafc);
+    }
+    .bubble{
+      max-width:78%; padding:10px 12px; border-radius:18px; margin:10px 0;
+      box-shadow:0 1px 1px rgba(0,0,0,.04); white-space:pre-wrap; line-height:1.45;
+    }
+    .bot{background:var(--bot-bubble); border:1px solid var(--border)}
+    .user{background:var(--user-bubble); color:#fff; margin-left:auto}
+    .composer{display:flex; gap:8px; padding:10px; border-top:1px solid var(--border); background:#fff}
+    .composer input{
+      flex:1; padding:12px; border:1px solid var(--border); border-radius:12px; font-size:15px;
+    }
+    .composer button{
+      padding:12px 16px; border:0; border-radius:12px; background:var(--brand-2);
+      color:#fff; font-weight:700; cursor:pointer;
+    }
+
+    /* Right info panel */
+    .side{
+      border:1px solid var(--border); border-radius:18px; background:#fff; padding:14px;
+      box-shadow:0 8px 22px rgba(0,0,0,.06);
+    }
+    .side h3{margin:6px 0 10px;font-size:16px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{
+      border:1px solid var(--border); padding:8px 10px; border-radius:999px; cursor:pointer;
+      background:#fff; font-size:13px;
+    }
+    .hint{font-size:12px;color:#475569;margin-top:8px}
+
+    /* Product card */
+    .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:8px;margin:8px 0;display:flex;gap:10px;align-items:center}
+    .card img{width:120px;height:auto;border-radius:10px;border:1px solid var(--border)}
+    .card .info{font-size:14px}
+    .liwc{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+    .liwc button{font-size:11px;border:1px solid var(--border);border-radius:8px;background:#fff;padding:6px 8px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Brand hero with cover image -->
+    <div class="hero">
+      <!-- 저장소에 있는 브랜드 이미지를 사용 -->
+      <img src="Greenist.jpg" alt="Brand cover">
+      <div class="bar">
+        <span class="logo-dot"></span>
+        <h1>Greenist • Shampoo Assistant</h1>
+        <span class="badge">Competent</span>
+      </div>
+    </div>
+
+    <div class="phone">
+      <!-- Chat phone -->
+      <div class="chat-shell">
+        <div class="topbar">
+          <div class="avatar"></div>
+          <div class="title">G150 상담 챗봇</div>
+        </div>
+        <div id="chat" class="screen" role="log" aria-live="polite"></div>
+        <div class="composer" role="group" aria-label="메시지 작성">
+          <input id="msg" type="text" placeholder="예: 지성, 민감두피, 탈모케어, 볼륨, 손상모 / 또는 ‘제품추천’, ‘이미지’" autocomplete="off">
+          <button id="send" type="button">보내기</button>
+        </div>
+      </div>
+
+      <!-- Right info panel -->
+      <aside class="side">
+        <h3>빠른 질문 예시</h3>
+        <div class="chips" id="chips">
+          <span class="chip" data-q="지성">지성</span>
+          <span class="chip" data-q="민감두피">민감두피</span>
+          <span class="chip" data-q="탈모케어">탈모케어</span>
+          <span class="chip" data-q="볼륨">볼륨</span>
+          <span class="chip" data-q="손상모">손상모</span>
+          <span class="chip" data-q="매일 사용하고 싶어요">매일 사용</span>
+          <span class="chip" data-q="균형 잡힌 샴푸가 필요해요">밸런스</span>
+          <span class="chip" data-q="제품추천">제품추천</span>
+          <span class="chip" data-q="이미지">제품 이미지</span>
+        </div>
+
+        <div class="hint">
+          • 첫인사 후 <strong>궁금한 제품</strong>이나 <strong>찾고 싶은 용도</strong>를 자유롭게 물어보세요.<br>
+          • 예) “지성인데 가볍게 쓰고 싶어요”, “가족이 같이 쓸 순한 샴푸?”, “두피가 가려워요”
+        </div>
+
+        <div class="liwc">
+          <button onclick="exportLIWCcsv('per_turn')">Export CSV (per_turn)</button>
+          <button onclick="exportLIWCcsv('per_user')">Export CSV (user_only)</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ===== Logic ===== -->
+  <script>
+  (function(){
+    // -------- Query / state
+    const qp   = new URLSearchParams(location.search);
+    const pid  = qp.get('pid') || crypto.randomUUID().slice(0,8);
+    const conc = (qp.get('conc') || 'high').toLowerCase();   // high|low
+    const cond = 'comp', lang='ko', page=location.pathname.split('/').pop();
+
+    // -------- Logging (LIWC exportable)
+    const LOG = { pid, cond, conc, lang, page, started: Date.now(), turns: [] };
+    let lastTs = LOG.started;
+    function track(who,text){ const now=Date.now(); LOG.turns.push({t:now,who,text:String(text||'').trim(),ms_from_prev:now-lastTs}); lastTs=now; }
+    window.exportLIWCcsv=function(mode='per_turn'){
+      const rows=[];
+      if(mode==='per_turn'){
+        LOG.turns.forEach((r,i)=>rows.push({pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,idx:i,who:r.who,ms_from_prev:r.ms_from_prev,text:r.text.replace(/\s+/g,' ').trim()}));
+      }else{
+        const merged=LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
+        rows.push({pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,idx:0,who:'user_all',ms_from_prev:'',text:merged.replace(/\s+/g,' ').trim()});
+      }
+      const header=Object.keys(rows[0]||{text:''});
+      const csv=[header.join(','),...rows.map(r=>header.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download=`liwc_${LOG.pid}_${mode}.csv`; document.body.appendChild(a); a.click(); a.remove();
+    };
+
+    // -------- UI helpers
+    const $chat=document.getElementById('chat'), $msg=document.getElementById('msg'), $send=document.getElementById('send'), $chips=document.getElementById('chips');
+    function addBubble(text, who='bot'){
+      const div=document.createElement('div'); div.className=`bubble ${who==='bot'?'bot':'user'}`; div.textContent=text;
+      $chat.appendChild(div); $chat.scrollTop=$chat.scrollHeight;
+    }
+    function addProductCard(imgSrc, title, desc){
+      const wrap=document.createElement('div'); wrap.className='card';
+      const img=document.createElement('img'); img.src=imgSrc; img.alt=title;
+      const info=document.createElement('div'); info.className='info'; info.innerHTML=`<strong>${title}</strong><br>${desc}`;
+      wrap.appendChild(img); wrap.appendChild(info); $chat.appendChild(wrap); $chat.scrollTop=$chat.scrollHeight;
+    }
+
+    // -------- Greeting (Competent) × Concreteness
+    function greeting(){
+      const g = (conc==='high')
+        ? "안녕하세요. 먼저 필요한 샴푸 용도나 궁금하신 제품을 말씀해 주세요. 입력하시면 ‘상태 확인 → 사용 단계 → 주의 요약’ 순서로 간단히 안내하고, 상황에 맞는 제품도 추천해 드릴게요."
+        : "안녕하세요. 궁금하거나 찾고 싶은 제품을 편하게 물어보세요. 입력하시면 일반적인 안내와 함께 어울리는 제품을 알려 드립니다.";
+      addBubble(g,'bot'); track('bot', g);
+    }
+
+    // -------- Need detection
+    const MAP_NEED=[
+      {keys:['지성','oily','유분','oil'],slot:'oily'},
+      {keys:['민감','sensitive','자극','가려움','itch'],slot:'sensitive'},
+      {keys:['탈모','hair-loss','hairloss','density','얇아','가늘'],slot:'hairloss'},
+      {keys:['볼륨','volume','루트','root','납작','플랫'],slot:'volume'},
+      {keys:['손상','damaged','손상모','케어','repair','갈라짐','푸석'],slot:'damaged'},
+    ];
+    function detectNeed(s){ const t=(s||'').toLowerCase(); for(const m of MAP_NEED){ if(m.keys.some(k=>t.includes(k))) return m.slot; } return null; }
+
+    // -------- Competent responses × Concreteness
+    const RESP = {
+      high:{
+        oily:"입력: 지성. ① 프리린스 30–45초(미온수) → ② 두피 거품화 20–30초(손끝, 압력 약하게) → ③ 헹굼 45–60초(목덜미→정수리). 주의: 과도 마찰·고온 건조 회피.",
+        sensitive:"입력: 민감. ① 접촉 시간 단축 20–30초 → ② 손톱 금지, 지문 사용 → ③ 미지근한 물 충분 헹굼 → ④ 드라이 거리 15–20cm 유지. 주의: 향 강한 제품 병행 자제.",
+        hairloss:"입력: 탈모 관심. ① 두피 중심 단시간 세정 20–30초 → ② 뿌리 리프트 건조 → ③ 스타일링 잔여물 누적 점검. 주의: 고열·과다 제품층 회피.",
+        volume:"입력: 볼륨. ① 거품 과다 사용 금지 → ② 헹굼 시 뿌리 흔들기 15–20회 → ③ 드라이 시 브러시 각도 30–45° 유지. 주의: 장시간 고온 바람 회피.",
+        damaged:"입력: 손상. ① 거품 방치 ≤30초 → ② 타월 프레스 제거 → ③ 끝부분부터 빗질 → ④ 고열 도구 주 1–2회 이내. 주의: 표면 마찰 최소화."
+      },
+      low:{
+        oily:"지성으로 인식되었습니다. 일반 절차에 따라 세정과 헹굼을 완료한 뒤 건조를 진행하세요.",
+        sensitive:"민감으로 인식되었습니다. 짧은 사용과 온도·마찰 관리를 권장합니다.",
+        hairloss:"탈모 관심으로 인식되었습니다. 세정 후 건조 단계와 잔여물 누적 여부를 점검하세요.",
+        volume:"볼륨 관심으로 인식되었습니다. 사용 중 무게감을 줄이고 건조 시 형태를 확인하세요.",
+        damaged:"손상으로 인식되었습니다. 거칠음과 빗질 진행 상태를 확인하고 고열 사용을 줄이세요."
+      }
+    };
+
+    // -------- Product mapping & assets
+    const MAP_PRODUCTS = {
+      scalp:["scalp","두피","oily","oil","sebum","지성","가려움","itch","민감","redness","탈모","hair-loss","thinning","각질"],
+      balance:["balance","balanced","균형","밸런스","중성","normal","combination","혼합","ph","컨디션 유지"],
+      daily:["daily","everyday","매일","데일리","순한","gentle","mild","가족","공용","가볍게","심플","간단","부담없이"]
+    };
+    const ASSET = {
+      scalp:  {img:"G150-Scalp-shampoo.png",   title:"Scalp Shampoo",   desc:"두피 집중 세정/정돈이 필요한 경우에 적합합니다."},
+      balance:{img:"G150-Balance-shampoo.png", title:"Balance Shampoo", desc:"건성/지성 혼합 등 전체 컨디션 균형 유지 목적에 적합합니다."},
+      daily:  {img:"G150-Daily-Shampoo.png",   title:"Daily Shampoo",   desc:"자주 쓰는 마일드 타입. 가족 공용/부담 적은 사용감."}
+    };
+    const PRODUCT_TEXT = {
+      scalp:"말씀하신 내용 기준으로 ‘Scalp Shampoo’를 권해 드릴게요.",
+      balance:"설명해 주신 상태에는 ‘Balance Shampoo’가 잘 맞아 보여요.",
+      daily:"자주, 편하게 쓰고 싶으시면 ‘Daily Shampoo’를 추천드립니다."
+    };
+    function countMatches(text, arr){ const t=(text||'').toLowerCase(); return arr.reduce((n,k)=> n + (t.includes(k)?1:0), 0); }
+    function recommendProduct(userText){
+      const scores={scalp:countMatches(userText,MAP_PRODUCTS.scalp), balance:countMatches(userText,MAP_PRODUCTS.balance), daily:countMatches(userText,MAP_PRODUCTS.daily)};
+      const order=['scalp','balance','daily']; let best=order[0], s=scores[best]; for(const k of order.slice(1)){ if(scores[k]>s){best=k;s=scores[k];} }
+      return {key:best, scores};
+    }
+
+    // -------- conversation state (for “제품추천”, “이미지”)
+    let lastNeed=null, lastProductKey=null, lastUserText="";
+
+    function showRecommendation(prodKey, scores, logScores=true){
+      const line = PRODUCT_TEXT[prodKey] + (logScores?` (scalp:${scores.scalp}, balance:${scores.balance}, daily:${scores.daily})`:"");
+      addBubble(line,'bot'); track('bot', line);
+      const asset=ASSET[prodKey]; if(asset){ addProductCard(asset.img, asset.title, asset.desc); track('bot', `[image] ${asset.img}`); }
+    }
+
+    function respond(userText){
+      const t=userText.trim().toLowerCase();
+
+      // quick commands
+      if(/^(제품추천|추천|recommend)$/.test(t)){
+        const baseKey = lastProductKey || recommendProduct(lastUserText||userText).key;
+        const baseScores = recommendProduct(lastUserText||userText).scores;
+        showRecommendation(baseKey, baseScores, false); return;
+      }
+      if(/^(이미지|image|photo|사진)$/.test(t)){
+        const key = lastProductKey || 'balance';
+        showRecommendation(key, {scalp:0,balance:0,daily:0}, false); return;
+      }
+
+      // main flow
+      const need = detectNeed(userText);
+      const base = need ? RESP[conc][need] :
+        "입력값을 인식하지 못했습니다. 지성/민감두피/탈모케어/볼륨/손상모 또는 궁금한 제품을 입력해 주세요.";
+      addBubble(base,'bot'); track('bot', base);
+
+      const {key, scores} = recommendProduct(userText);
+      lastNeed = need; lastProductKey = key; lastUserText = userText;
+      showRecommendation(key, scores);
+    }
+
+    // -------- Events
+    function onSend(){
+      const v=$msg.value.trim(); if(!v) return;
+      addBubble(v,'user'); track('user', v); $msg.value='';
+      setTimeout(()=>respond(v), 240);
+    }
+    $send.addEventListener('click', onSend);
+    $msg.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); onSend(); }});
+    $chips?.addEventListener('click', (e)=>{
+      const btn=e.target.closest('[data-q]'); if
