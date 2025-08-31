@@ -1,184 +1,64 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G150 샴푸추천 엑스퍼트봇</title>
-    <style>
-        /* 스타일은 제공된 초록 테마로 유지 */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f5f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        #chat-container {
-            width: 400px;
-            background-color: #e8f5e9;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            overflow-y: auto;
-            max-height: 90%;
-            line-height: 1.8;
-        }
-        .bot-message, .user-message {
-            margin: 10px 0;
-            display: flex;
-        }
-        .bot-message {
-            justify-content: flex-start;
-        }
-        .user-message {
-            justify-content: flex-end;
-        }
-        .message {
-            padding: 10px 15px;
-            border-radius: 20px;
-            max-width: 70%;
-        }
-        .bot-message .message {
-            background-color: #c8e6c9;
-            color: #2e7d32;
-        }
-        .user-message .message {
-            background-color: #a5d6a7;
-            color: #1b5e20;
-        }
-        .button-container {
-            text-align: center;
-            margin-top: 10px;
-        }
-        button {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #388e3c;
-        }
-        .image-container {
-            text-align: center;
-            margin: 10px 0;
-        }
-        .image-container img {
-            max-width: 100%;
-            border-radius: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G150 샴푸추천 부들봇 (Warm)</title>
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background-color:#fff8f0; margin:0; padding:0;
+      display:flex; justify-content:center; align-items:center; min-height:100vh;
+    }
+    #wrap{ width:430px; max-width:92%; }
+    #chat{ width:100%; background:#fff3e6; border-radius:10px;
+      box-shadow:0 4px 8px rgba(0,0,0,.1);
+      padding:20px; overflow-y:auto; max-height:72vh; line-height:1.8;
+      border:1px solid #ffd9bf; }
+    .bot,.user{ margin:10px 0; display:flex; }
+    .bot{ justify-content:flex-start; }
+    .user{ justify-content:flex-end; }
+    .bubble{ padding:10px 15px; border-radius:20px; max-width:75%; box-shadow:0 1px 1px rgba(0,0,0,.04); }
+    .bot .bubble{ background:#ffd8b1; color:#5a372a; }
+    .user .bubble{ background:#ffcba4; color:#5a372a; }
+    .imgbox{ text-align:center; margin:10px 0; }
+    .imgbox img{ max-width:100%; border-radius:10px; border:1px solid #ffd9bf; }
+    .buttons{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:8px;}
+    .chip{ background:#ffe4d3; color:#5a372a; border:1px solid #ffcfb8; border-radius:12px; padding:8px 10px; cursor:pointer; font-weight:600;}
+    .chip.secondary{ background:#fff; }
+    .bar{ display:flex; gap:8px; margin-top:10px; }
+    .bar input{ flex:1; padding:12px; border:1px solid #ffcfb8; border-radius:10px; font-size:15px; background:#fffaf6; color:#5a372a;}
+    .bar button{ min-width:92px; background:#ffad8f; color:#5a372a; border:none; border-radius:8px; font-weight:700; cursor:pointer; padding:9px 12px;}
+    .bar button:hover{ background:#e69c7a; }
+    .top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .mini{ font-size:12px; color:#7a5a4b; }
+    .pill{ font-size:11px; padding:4px 8px; border-radius:999px; border:1px solid #ffcfb8; background:#fffaf6; cursor:pointer;}
+    .pill:hover{ background:#ffe7da; }
+  </style>
 </head>
 <body>
-    <div id="chat-container">
-        <!-- 대화 내용이 동적으로 추가됩니다 -->
+  <div id="wrap">
+    <div class="top">
+      <div class="mini">G150 샴푸추천 <strong>부들봇</strong> (Warm)</div>
+      <div class="mini">
+        <button class="pill" onclick="exportCSV('per_turn')">CSV per_turn</button>
+        <button class="pill" onclick="exportCSV('per_user')">CSV user_only</button>
+      </div>
     </div>
 
-    <script>
-        const chatContainer = document.getElementById('chat-container');
+    <div id="chat" aria-live="polite"></div>
 
-        const conversation = [
-            {
-                type: 'bot',
-                message: '안녕하세요. 찾으시는 샴푸의 용도를 말씀해 주세요.<br><br>용도에 맞는 정확한 답변과 추천을 제공해 드리겠습니다.',
-                buttons: [
-                    { text: '두피 문제 해결', nextIndex: 1 },
-                    { text: '건강한 모발 관리', nextIndex: 1 }
-                ]
-            },
-            {
-                type: 'bot',
-                message: '저는 엑스퍼트봇입니다. 😊<br><br>2만 건 이상의 데이터를 분석하고 임상으로 검증된 최적의 제품을 추천드립니다.<br><br>추천을 원하시면 아래 버튼을 눌러주세요.',
-                buttons: [
-                    { text: 'G150 샴푸 추천 보기', nextIndex: 2 }
-                ]
-            },
-            {
-                type: 'bot',
-                message: 'G150 Greenist 샴푸는 모발 건강과 강화에 최적화된 제품입니다.<br><br>1. 아미노산, 판테놀, 살리실릭애씨드, 케라틴 등의 고기능성 성분 함유.<br>2. 95% 이상의 식물유래 성분 사용.<br>3. 파라벤, 인공색소, 인공향료 등의 유해 성분 배제. <br> 이러한 특장점이 있는 Greenist 샴푸 추천에 만족하신다면 구매버튼을 눌러주세요.', 
-                image: 'https://raw.githubusercontent.com/zhmoon35/chatbot-test/refs/heads/main/G150-Greenist.jpg',
-                buttons: [
-                    { text: '구매하러 가기', nextIndex: 3 },
-                    { text: '다른 추천 보기', nextIndex: null }
-                ]
-            },
-            {
-                type: 'bot',
-                message: 'G150 Greenist 샴푸를 사용하시면 윤기 있고 건강한 모발로 변신할 수 있습니다.<br><br>아래 이미지를 확인하시고 구매를 진행해 보세요.',
-                image: 'https://github.com/zhmoon35/chatbot-test/blob/main/Greenist.jpg?raw=true',
-                buttons: [
-                    { text: '구매 완료', nextIndex: null }
-                ]
-            }
-        ];
+    <div class="bar">
+      <input id="msg" type="text" placeholder="문장으로 편하게 입력해 주세요. 예) 두피가 가렵고 유분이 많아요 / 매일 써도 순한 샴푸 있을까요?" autocomplete="off">
+      <button id="send">보내기</button>
+    </div>
+  </div>
 
-        let currentIndex = 0;
+  <script>
+  (function(){
+    const $chat=document.getElementById('chat');
+    const $msg=document.getElementById('msg');
+    const $send=document.getElementById('send');
 
-        function addMessage(type, text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add(type === 'bot' ? 'bot-message' : 'user-message');
-
-            const messageBubble = document.createElement('div');
-            messageBubble.classList.add('message');
-            messageBubble.innerHTML = text.replace(/\\n/g, '<br>');
-
-            messageDiv.appendChild(messageBubble);
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function addImage(imageUrl) {
-            const imageContainer = document.createElement('div');
-            imageContainer.classList.add('image-container');
-
-            const imageElement = document.createElement('img');
-            imageElement.src = imageUrl;
-            imageElement.alt = '제품 이미지';
-
-            imageContainer.appendChild(imageElement);
-            chatContainer.appendChild(imageContainer);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function addButtons(buttons) {
-            const buttonContainer = document.createElement('div');
-            buttonContainer.classList.add('button-container');
-
-            buttons.forEach(button => {
-                const buttonElement = document.createElement('button');
-                buttonElement.textContent = button.text;
-                buttonElement.onclick = () => {
-                    addMessage('user', button.text);
-                    if (button.nextIndex !== null) {
-                        loadConversation(button.nextIndex);
-                    }
-                };
-                buttonContainer.appendChild(buttonElement);
-            });
-
-            chatContainer.appendChild(buttonContainer);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function loadConversation(index) {
-            const step = conversation[index];
-            currentIndex = index;
-            addMessage('bot', step.message);
-            if (step.image) {
-                addImage(step.image);
-            }
-            if (step.buttons) {
-                addButtons(step.buttons);
-            }
-        }
-
-        loadConversation(currentIndex);
-    </script>
-</body>
-</html>
+    /* ===== LIWC 로깅 ===== */
+    const pid=crypto.randomUUID().slice(
