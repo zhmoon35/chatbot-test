@@ -1,275 +1,180 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G150 샴푸추천 부들봇 (자유입력 + LIWC)</title>
+  <title>G150 샴푸추천 부들봇 (Warm · Free Input + Mapping + LIWC)</title>
   <style>
-    /* ====== 기존 살구톤 디자인 유지 ====== */
+    /* Warm(부들봇) 살구톤 테마 */
     body{
       font-family: Arial, sans-serif;
       background-color:#fff8f0; margin:0; padding:0;
       display:flex; justify-content:center; align-items:center; min-height:100vh;
     }
     #wrap{ width:430px; max-width:92%; }
-    #chat-container{
-      width:100%; background:#fff3e6; border-radius:10px;
-      box-shadow:0 4px 8px rgba(0,0,0,0.1);
+    #chat{ width:100%; background:#fff3e6; border-radius:10px;
+      box-shadow:0 4px 8px rgba(0,0,0,.1);
       padding:20px; overflow-y:auto; max-height:72vh; line-height:1.8;
-      border:1px solid #ffd9bf;
-    }
-    .bot-message,.user-message{ margin:10px 0; display:flex; }
-    .bot-message{ justify-content:flex-start; }
-    .user-message{ justify-content:flex-end; }
-    .message{
-      padding:10px 15px; border-radius:20px; max-width:75%;
-      box-shadow:0 1px 1px rgba(0,0,0,.04);
-    }
-    .bot-message .message{ background:#ffd8b1; color:#5a372a; }
-    .user-message .message{ background:#ffcba4; color:#5a372a; }
-    .image-container{ text-align:center; margin:10px 0; }
-    .image-container img{ max-width:100%; border-radius:10px; border:1px solid #ffd9bf; }
-    .button-container{ text-align:center; margin:10px 0 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
-    button{
-      background:#ffad8f; color:#5a372a; border:none; border-radius:8px;
-      padding:9px 12px; cursor:pointer; font-weight:600;
-    }
-    button:hover{ background:#e69c7a; }
-    /* 입력창 */
-    .composer{ display:flex; gap:8px; margin-top:10px; }
-    .composer input{
-      flex:1; padding:12px; border:1px solid #ffcfb8; border-radius:10px; font-size:15px; background:#fffaf6; color:#5a372a;
-    }
-    .composer .send{ min-width:92px; }
-    /* 로그 내보내기 */
-    .toprow{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+      border:1px solid #ffd9bf; }
+    .bot,.user{ margin:10px 0; display:flex; }
+    .bot{ justify-content:flex-start; }
+    .user{ justify-content:flex-end; }
+    .bubble{ padding:10px 15px; border-radius:20px; max-width:75%; box-shadow:0 1px 1px rgba(0,0,0,.04); }
+    .bot .bubble{ background:#ffd8b1; color:#5a372a; }
+    .user .bubble{ background:#ffcba4; color:#5a372a; }
+    .imgbox{ text-align:center; margin:10px 0; }
+    .imgbox img{ max-width:100%; border-radius:10px; border:1px solid #ffd9bf; }
+    .buttons{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:8px;}
+    .chip{ background:#ffe4d3; color:#5a372a; border:1px solid #ffcfb8; border-radius:12px; padding:8px 10px; cursor:pointer; font-weight:600;}
+    .chip.secondary{ background:#fff; }
+    .bar{ display:flex; gap:8px; margin-top:10px; }
+    .bar input{ flex:1; padding:12px; border:1px solid #ffcfb8; border-radius:10px; font-size:15px; background:#fffaf6; color:#5a372a;}
+    .bar button{ min-width:92px; background:#ffad8f; color:#5a372a; border:none; border-radius:8px; font-weight:700; cursor:pointer; padding:9px 12px;}
+    .bar button:hover{ background:#e69c7a; }
+    .top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
     .mini{ font-size:12px; color:#7a5a4b; }
-    .pill{ font-size:11px; padding:4px 8px; border-radius:999px; border:1px solid #ffcfb8; background:#fffaf6; cursor:pointer; }
+    .pill{ font-size:11px; padding:4px 8px; border-radius:999px; border:1px solid #ffcfb8; background:#fffaf6; cursor:pointer;}
     .pill:hover{ background:#ffe7da; }
-    /* 빠른 선택 버튼 색상 변형 */
-    .chip{ background:#ffe4d3; }
-    .chip.secondary{ background:#fff; border:1px solid #ffcfb8; }
   </style>
 </head>
 <body>
   <div id="wrap">
-    <div class="toprow">
-      <div class="mini">G150 샴푸추천 부들봇</div>
+    <div class="top">
+      <div class="mini">G150 샴푸추천 <strong>부들봇</strong> (Warm)</div>
       <div class="mini">
         <button class="pill" onclick="exportCSV('per_turn')">CSV per_turn</button>
         <button class="pill" onclick="exportCSV('per_user')">CSV user_only</button>
       </div>
     </div>
-    <div id="chat-container" aria-live="polite"></div>
 
-    <!-- 자유 입력 + 전송 -->
-    <div class="composer">
-      <input id="msg" type="text" placeholder="문장으로 입력해 보세요. 예) 매일 써도 순한 샴푸 있을까요? / 두피가 가렵고 유분이 많아요" autocomplete="off"/>
-      <button id="send" class="send">보내기</button>
+    <div id="chat" aria-live="polite"></div>
+
+    <div class="bar">
+      <input id="msg" type="text" placeholder="문장으로 편하게 입력해 주세요. 예) 두피가 가렵고 유분이 많아요 / 매일 써도 순한 샴푸 있을까요?" autocomplete="off">
+      <button id="send">보내기</button>
     </div>
   </div>
 
   <script>
   (function(){
-    const chat = document.getElementById('chat-container');
-    const $msg = document.getElementById('msg');
+    const $chat = document.getElementById('chat');
+    const $msg  = document.getElementById('msg');
     const $send = document.getElementById('send');
 
-    /* =======================
-       0) LIWC용 로깅 구조
-       ======================= */
-    const pid = crypto.randomUUID().slice(0,8);
-    const LOG = { pid, cond:'warm-ui', conc:'na', lang:'ko', page:location.pathname.split('/').pop(), started: Date.now(), turns: [] };
+    /* =============== LIWC 로깅 =============== */
+    const pid  = crypto.randomUUID().slice(0,8);
+    const LOG  = { pid, cond:'warm', conc:'na', lang:'ko', page:location.pathname.split('/').pop(), started: Date.now(), turns: [] };
     let lastTs = LOG.started;
-    function track(who, text){
-      const now = Date.now();
-      LOG.turns.push({ t: now, who, text: String(text||'').trim(), ms_from_prev: now-lastTs });
-      lastTs = now;
-    }
-    window.exportCSV = function(mode='per_turn'){
+    function track(who, text){ const now=Date.now(); LOG.turns.push({t:now, who, text:String(text||'').trim(), ms_from_prev:now-lastTs}); lastTs=now; }
+    window.exportCSV=function(mode='per_turn'){
       const rows=[];
       if(mode==='per_turn'){
-        LOG.turns.forEach((r,i)=>rows.push({
-          pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,
-          idx:i,who:r.who,ms_from_prev:r.ms_from_prev,text:r.text.replace(/\s+/g,' ').trim()
-        }));
+        LOG.turns.forEach((r,i)=>rows.push({pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,idx:i,who:r.who,ms_from_prev:r.ms_from_prev,text:r.text.replace(/\s+/g,' ').trim()}));
       }else{
-        const mergedUser = LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
-        rows.push({pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,
-          idx:0,who:'user_all',ms_from_prev:'',text:mergedUser.replace(/\s+/g,' ').trim()});
+        const merged=LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
+        rows.push({pid:LOG.pid,cond:LOG.cond,conc:LOG.conc,lang:LOG.lang,page:LOG.page,idx:0,who:'user_all',ms_from_prev:'',text:merged.replace(/\s+/g,' ').trim()});
       }
-      if(rows.length===0){ alert('아직 대화가 없습니다.'); return; }
-      const header = Object.keys(rows[0]);
-      const csv = [header.join(','), ...rows.map(r=>header.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
-      const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a');
+      if(rows.length===0){ alert('대화가 아직 없습니다.'); return; }
+      const header=Object.keys(rows[0]); const csv=[header.join(','),...rows.map(r=>header.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a');
       a.href=URL.createObjectURL(blob); a.download=`liwc_${LOG.pid}_${mode}.csv`; document.body.appendChild(a); a.click(); a.remove();
     };
 
-    /* =======================
-       1) 디자인 유틸
-       ======================= */
-    function addMessage(type, html){
-      const row = document.createElement('div');
-      row.className = type==='bot' ? 'bot-message' : 'user-message';
-      const bubble = document.createElement('div');
-      bubble.className = 'message';
-      bubble.innerHTML = html;
-      row.appendChild(bubble);
-      chat.appendChild(row);
-      chat.scrollTop = chat.scrollHeight;
+    /* =============== UI 헬퍼 =============== */
+    function addBubble(who, html){
+      const row=document.createElement('div'); row.className = (who==='bot'?'bot':'user');
+      const b=document.createElement('div'); b.className='bubble'; b.innerHTML=html;
+      row.appendChild(b); $chat.appendChild(row); $chat.scrollTop=$chat.scrollHeight;
     }
-    function addImage(url, alt='Product'){
-      const box=document.createElement('div'); box.className='image-container';
-      const img=document.createElement('img'); img.src=url; img.alt=alt;
-      box.appendChild(img); chat.appendChild(box); chat.scrollTop=chat.scrollHeight;
-    }
-    function addButtons(configs){
-      const area=document.createElement('div'); area.className='button-container';
-      configs.forEach(c=>{
-        const b=document.createElement('button');
-        b.className = 'chip' + (c.secondary ? ' secondary' : '');
-        b.textContent=c.text;
-        b.onclick=()=>{ userSays(c.text); if(c.on){ c.on(); } };
-        area.appendChild(b);
+    function addButtons(list){
+      const wrap=document.createElement('div'); wrap.className='buttons';
+      list.forEach(cfg=>{
+        const btn=document.createElement('button'); btn.className='chip'+(cfg.secondary?' secondary':''); btn.textContent=cfg.text;
+        btn.onclick=()=>{ userSay(cfg.text); if(cfg.on) cfg.on(); };
+        wrap.appendChild(btn);
       });
-      chat.appendChild(area); chat.scrollTop=chat.scrollHeight;
+      $chat.appendChild(wrap); $chat.scrollTop=$chat.scrollHeight;
+    }
+    function addCard(img, title, desc){
+      const box=document.createElement('div'); box.className='imgbox';
+      const im=document.createElement('img'); im.src=img; im.alt=title; box.appendChild(im);
+      $chat.appendChild(box);
+      addBubble('bot', `<strong>${title}</strong><br>${desc}`);
     }
 
-    /* =======================
-       2) 초기 인사(사용자 문장 입력 유도)
-       ======================= */
-    function greeting(){
-      addMessage('bot',
-        '안녕하세요! 저는 <strong>부들봇</strong>입니다. ✨<br>'+
-        '샴푸를 고르는 목적을 알려 주시면, 해당되는 정보와 추천을 정리해 드릴게요.<br>'+
-        '<em>문장으로</em> 편하게 입력해 주세요. 예) “두피가 가렵고 유분이 많아요”, “매일 써도 순한 샴푸 있을까요?”'
-      ); track('bot','greet');
-
-      addButtons([
-        {text:'지성', on:()=>userSays('지성')},
-        {text:'민감', on:()=>userSays('민감')},
-        {text:'탈모', on:()=>userSays('탈모')},
-        {text:'볼륨', on:()=>userSays('볼륨')},
-        {text:'손상', on:()=>userSays('손상')},
-        {text:'제품추천', secondary:true, on:()=>userSays('제품추천')},
-        {text:'이미지', secondary:true, on:()=>userSays('이미지')}
-      ]);
-    }
-
-    /* =======================
-       3) 니즈/제품 매핑
-       ======================= */
-    const MAP_NEED = [
-      {keys:['지성','oily','유분','oil','sebum'], slot:'oily'},
-      {keys:['민감','sensitive','자극','가려움','itch','redness'], slot:'sensitive'},
-      {keys:['탈모','hair-loss','hairloss','density','얇','가늘'], slot:'hairloss'},
-      {keys:['볼륨','volume','루트','root','납작','플랫','flat'], slot:'volume'},
-      {keys:['손상','damaged','손상모','repair','갈라짐','푸석','건조'], slot:'damaged'}
-    ];
-    function detectNeed(s){ const t=(s||'').toLowerCase(); for(const m of MAP_NEED){ if(m.keys.some(k=>t.includes(k))) return m.slot; } return null; }
-
-    const MAP_PRODUCTS = {
-      scalp:["scalp","두피","oily","oil","sebum","지성","가려움","itch","민감","redness","탈모","hair-loss","thinning","각질"],
-      balance:["balance","balanced","균형","밸런스","중성","normal","combination","혼합","ph","컨디션 유지"],
-      daily:["daily","everyday","매일","데일리","순한","gentle","mild","가족","공용","가볍게","심플","간단","부담없이"]
+    /* =============== 제품 매핑 규칙(요청대로 고정) =============== */
+    // 지성, 민감 => balance / 탈모, 두피, 비듬 => scalp / 볼륨, 손상, 기타 => daily
+    const MAP_FORCE = {
+      balance: ['지성','민감','oily','sensitive'],
+      scalp:   ['탈모','두피','비듬','hair-loss','scalp','dandruff'],
+      daily:   ['볼륨','손상','volume','damaged'] // 기본값도 daily
     };
+    function matchForced(text){
+      const t=(text||'').toLowerCase();
+      for(const k of MAP_FORCE.balance){ if(t.includes(k.toLowerCase())) return 'balance'; }
+      for(const k of MAP_FORCE.scalp){   if(t.includes(k.toLowerCase())) return 'scalp'; }
+      for(const k of MAP_FORCE.daily){   if(t.includes(k.toLowerCase())) return 'daily'; }
+      return 'daily';
+    }
+
     const ASSET = {
       scalp:  {img:"https://github.com/zhmoon35/chatbot-test/blob/main/G150-Scalp-shampoo.png?raw=true",   title:"Scalp Shampoo",   desc:"두피 중심 세정/정돈이 필요한 경우에 적합합니다."},
-      balance:{img:"https://github.com/zhmoon35/chatbot-test/blob/main/G150-Balance-shampoo.png?raw=true", title:"Balance Shampoo", desc:"건성/지성 혼합 등 전반 컨디션 균형 유지 목적에 적합합니다."},
-      daily:  {img:"https://github.com/zhmoon35/chatbot-test/blob/main/G150-Daily-Shampoo.png?raw=true",   title:"Daily Shampoo",   desc:"자주 사용하기 위한 마일드 베이스. 가족 공용에 적합합니다."}
-    };
-    const PRODUCT_TEXT = {
-      scalp:"설명에 근거해 ‘Scalp Shampoo’를 권장합니다.",
-      balance:"설명에 근거해 ‘Balance Shampoo’를 권장합니다.",
-      daily:"설명에 근거해 ‘Daily Shampoo’를 권장합니다."
-    };
-    function countMatches(text, arr){ const t=(text||'').toLowerCase(); return arr.reduce((n,k)=> n + (t.includes(k)?1:0), 0); }
-    function recommendProduct(userText){
-      const scores = {
-        scalp:countMatches(userText,MAP_PRODUCTS.scalp),
-        balance:countMatches(userText,MAP_PRODUCTS.balance),
-        daily:countMatches(userText,MAP_PRODUCTS.daily)
-      };
-      const order=['scalp','balance','daily']; let best=order[0], s=scores[best];
-      for(const k of order.slice(1)){ if(scores[k]>s){ best=k; s=scores[k]; } }
-      return {key:best, scores};
-    }
-
-    /* =======================
-       4) 응답(디자인 유지 + 제품카드)
-       ======================= */
-    const RESP = {
-      oily:     "지성 관련 입력으로 분류했어요. 세정감, 건조 속도, 뿌리 눌림 여부를 함께 확인해 보세요.",
-      sensitive:"민감 관련 입력으로 분류했어요. 접촉 시간·온도·마찰을 줄이는 구성이 안전합니다.",
-      hairloss: "탈모/밀도 관련 입력으로 분류했어요. 두피 중심 세정과 건조 방향 점검이 일반적입니다.",
-      volume:   "볼륨 관련 입력으로 분류했어요. 사용 중 무게감과 건조 시 형태 유지가 핵심 변수입니다.",
-      damaged:  "손상 관련 입력으로 분류했어요. 표면 거칠음·엉킴을 줄이는 관리가 일반적입니다."
+      balance:{img:"https://github.com/zhmoon35/chatbot-test/blob/main/G150-Balance-shampoo.png?raw=true", title:"Balance Shampoo", desc:"지성·민감 등 전체 컨디션의 균형을 유지하기에 적합합니다."},
+      daily:  {img:"https://github.com/zhmoon35/chatbot-test/blob/main/G150-Daily-Shampoo.png?raw=true",   title:"Daily Shampoo",   desc:"자주 사용하기 좋은 마일드 타입. 편안한 사용감을 제공합니다."}
     };
 
-    let lastProductKey=null, lastUserText="";
-    function showRecommendation(prodKey, scores, withImage=true){
-      addMessage('bot', PRODUCT_TEXT[prodKey] + ` <span style="opacity:.5">(scalp:${scores.scalp}, balance:${scores.balance}, daily:${scores.daily})</span>`);
-      const a = ASSET[prodKey];
-      if(withImage && a){ addImage(a.img, a.title);
-        addMessage('bot',
-          `<strong>${a.title}</strong><br>${a.desc}<br><br>`+
-          `원하시면 “다른 추천”이라고 입력해 보세요.`); }
-    }
-
-    function coreRespond(userText){
-      const need = detectNeed(userText);
-      if(need){ addMessage('bot', RESP[need]); track('bot', `need:${need}`); }
-      else { addMessage('bot', '입력 내용을 기준으로 조건을 분류하지 못했습니다. 상태/용도를 조금 더 구체적으로 서술해 주세요.'); track('bot','unrecognized'); }
-
-      const {key, scores} = recommendProduct(userText);
-      lastProductKey = key; lastUserText = userText;
-      showRecommendation(key, scores, true);
-    }
-
-    /* =======================
-       5) 사용자 입력 처리
-       ======================= */
-    function userSays(text){
-      addMessage('user', text); track('user', text);
-
-      const t = text.trim().toLowerCase();
-      if(t==='제품추천' || t==='추천' || t==='다른 추천' || t==='다른추천' || t==='recommend'){
-        const {key, scores} = recommendProduct(lastUserText || text);
-        lastProductKey = key;
-        showRecommendation(key, scores, true);
-        return;
-      }
-      if(t==='이미지' || t==='image' || t==='사진'){
-        const key = lastProductKey || 'balance';
-        const a = ASSET[key]; if(a){ addImage(a.img, a.title); track('bot', `[image] ${a.img}`); }
-        return;
-      }
-
-      // 일반 흐름
-      setTimeout(()=>coreRespond(text), 200);
-    }
-
-    $send.addEventListener('click', ()=>{ const v=$msg.value.trim(); if(!v) return; $msg.value=''; userSays(v); });
-    $msg.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); const v=$msg.value.trim(); if(!v) return; $msg.value=''; userSays(v); }});
-
-    /* =======================
-       6) 기존 대화 카드(옵션): 버튼 흐름 유지
-       ======================= */
-    function showLegacyCards(){
-      // 카드 1
-      addMessage('bot','안녕하세요!<br>제가 도와드릴까요? 😊<br><br>부드럽고 윤기 나는 머릿결을 위해 어떤 게 궁금하신가요?');
+    /* =============== Warm 안내문 & 시작 버튼 =============== */
+    function greet(){
+      // 1) 요청된 첫 인사
+      addBubble('bot','안녕하세요! 제 이름은 <strong>부들봇</strong>이라고 해요. 제가 샴푸 쇼핑을 도와드릴까요? 😊');
+      track('bot','greet-1');
+      // 2) 자유 입력 안내 + 예시 + 매핑 힌트(내부 규칙)
+      addBubble('bot',
+        '샴푸를 고르는 목적을 알려 주시면, 해당되는 정보와 추천을 정리해 드릴게요.<br>'+
+        '문장으로 편하게 입력해 주세요. 예) “두피가 가렵고 유분이 많아요”, “매일 써도 순한 샴푸 있을까요?”'
+      );
+      track('bot','greet-2');
+      // 선택형 빠른 버튼(편의)
       addButtons([
-        {text:'자연 성분', on:()=>userSays('자연 성분이 들어간 제품 찾고 있어요')},
-        {text:'좋은 향기', on:()=>userSays('향이 좋은 제품을 찾고 있어요')}
+        {text:'지성', on:()=>userSay('지성')},
+        {text:'민감', on:()=>userSay('민감')},
+        {text:'탈모', on:()=>userSay('탈모')},
+        {text:'두피', on:()=>userSay('두피 상태가 예민해요')},
+        {text:'비듬', on:()=>userSay('비듬이 고민이에요')},
+        {text:'볼륨', secondary:true, on:()=>userSay('볼륨이 쉽게 가라앉아요')},
+        {text:'손상', secondary:true, on:()=>userSay('손상모라 엉켜요')}
       ]);
-      // 카드 2
-      addMessage('bot','제 이름은 부들봇이에요! 😊<br><br>원하시는 사용감과 향을 알려 주시면 맞춤 정보를 제공합니다.');
-      addButtons([{text:'추천 샴푸 보기', on:()=>userSays('추천 샴푸 보기')}]);
     }
 
-    // 시작: 인사 + (선택) 레거시 카드 톤 유지
-    greeting();
-    showLegacyCards();
+    /* =============== 응답 로직 =============== */
+    function respond(userText){
+      // 제품 매핑(요청 규칙 강제)
+      const key = matchForced(userText);
+      const a = ASSET[key];
+
+      // Warm 톤 간단 본문
+      const warmText = {
+        balance: "공유해 주셔서 고마워요. 전반 균형을 가볍게 유지하는 쪽으로 함께 보시죠.",
+        scalp:   "말씀하신 내용을 보면 두피 중심 케어가 우선이에요. 사용 중 불편 신호를 함께 살펴볼게요.",
+        daily:   "부담 없이 자주 쓰기 편한 구성이 좋아 보여요. 사용감이 가벼운 방향으로 안내드릴게요."
+      }[key];
+      addBubble('bot', warmText); track('bot', `warm:${key}`);
+
+      // 제품 카드
+      addCard(a.img, a.title, a.desc); track('bot', `[image] ${a.img}`);
+    }
+
+    function userSay(text){
+      addBubble('user', text); track('user', text);
+      setTimeout(()=>respond(text), 200);
+    }
+
+    $send.addEventListener('click', ()=>{ const v=$msg.value.trim(); if(!v) return; $msg.value=''; userSay(v); });
+    $msg.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); const v=$msg.value.trim(); if(!v) return; $msg.value=''; userSay(v); }});
+
+    // 시작
+    greet();
   })();
   </script>
 </body>
