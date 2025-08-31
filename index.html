@@ -1,75 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shampoo Recommendation Chatbot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .chat-container {
-            max-width: 350px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-        .chat {
-            margin: 10px 0;
-        }
-        .bot {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .buttons {
-            margin: 10px 0;
-        }
-        .buttons button {
-            margin-right: 10px;
-            padding: 10px 15px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button1 {
-            background-color: #3498db;
-            color: white;
-        }
-        .button2 {
-            background-color: #2ecc71;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Shampoo Recommendation Chatbot</title>
+  <style>
+    body{font-family:Arial, sans-serif;line-height:1.6;background:#f9f9f9;margin:0;display:flex;min-height:100vh;align-items:center;justify-content:center}
+    .card{max-width:520px;width:92%;margin:auto;padding:24px;border:1px solid #ddd;border-radius:12px;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.06);text-align:center}
+    h1{font-size:22px;margin:6px 0 18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{display:inline-block;padding:12px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:600;font-size:14px}
+    .btn-blue{background:#3498db;color:#fff}
+    .btn-green{background:#2ecc71;color:#fff}
+    .note{margin-top:14px;font-size:12px;color:#555}
+    a.btn{ text-decoration:none }
+  </style>
 </head>
 <body>
-    <div class="chat-container">
-		<div id="chat">
-			<p class="chat bot"><h3>Shampoo Recommendation Chatbot</h3></p>
-		</div>
-        <div class="buttons">
-            <p><button class="button1" onclick="selectOption('en1')">English Scenario 1</button>
-            <button class="button1" onclick="selectOption('en2')">English Scenario 2</button></p>
-            <p><button class="button2" onclick="selectOption('ko1')">Korean Scenario 1</button>
-            <button class="button2" onclick="selectOption('ko2')">Korean Scenario 2</button></p>
-        </div>
+  <div class="card">
+    <h1>Shampoo Recommendation Chatbot</h1>
+    <div class="grid">
+      <!-- EN -->
+      <a class="btn btn-blue"  href="chatbot_warm_liwc_en.html">English • Warm</a>
+      <a class="btn btn-blue"  href="chatbot_comp_liwc_en.html">English • Competent</a>
+      <!-- KO -->
+      <a class="btn btn-green" href="chatbot_warm_liwc_ko.html">Korean • Warm</a>
+      <a class="btn btn-green" href="chatbot_comp_liwc_ko.html">Korean • Competent</a>
     </div>
-
-    <script>
-        function selectOption(option) {
-			window.location.href=option+'.html';
-        }
-    </script>
+    <div class="note">
+      If a page doesn’t open, confirm the file really exists with the <code>.html</code> extension and exact casing.
+    </div>
+  </div>
 </body>
 </html>
