@@ -3,120 +3,173 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G150 샴푸 추천 챗봇 - 부들봇</title>
+  <title>G150 샴푸 추천 챗봇 - 부들봇 (Warm)</title>
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #fff7f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+    /* === Warm (살구톤) 테마 === */
+    body{
+      font-family: Arial, sans-serif;
+      background:#fff7f5; margin:0; padding:0;
+      display:flex; justify-content:center; align-items:center; min-height:100vh;
     }
-    #chat-container {
-      width: 400px;
-      background-color: #ffece5;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-      overflow-y: auto;
-      max-height: 90vh;
+    #wrap{ width:430px; max-width:92%; }
+    #top{
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;
+      font-size:12px; color:#7a5a4b;
     }
-    .message {
-      margin: 10px 0;
-      padding: 10px 15px;
-      border-radius: 20px;
-      max-width: 80%;
+    #top .pill{ border:1px solid #ffcfb8; background:#fffaf6; padding:4px 8px; border-radius:999px; cursor:pointer; }
+    #top .pill:hover{ background:#ffe7da; }
+
+    #chat{
+      width:100%; background:#ffece5; border:1px solid #ffd9bf; border-radius:12px;
+      box-shadow:0 4px 8px rgba(0,0,0,.08);
+      padding:16px; max-height:70vh; overflow-y:auto; line-height:1.8;
     }
-    .bot-message {
-      background-color: #ffc9b8;
-      color: #4e342e;
-      align-self: flex-start;
+    .row{ display:flex; margin:10px 0; }
+    .row.bot{ justify-content:flex-start; }
+    .row.user{ justify-content:flex-end; }
+    .bubble{
+      max-width:75%; padding:10px 14px; border-radius:18px; box-shadow:0 1px 1px rgba(0,0,0,.04);
     }
-    .user-message {
-      background-color: #ffd6cc;
-      color: #3e2723;
-      align-self: flex-end;
-      text-align: right;
+    .bot .bubble{ background:#ffc9b8; color:#4e342e; }
+    .user .bubble{ background:#ffd6cc; color:#3e2723; }
+
+    .imgbox{ text-align:center; margin:8px 0; }
+    .imgbox img{ max-width:100%; border-radius:10px; border:1px solid #ffd9bf; }
+
+    .buttons{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:8px; }
+    .chip{ background:#ffe4d3; color:#5a372a; border:1px solid #ffcfb8; border-radius:12px; padding:8px 10px; cursor:pointer; font-weight:600; }
+    .chip.secondary{ background:#fff; }
+
+    .composer{ display:flex; gap:8px; margin-top:10px; }
+    .composer input{
+      flex:1; padding:12px; border:1px solid #ffcfb8; border-radius:10px; font-size:15px;
+      background:#fffaf6; color:#5a372a;
     }
-    .image-container {
-      text-align: center;
-      margin: 10px 0;
+    .composer button{
+      min-width:88px; background:#ff8a65; color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; padding:9px 12px;
     }
-    .image-container img {
-      max-width: 100%;
-      border-radius: 12px;
-    }
-    #user-input {
-      width: 100%;
-      margin-top: 15px;
-    }
-    input[type="text"] {
-      width: 75%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-    button {
-      padding: 10px 15px;
-      margin-left: 10px;
-      background-color: #ff8a65;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #ff7043;
-    }
+    .composer button:hover{ background:#ff7043; }
   </style>
 </head>
 <body>
-  <div id="chat-container"></div>
+  <div id="wrap">
+    <div id="top">
+      <div>G150 샴푸추천 <strong>부들봇</strong> (Warm)</div>
+      <div>
+        <button class="pill" onclick="exportCSV('per_turn')">CSV per_turn</button>
+        <button class="pill" onclick="exportCSV('per_user')">CSV user_only</button>
+      </div>
+    </div>
 
-  <div id="user-input">
-    <input type="text" id="input-box" placeholder="원하시는 샴푸를 말씀해 주세요..."/>
-    <button onclick="handleUserInput()">전송</button>
+    <div id="chat" aria-live="polite"></div>
+
+    <div class="composer">
+      <input id="msg" type="text" placeholder="원하시는 샴푸를 말씀해 주세요..." autocomplete="off">
+      <button id="send">전송</button>
+    </div>
   </div>
 
   <script>
-    const chatContainer = document.getElementById("chat-container");
+  (function(){
+    const $chat = document.getElementById('chat');
+    const $msg  = document.getElementById('msg');
+    const $send = document.getElementById('send');
 
-    function addMessage(message, type = "bot") {
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("message");
-      messageDiv.classList.add(type === "bot" ? "bot-message" : "user-message");
-      messageDiv.innerHTML = message;
-      chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+    /* ===== 이미지 에셋 (GitHub Pages 경로) ===== */
+    const ASSET = {
+      scalp:  { img: "https://zhmoon35.github.io/chatbot-test/G150-Scalp-shampoo.png",   title: "Scalp Shampoo"   },
+      balance:{ img: "https://zhmoon35.github.io/chatbot-test/G150-Balance-Shampoo.png", title: "Balance Shampoo" },
+      daily:  { img: "https://zhmoon35.github.io/chatbot-test/G150-Daily-shampoo.png",   title: "Daily Shampoo"   }
+    };
+
+    /* ===== LIWC 로깅 & CSV 내보내기(선택) ===== */
+    const pid  = crypto.randomUUID().slice(0,8);
+    const LOG  = { pid, cond:'warm', lang:'ko', page:location.pathname.split('/').pop(), started: Date.now(), turns: [] };
+    let lastTs = LOG.started;
+    function track(who, text){
+      const now = Date.now();
+      LOG.turns.push({t: now, who, text: String(text||'').trim(), ms_from_prev: now-lastTs});
+      lastTs = now;
+    }
+    window.exportCSV = function(mode='per_turn'){
+      const rows=[];
+      if(mode==='per_turn'){
+        LOG.turns.forEach((r,i)=>rows.push({pid:LOG.pid,cond:LOG.cond,lang:LOG.lang,page:LOG.page,idx:i,who:r.who,ms_from_prev:r.ms_from_prev,text:r.text.replace(/\s+/g,' ').trim()}));
+      }else{
+        const merged = LOG.turns.filter(r=>r.who==='user').map(r=>r.text).join(' . ');
+        rows.push({pid:LOG.pid,cond:LOG.cond,lang:LOG.lang,page:LOG.page,idx:0,who:'user_all',ms_from_prev:'',text:merged.replace(/\s+/g,' ').trim()});
+      }
+      if(rows.length===0){ alert('대화가 아직 없습니다.'); return; }
+      const header=Object.keys(rows[0]);
+      const csv=[header.join(','),...rows.map(r=>header.map(k=>`"${String(r[k]??'').replace(/"/g,'""')}"`).join(','))].join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`liwc_${LOG.pid}_${mode}.csv`;
+      document.body.appendChild(a); a.click(); a.remove();
+    };
+
+    /* ===== UI 유틸 ===== */
+    function addBubble(who, html){
+      const row=document.createElement('div'); row.className = 'row ' + (who==='bot'?'bot':'user');
+      const b=document.createElement('div'); b.className='bubble'; b.innerHTML=html;
+      row.appendChild(b); $chat.appendChild(row); $chat.scrollTop=$chat.scrollHeight;
+    }
+    function addImage(url, alt='Product'){
+      const box=document.createElement('div'); box.className='imgbox';
+      const img=document.createElement('img'); img.src=url; img.alt=alt;
+      box.appendChild(img); $chat.appendChild(box); $chat.scrollTop=$chat.scrollHeight;
+    }
+    function addButtons(items){
+      const area=document.createElement('div'); area.className='buttons';
+      items.forEach(cfg=>{
+        const btn=document.createElement('button'); btn.className='chip'+(cfg.secondary?' secondary':''); btn.textContent=cfg.text;
+        btn.onclick=()=>{ userSay(cfg.text); if(cfg.on) cfg.on(); };
+        area.appendChild(btn);
+      });
+      $chat.appendChild(area); $chat.scrollTop=$chat.scrollHeight;
     }
 
-    function addImage(url) {
-      const imageContainer = document.createElement("div");
-      imageContainer.classList.add("image-container");
-      const img = document.createElement("img");
-      img.src = url;
-      imageContainer.appendChild(img);
-      chatContainer.appendChild(imageContainer);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+    /* ===== 매핑 규칙 =====
+       지성/민감 → Balance,  탈모/두피/비듬 → Scalp,  그 외(볼륨/손상/기타) → Daily  */
+    function mapProduct(text){
+      const t=(text||'').toLowerCase();
+      if(t.includes('지성') || t.includes('민감')) return 'balance';
+      if(t.includes('탈모') || t.includes('두피') || t.includes('비듬')) return 'scalp';
+      if(t.includes('볼륨') || t.includes('손상')) return 'daily';
+      return 'daily';
     }
 
-    // 첫 인사
-    addMessage("안녕하세요. 제가 샴푸 쇼핑을 도와드려도 될까요? 😊");
-    addMessage("어떤 샴푸를 찾고 계신지 편하게 말씀해 주세요. 원하시는 제품을 찾아드릴게요.");
+    /* ===== 추천 응답 ===== */
+    function respond(userText){
+      const key = mapProduct(userText);
+      const msg = {
+        balance: "공유해 주셔서 고마워요. 전반 균형을 가볍게 유지하는 쪽으로 함께 보시죠. 👉 추천: <strong>Balance Shampoo</strong>",
+        scalp:   "말씀을 보니 두피 중심 케어가 우선이에요. 사용 중 불편 신호를 함께 살펴볼게요. 👉 추천: <strong>Scalp Shampoo</strong>",
+        daily:   "부담 없이 자주 쓰기 편한 구성이 좋아 보여요. 사용감이 가벼운 방향으로 안내드릴게요. 👉 추천: <strong>Daily Shampoo</strong>"
+      }[key];
+      addBubble('bot', msg); track('bot',`rec:${key}`);
+      const a=ASSET[key]; if(a){ addImage(a.img, a.title); track('bot',`[image] ${a.img}`); }
+    }
 
-    function handleUserInput() {
-      const inputBox = document.getElementById("input-box");
-      const userText = inputBox.value.trim();
-      if (!userText) return;
+    /* ===== 시작/이벤트 ===== */
+    function greet(){
+      addBubble('bot', '안녕하세요. 제가 샴푸 쇼핑을 도와드려도 될까요? 😊');      track('bot','greet-1');
+      addBubble('bot', '어떤 샴푸를 찾고 계신지 편하게 말씀해 주세요. 원하시는 제품을 찾아드릴게요.'); track('bot','greet-2');
+      addButtons([
+        {text:'지성'}, {text:'민감'}, {text:'탈모'}, {text:'두피'}, {text:'비듬'},
+        {text:'볼륨',secondary:true}, {text:'손상',secondary:true}
+      ]);
+    }
 
-      addMessage(userText, "user");
-      inputBox.value = "";
+    function userSay(text){
+      addBubble('user', text); track('user', text);
+      setTimeout(()=>respond(text), 180);
+    }
 
-      // 키워드 분석 및 추천
-      const lowerText = userText.toLowerCase();
+    $send.addEventListener('click', ()=>{ const v=$msg.value.trim(); if(!v) return; $msg.value=''; userSay(v); });
+    $msg.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); const v=$msg.value.trim(); if(!v) return; $msg.value=''; userSay(v); }});
 
-      if (lowerText.includes("두피") || lowerText.includes("탈모") || lowerText.includes("비듬")) {
-        addMessage("두피 케어가 필요하시군요! G150 Scalp Shampoo를 추천드릴게요.");
-        addImage("https://raw.githubusercontent.com/zhmoon35/chatbot-test/main/G
+    greet();
+  })();
+  </script>
+</body>
+</html>
