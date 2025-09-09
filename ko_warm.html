@@ -1,57 +1,39 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>G150 샴푸추천 · 부들봇(따뜻/보습 시나리오·친근 톤)</title>
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G150 샴푸추천 · 부들봇(따뜻)</title>
 <link rel="preload" as="image" href="./g150-daily.png">
 <style>
-  /* 기존 살구톤 프레임 유지 */
   body{font-family:Arial,sans-serif;background:#fff8f0;margin:0;display:flex;justify-content:center;align-items:center;height:100vh}
-  #chat-container{width:400px;background:#fff3e6;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);padding:20px;overflow-y:auto;max-height:90vh;line-height:1.8}
-  .bot-message,.user-message{margin:10px 0;display:flex}
-  .bot-message{justify-content:flex-start}.user-message{justify-content:flex-end}
+  #chat-container{width:400px;background:#fff3e6;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,.1);padding:20px;overflow-y:auto;max-height:90vh;line-height:1.8}
+  .bot-message,.user-message{margin:10px 0;display:flex}.bot-message{justify-content:flex-start}.user-message{justify-content:flex-end}
   .message{padding:10px 15px;border-radius:20px;max-width:70%}
-  .bot-message .message{background:#ffd8b1;color:#5a372a}
-  .user-message .message{background:#ffcba4;color:#5a372a}
-  .button-container{text-align:center;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-  button{background:#ffad8f;color:#5a372a;border:none;border-radius:5px;padding:10px 20px;cursor:pointer}
-  button:hover{background:#e69c7a}
-  .image-container{text-align:center;margin:10px 0}
-  .image-container img{width:100%;height:200px;object-fit:contain;border-radius:10px}
-</style>
-</head>
-<body>
-<div id="chat-container"></div>
-
-<script>
-const chatContainer=document.getElementById('chat-container');
-const IMG_URL="./g150-daily.png";
-
-/* 사용자 선택 상태 */
-let concern=null;   // '건조함' | '푸석함' | '윤기 부족'
-let scent=null;     // '무향에 가까운' | '은은한 향'
-
-/* 6턴: 인사 → 고민 → 향 → 제품소개(이미지) → 사용가이드 → 안전·마무리 */
+  .bot-message .message{background:#ffd8b1;color:#5a372a}.user-message .message{background:#ffcba4;color:#5a372a}
+  .button-container{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+  button{background:#ffad8f;color:#5a372a;border:none;border-radius:8px;padding:10px 16px;cursor:pointer} button:hover{background:#e69c7a}
+  .image-container{text-align:center;margin:10px 0}.image-container img{width:100%;height:200px;object-fit:contain;border-radius:10px}
+</style></head><body><div id="chat-container"></div><script>
+const box=document.getElementById('chat-container'); const IMG="./g150-daily.png";
+let concern=null, scent=null;
 const convo=[
-  { type:'bot',
-    text:'안녕하세요! 제가 도와드려도 될까요? 건조하고 푸석해진 모발을 조금 더 편안하게 돌봐드릴 부들봇입니다 😊',
-    buttons:[{label:'좋아요, 시작할게요', next:1}]
-  },
-  { type:'bot',
-    text:'먼저 가장 신경 쓰이는 부분을 알려주시면, 그에 맞춰 부드럽게 안내해 드릴게요.',
-    buttons:[
-      {label:'건조해요',   next:2, onClick:()=>{concern='건조함'}},
-      {label:'푸석해요',   next:2, onClick:()=>{concern='푸석함'}},
-      {label:'윤기가 부족해요', next:2, onClick:()=>{concern='윤기 부족'}}
-    ]
-  },
-  { type:'bot',
-    text:'향은 어떤 느낌을 좋아하시나요? 편안하게 사용하실 수 있도록 취향을 맞춰 추천드릴게요.',
-    buttons:[
-      {label:'무향에 가까운 향이 좋아요', next:3, onClick:()=>{scent='무향에 가까운'}},
-      {label:'은은하고 포근한 향이 좋아요', next:3, onClick:()=>{scent='은은한 향'}}
-    ]
-  },
-  { type:'bot',
-    text:()=>`그렇다면 <b>G150 Daily Shampoo</b>를 살펴볼게요. ${concern?`특히 ${concern} 완화에 `:''}도움이 되도록 설계되어 세정 후 촉감이 한결 편안했다는 보고가 있어요. 향도 ${scent||
+  {type:'bot', text:'안녕하세요! 제가 도와드려도 될까요? 저는 모발을 조금 더 편안하게 돌봐드릴 부들봇이에요 😊',
+   buttons:[{label:'좋아요, 시작할게요', next:1}]},
+  {type:'bot', text:'가장 신경 쓰이는 부분부터 살펴볼게요. 편하신 걸 골라 주세요—제가 부드럽게 맞춰 드릴게요.',
+   buttons:[{label:'건조해요',next:2,onClick:()=>concern='건조함'},{label:'푸석해요',next:2,onClick:()=>concern='푸석함'},{label:'윤기가 부족해요',next:2,onClick:()=>concern='윤기 부족'}]},
+  {type:'bot', text:'향은 어떤 느낌이 좋으세요? 일상에서 부담 없이 쓰실 수 있도록 고객님이 좋아하실 향으로 준비해드릴게요.',
+   buttons:[{label:'무향에 가까운 향',next:3,onClick:()=>scent='무향에 가까운'},{label:'은은하고 포근한 향',next:3,onClick:()=>scent='은은한 향'}]},
+  {type:'bot', text:()=>`그럼 <b>G150 Daily Shampoo</b>를 함께 보실까요? ${concern?`요즘 ${concern} 때문에 마음 쓰이셨죠. `:''}세정 후 촉감이 한결 편안했다는 보고가 있어요. 향도 ${scent||'은은한 톤'}이라 매일 쓰기 좋아요.`,
+   image:IMG, buttons:[{label:'사용 꿀팁 알려줘', next:4}]},
+  {type:'bot', text:'샴푸는 주 3–4회가 좋아요. 미온수로 충분히 적신 뒤 두피를 부드럽게 마사지하고, 1–2분 머금었다가 편하게 헹궈 주세요. 끝부분은 살살 쓸어주면 촉촉함이 오래가요.',
+   buttons:[{label:'혹시 자극이 걱정돼요', next:5}]},
+  {type:'bot', text:'저자극 시험을 통과했지만, 개인차는 있을 수 있어요. 안심하고 쓰실 수 있도록 제품 라벨과 요약 문서도 함께 안내드릴게요.',
+   buttons:[]}
+];
+function addRow(kind,html){const r=document.createElement('div');r.className=kind==='bot'?'bot-message':'user-message';
+ const m=document.createElement('div');m.className='message';m.innerHTML=html;r.appendChild(m);box.appendChild(r);box.scrollTop=box.scrollHeight;}
+function addImage(u){const d=document.createElement('div');d.className='image-container';const i=document.createElement('img');i.src=u;i.alt='G150 Daily Shampoo bottle';i.loading='eager';d.appendChild(i);box.appendChild(d);box.scrollTop=box.scrollHeight;}
+function addBtns(btns){const w=document.createElement('div');w.className='button-container';btns.forEach(b=>{const el=document.createElement('button');el.textContent=b.label;
+ el.onclick=()=>{addRow('user',b.label); if(b.onClick) b.onClick(); if(b.next!==null&&b.next!==undefined) step(b.next)}; w.appendChild(el)}); box.appendChild(w); box.scrollTop=box.scrollHeight;}
+function clearBtns(){document.querySelectorAll('.button-container').forEach(n=>n.remove());}
+function step(i){clearBtns();const s=convo[i]; if(!s) return; const t=typeof s.text==='function'?s.text():s.text; addRow('bot',t); if(s.image) addImage(s.image); if(s.buttons) addBtns(s.buttons);}
+new Image().src=IMG; step(0);
+</script></body></html>
