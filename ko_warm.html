@@ -1,153 +1,101 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G150 샴푸추천 · 부들봇(따뜻 조건)</title>
-  <style>
-    /* === 실험 통제를 위한 중립 UI (세 조건 동일 적용 권장) === */
-    :root{
-      --bg:#f5f5f5; --panel:#ffffff; --bubble-bot:#eeeeee; --bubble-user:#e0e0e0; --text:#222;
-      --radius:14px; --w:400px;
-    }
-    body{
-      font-family: Arial, sans-serif; background:var(--bg); margin:0; padding:0;
-      display:flex; justify-content:center; align-items:center; height:100vh;
-    }
-    #chat-container{
-      width:var(--w); max-height:90vh; background:var(--panel); border-radius:12px;
-      box-shadow:0 4px 8px rgba(0,0,0,.08);
-      padding:18px; overflow-y:auto; line-height:1.6;
-    }
-    .row{ margin:10px 0; display:flex; }
-    .bot{ justify-content:flex-start; }
-    .user{ justify-content:flex-end; }
-    .msg{
-      max-width:74%; padding:10px 14px; border-radius:var(--radius); color:var(--text);
-      word-break:keep-all; white-space:pre-wrap;
-    }
-    .bot .msg{ background:var(--bubble-bot); }
-    .user .msg{ background:var(--bubble-user); }
-    .btns{ text-align:center; margin-top:8px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
-    button{
-      background:#d9d9d9; color:#222; border:0; border-radius:8px; padding:8px 12px; cursor:pointer;
-    }
-    button:hover{ filter:brightness(.95); }
-    .image{ text-align:center; margin:8px 0; }
-    .image img{ max-width:100%; border-radius:8px; }
-    /* 접근성 */
-    button:focus{ outline:2px solid #9ea0a3; outline-offset:1px; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>G150 샴푸추천 · 부들봇(따뜻/건조모발 보습)</title>
+<link rel="preload" as="image" href="./g150-daily.png">
+<style>
+  /* 기존 살구톤 프레임 유지 */
+  body{font-family:Arial,sans-serif;background:#fff8f0;margin:0;display:flex;justify-content:center;align-items:center;height:100vh}
+  #chat-container{width:400px;background:#fff3e6;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);padding:20px;overflow-y:auto;max-height:90vh;line-height:1.8}
+  .bot-message,.user-message{margin:10px 0;display:flex}
+  .bot-message{justify-content:flex-start}.user-message{justify-content:flex-end}
+  .message{padding:10px 15px;border-radius:20px;max-width:70%}
+  .bot-message .message{background:#ffd8b1;color:#5a372a}
+  .user-message .message{background:#ffcba4;color:#5a372a}
+  .button-container{text-align:center;margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  button{background:#ffad8f;color:#5a372a;border:none;border-radius:5px;padding:10px 20px;cursor:pointer}
+  button:hover{background:#e69c7a}
+  .image-container{text-align:center;margin:10px 0}
+  .image-container img{width:100%;height:200px;object-fit:contain;border-radius:10px}
+</style>
 </head>
 <body>
-  <div id="chat-container" aria-live="polite"></div>
+<div id="chat-container"></div>
 
-  <script>
-    /* -----------------------------
-       부들봇(따뜻 조건) – 언어만 조작
-       공통 구조: 6턴(봇 5 + 마지막 답변 1), 정보슬롯 3개(효능근거/성분·향/사용가이드)
-       이모지: 1회(초반 공감 표시)만 사용
-       이미지: 조건 간 교란을 피하려면 사용하지 않거나 세 조건 동일 이미지 1장만 사용
-    --------------------------------*/
+<script>
+const chatContainer=document.getElementById('chat-container');
+const IMG_URL="./g150-daily.png";
 
-    const USE_IMAGE = false; // 세 조건 동일하게 쓸 경우 true로
-    const COMMON_IMAGE_URL = "https://via.placeholder.com/360x200?text=Product+Image"; // 세 조건 동일 이미지
+/* 부들봇(따뜻) – Kull et al.의 '따뜻한 첫 멘트' 원칙 적용
+   첫 인사: “제가 도와드려도 될까요?” 그대로 사용 (+ 이모지 1회)
+   시나리오: 다수가 경험하는 ‘건조한 모발’ 보습 케어 추천
+   구조: 6턴 고정, 정보슬롯(보습효과/근거 → 성분/향 → 사용 가이드) 동일화 */
+const conversation=[
+  { type:'bot',
+    message:'안녕하세요! 제가 도와드려도 될까요? 건조하고 푸석해진 모발을 편안하게 관리할 수 있도록 안내드릴게요 😊',
+    buttons:[{text:'시작하기', nextIndex:1}]
+  },
+  { type:'bot',
+    message:'원하시는 항목을 선택해 주세요. 보습 관련 핵심 정보를 순서대로 안내드립니다.',
+    buttons:[
+      {text:'보습 효과/근거', nextIndex:2},
+      {text:'성분/향', nextIndex:2},
+      {text:'사용 가이드', nextIndex:2}
+    ]
+  },
+  { type:'bot',
+    message:'추천 제품은 <b>G150 Daily Shampoo</b>예요. 건조 모발의 수분 유지에 도움을 주도록 설계되었고, 내부 평가 요약에서 세정 후 촉감 개선이 보고되었습니다.',
+    image: IMG_URL,
+    buttons:[{text:'계속', nextIndex:3}]
+  },
+  { type:'bot',
+    message:'주요 성분은 판테놀·글리세린으로 수분을 끌어당기고 유지하는 데 기여해요. 향은 은은하고 부드럽게 느껴지도록 구성했어요.',
+    buttons:[{text:'계속', nextIndex:4}]
+  },
+  { type:'bot',
+    message:'주 3–4회 사용을 권장해요. 모발에 도포한 뒤 1–2분 유지하고 충분히 헹궈 주세요. 중간부터 끝 부분에 가볍게 마사지하면 촉촉한 마무음에 도움이 됩니다.',
+    buttons:[{text:'자극이 걱정돼요', nextIndex:5}]
+  },
+  { type:'bot',
+    message:'저자극 관련 시험을 통과했어요. 다만 개인차가 있을 수 있으니 라벨과 요약 문서를 함께 확인해 주세요.',
+    buttons:[]
+  }
+];
 
-    const convo = [
-      // B1: 첫 인사(공감 신호·이모지 1회)
-      { type:"bot",
-        text:"안녕하세요, 저는 부들봇입니다. 두피가 예민해 불편하셨을 것 같아요 😊" ,
-        buttons:[{label:"시작하기", next:1}]
-      },
-      // B2: 안내(중립형 프레이밍 + 선택 버튼은 모두 동일 경로 → 노출량 통제)
-      { type:"bot",
-        text:"원하시는 항목을 선택해 주세요. 순서대로 간단히 안내드리겠습니다.",
-        buttons:[
-          {label:"효능/근거", next:2},
-          {label:"성분/향", next:2},
-          {label:"사용 가이드", next:2}
-        ]
-      },
-      // B3: 효능/근거(정서적 안정의 느낌 중심 서술, 과장·감탄 금지)
-      { type:"bot",
-        text:"이 제품은 민감한 두피 사용을 목표로 설계되었고, 사용 후 편안함을 보고한 사례가 있습니다.",
-        image: USE_IMAGE ? COMMON_IMAGE_URL : null,
-        buttons:[{label:"계속", next:3}]
-      },
-      // B4: 성분/향(자연 유래·은은함 등 따뜻 단어지만 사실 서술)
-      { type:"bot",
-        text:"주요 성분은 자연 유래 성분을 기반으로 하며, 향은 은은하고 부드럽게 설계되었습니다.",
-        buttons:[{label:"계속", next:4}]
-      },
-      // B5: 사용 가이드(지시를 부드럽게—권장 표현)
-      { type:"bot",
-        text:"일반 권장 빈도는 주 3–4회이며, 도포 후 1–2분 유지한 뒤 충분히 헹궈 주세요.",
-        buttons:[
-          {label:"자극이 걱정돼요", next:5}
-        ]
-      },
-      // B6: 안전/마무리(안심 서술 + 문서 참조, 과장 금지)
-      { type:"bot",
-        text:"저자극 관련 시험을 통과한 제품입니다. 자세한 내용은 제품 라벨과 요약 문서에서 확인하실 수 있습니다.",
-        buttons:[]
-      }
-    ];
+function addMessage(type,text){
+  const row=document.createElement('div'); row.className=type==='bot'?'bot-message':'user-message';
+  const bubble=document.createElement('div'); bubble.className='message'; bubble.innerHTML=text;
+  row.appendChild(bubble); chatContainer.appendChild(row); chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function addImage(url){
+  const c=document.createElement('div'); c.className='image-container';
+  const img=document.createElement('img'); img.src=url; img.alt='G150 Daily Shampoo bottle'; img.loading='eager';
+  c.appendChild(img); chatContainer.appendChild(c); chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function addButtons(buttons){
+  const bc=document.createElement('div'); bc.className='button-container';
+  buttons.forEach(b=>{
+    const el=document.createElement('button'); el.textContent=b.text;
+    el.onclick=()=>{ addMessage('user', b.text); if(b.nextIndex!==null && b.nextIndex!==undefined) loadConversation(b.nextIndex); };
+    bc.appendChild(el);
+  });
+  chatContainer.appendChild(bc); chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function clearButtons(){ document.querySelectorAll('.button-container').forEach(n=>n.remove()); }
+function loadConversation(i){
+  clearButtons();
+  const step=conversation[i];
+  addMessage('bot', step.message);
+  if(step.image) addImage(step.image);
+  if(step.buttons) addButtons(step.buttons);
+}
 
-    const box = document.getElementById("chat-container");
-
-    function addRow(kind, html){
-      const row = document.createElement("div");
-      row.className = `row ${kind}`;
-      const msg = document.createElement("div");
-      msg.className = "msg";
-      msg.innerHTML = html;
-      row.appendChild(msg);
-      box.appendChild(row);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function addButtons(btns){
-      const wrap = document.createElement("div");
-      wrap.className = "btns";
-      btns.forEach(b=>{
-        const el = document.createElement("button");
-        el.textContent = b.label;
-        el.onclick = ()=>{
-          addRow("user", b.label);
-          if (typeof b.onClick === "function") b.onClick();
-          if (b.next !== undefined && b.next !== null) step(b.next);
-        };
-        wrap.appendChild(el);
-      });
-      box.appendChild(wrap);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function addImage(url){
-      const div = document.createElement("div");
-      div.className = "image";
-      const img = document.createElement("img");
-      img.src = url; img.alt = "제품 이미지";
-      div.appendChild(img);
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function clearButtons(){
-      const btnGroups = box.querySelectorAll(".btns");
-      btnGroups.forEach(g=>g.remove());
-    }
-
-    function step(i){
-      clearButtons();
-      const s = convo[i];
-      addRow("bot", s.text);
-      if (s.image) addImage(s.image);
-      if (s.buttons && s.buttons.length) addButtons(s.buttons);
-    }
-
-    // 시작
-    step(0);
-  </script>
+// 프리로드 후 시작(세 조건 동일 이미지 사용)
+new Image().src = IMG_URL;
+loadConversation(0);
+</script>
 </body>
 </html>
+
