@@ -1,165 +1,117 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G150 샴푸추천 프로봇</title>
-  <style>
-    /* 스타일은 제공된 초록 테마로 유지 */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f5f0;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    #chat-container {
-      width: 400px;
-      background-color: #e8f5e9;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      overflow-y: auto;
-      max-height: 90%;
-      line-height: 1.8;
-    }
-    .bot-message, .user-message {
-      margin: 10px 0;
-      display: flex;
-    }
-    .bot-message { justify-content: flex-start; }
-    .user-message { justify-content: flex-end; }
-    .message {
-      padding: 10px 15px;
-      border-radius: 20px;
-      max-width: 70%;
-    }
-    .bot-message .message {
-      background-color: #c8e6c9;
-      color: #2e7d32;
-    }
-    .user-message .message {
-      background-color: #a5d6a7;
-      color: #1b5e20;
-    }
-    .button-container {
-      text-align: center;
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-    button {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      margin: 5px;
-      cursor: pointer;
-    }
-    button:hover { background-color: #388e3c; }
-
-    .image-container { text-align: center; margin: 10px 0; }
-    .image-container img { max-width: 100%; border-radius: 10px; }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G150 샴푸추천 · 프로봇(유능)</title>
+<link rel="preload" as="image" href="./g150-daily.png">
+<style>
+  /* ===== Light-Cyber Blue Theme (apply to ALL conditions if used for data collection) ===== */
+  :root{
+    --bg:#edf5ff;            /* 아주 연한 블루 배경 */
+    --panel:#ffffff;         /* 패널 */
+    --bot:#e8f1ff;           /* 봇 말풍선(연블루) */
+    --user:#dbeaff;          /* 유저 말풍선(연블루 톤 차이) */
+    --text:#0f1a2b;          /* 진한 남청 텍스트 */
+    --accent1:#7ab8ff;       /* 버튼 그라디언트 시작 */
+    --accent2:#60a5ff;       /* 버튼 그라디언트 끝 */
+    --accentHover:#4d94ff;   /* 호버 */
+    --glow:rgba(66,153,255,.22); /* 사이버틱한 글로우 */
+    --radius:20px; --w:400px;
+  }
+  body{
+    font-family: Arial, sans-serif; background:var(--bg); margin:0;
+    display:flex; justify-content:center; align-items:center; height:100vh;
+  }
+  #chat-container{
+    width:var(--w); max-height:90vh; background:var(--panel); border-radius:12px;
+    box-shadow:0 10px 28px var(--glow), 0 2px 8px rgba(0,0,0,.06);
+    padding:20px; overflow-y:auto; line-height:1.8; border:1px solid #cfe3ff;
+  }
+  .bot-message,.user-message{margin:10px 0; display:flex}
+  .bot-message{justify-content:flex-start} .user-message{justify-content:flex-end}
+  .message{
+    padding:10px 15px; border-radius:var(--radius); max-width:72%; color:var(--text);
+    backdrop-filter:saturate(120%) blur(0.2px);
+    border:1px solid #cfe3ff;
+  }
+  .bot-message .message{ background:var(--bot); }
+  .user-message .message{ background:var(--user); }
+  .button-container{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:10px;
+  }
+  button{
+    background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    color:#fff; border:none; border-radius:12px; padding:10px 16px; cursor:pointer;
+    box-shadow:0 0 0 0 var(--glow);
+    transition:transform .05s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  button:hover{ filter:brightness(.97); box-shadow:0 0 16px 2px var(--glow); }
+  button:active{ transform:translateY(1px); }
+  .image-container{ text-align:center; margin:10px 0; }
+  .image-container img{
+    width:100%; height:200px; object-fit:contain; border-radius:12px;
+    box-shadow:0 6px 18px var(--glow); border:1px solid #cfe3ff;
+  }
+</style>
 </head>
 <body>
-  <div id="chat-container"></div>
+<div id="chat-container"></div>
 
-  <script>
-    const chatContainer = document.getElementById('chat-container');
+<script>
+const chatContainer=document.getElementById('chat-container');
+const IMG_URL="./g150-daily.png";
 
-    /* 이미지 노출은 조건 간 교란을 피하기 위해 기본 비활성화(동일 이미지 1장만 쓰려면 true) */
-    const USE_IMAGE = false;
-    const COMMON_IMAGE_URL = "https://via.placeholder.com/360x200?text=G150+Greenist";
+/* Probot(유능) — 6턴, 정보슬롯 통제(효능/근거 → 성분/기전 → 사용 가이드)
+   감정어/이모지 없음, 증거·절차·전문용어 중심 */
+const conversation=[
+  {type:'bot',
+   message:'안녕하세요. 프로봇입니다. 찾으시는 샴푸 용도를 알려주시면 신속하고 정확하게 안내하겠습니다.',
+   buttons:[{text:'두피 문제 해결',nextIndex:1},{text:'건강한 모발 관리',nextIndex:1}]},
+  {type:'bot',
+   message:'원하시는 항목을 선택해 주세요. 핵심 정보를 순서대로 제공하겠습니다.',
+   buttons:[{text:'효능/근거',nextIndex:2},{text:'성분/기전',nextIndex:2},{text:'사용 가이드',nextIndex:2}]},
+  {type:'bot',
+   message:'추천 제품은 <b>G150 Daily Shampoo</b>입니다. 내부 시험 요약에서 2주 사용 후 자극 민감도 지표 감소가 관찰되었습니다.',
+   image:IMG_URL,
+   buttons:[{text:'계속',nextIndex:3}]},
+  {type:'bot',
+   message:'주요 활성 성분은 판테놀·알란토인으로 각질층 보습·진정에 기여합니다. 계면활성제 블렌드는 세정력 대비 자극도를 낮추도록 최적화되었습니다.',
+   buttons:[{text:'계속',nextIndex:4}]},
+  {type:'bot',
+   message:'일반 권장 빈도는 주 3–4회입니다. 도포 후 1–2분 유지한 뒤 충분히 헹굽니다. 사용 주기를 표준화하면 결과의 재현성이 높아집니다.',
+   buttons:[{text:'자극이 걱정됩니다',nextIndex:5}]},
+  {type:'bot',
+   message:'저자극 관련 항목은 피부과적 테스트를 통과했습니다. 상세 내용은 제품 라벨과 시험 요약본에서 확인 가능합니다.',
+   buttons:[]}
+];
 
-    /* 프로봇(유능 조건) – 6턴, 정보 슬롯 통제(효능/근거 → 성분/기전 → 사용 가이드) */
-    const conversation = [
-      {
-        type: 'bot',
-        message:
-          '안녕하세요. 프로봇입니다. 찾으시는 샴푸 용도를 알려주시면 신속하고 정확하게 안내하겠습니다.',
-        buttons: [
-          { text: '두피 문제 해결', nextIndex: 1 },
-          { text: '건강한 모발 관리', nextIndex: 1 }
-        ]
-      },
-      {
-        type: 'bot',
-        message:
-          '원하시는 항목을 선택해 주세요. 순서대로 핵심 정보를 제공하겠습니다.',
-        buttons: [
-          { text: '효능/근거', nextIndex: 2 },
-          { text: '성분/기전', nextIndex: 2 },
-          { text: '사용 가이드', nextIndex: 2 }
-        ]
-      },
-      {
-        type: 'bot',
-        message:
-          '이 제품은 민감 두피 사용을 목표로 설계되었으며, 내부 시험 요약에서 2주 사용 후 자극 민감도 지표 감소가 관찰되었습니다.',
-        image: USE_IMAGE ? COMMON_IMAGE_URL : null,
-        buttons: [
-          { text: '계속', nextIndex: 3 }
-        ]
-      },
-      {
-        type: 'bot',
-        message:
-          '주요 활성 성분은 판테놀·알란토인으로 각질층 보습·진정에 기여합니다. 계면활성제 블렌드는 세정력 대비 자극도를 낮추도록 최적화되었습니다.',
-        buttons: [
-          { text: '계속', nextIndex: 4 }
-        ]
-      },
-      {
-        type: 'bot',
-        message:
-          '일반 권장 빈도는 주 3–4회입니다. 도포 후 1–2분 유지한 뒤 충분히 헹굽니다. 사용 주기를 표준화하면 결과의 재현성이 높아집니다.',
-        buttons: [
-          { text: '자극이 걱정됩니다', nextIndex: 5 }
-        ]
-      },
-      {
-        type: 'bot',
-        message:
-          '저자극 관련 항목은 피부과적 테스트를 통과했습니다. 상세 내용은 제품 라벨과 시험 요약본에서 확인 가능합니다.',
-        buttons: []
-      }
-    ];
-
-    let currentIndex = 0;
-
-    function addMessage(type, text) {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add(type === 'bot' ? 'bot-message' : 'user-message');
-
-      const messageBubble = document.createElement('div');
-      messageBubble.classList.add('message');
-      messageBubble.innerHTML = text.replace(/\\n/g, '<br>');
-
-      messageDiv.appendChild(messageBubble);
-      chatContainer.appendChild(messageDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function addImage(imageUrl) {
-      const imageContainer = document.createElement('div');
-      imageContainer.classList.add('image-container');
-
-      const imageElement = document.createElement('img');
-      imageElement.src = imageUrl;
-      imageElement.alt = '제품 이미지';
-
-      imageContainer.appendChild(imageElement);
-      chatContainer.appendChild(imageContainer);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function addButtons(buttons) {
-      const buttonContainer = document.createElement('div');
-      buttonContainer.clas
+function addMessage(type,text){
+  const r=document.createElement('div'); r.className=type==='bot'?'bot-message':'user-message';
+  const m=document.createElement('div'); m.className='message'; m.innerHTML=text;
+  r.appendChild(m); chatContainer.appendChild(r); chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function addImage(url){
+  const c=document.createElement('div'); c.className='image-container';
+  const i=document.createElement('img'); i.src=url; i.alt='G150 Daily Shampoo bottle'; i.loading='eager';
+  c.appendChild(i); chatContainer.appendChild(c); chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function addButtons(btns){
+  const bc=document.createElement('div'); bc.className='button-container';
+  btns.forEach(b=>{
+    const el=document.createElement('button'); el.textContent=b.text;
+    el.onclick=()=>{ addMessage('user',b.text); if(b.nextIndex!==null && b.nextIndex!==undefined) loadConversation(b.nextIndex); };
+    bc.appendChild(el);
+  });
+  chatContainer.appendChild(bc); chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function clearButtons(){ document.querySelectorAll('.button-container').forEach(n=>n.remove()); }
+function loadConversation(i){
+  clearButtons(); const s=conversation[i];
+  addMessage('bot', s.message); if(s.image) addImage(s.image);
+  if(s.buttons) addButtons(s.buttons);
+}
+new Image().src=IMG_URL;  // preload
+loadConversation(0);
+</script>
+</body>
+</html>
