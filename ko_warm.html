@@ -1,39 +1,163 @@
-<!DOCTYPE html><html lang="ko"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G150 샴푸추천 · 부들봇(따뜻)</title>
-<link rel="preload" as="image" href="./g150-daily.png">
-<style>
-  body{font-family:Arial,sans-serif;background:#fff8f0;margin:0;display:flex;justify-content:center;align-items:center;height:100vh}
-  #chat-container{width:400px;background:#fff3e6;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,.1);padding:20px;overflow-y:auto;max-height:90vh;line-height:1.8}
-  .bot-message,.user-message{margin:10px 0;display:flex}.bot-message{justify-content:flex-start}.user-message{justify-content:flex-end}
-  .message{padding:10px 15px;border-radius:20px;max-width:70%}
-  .bot-message .message{background:#ffd8b1;color:#5a372a}.user-message .message{background:#ffcba4;color:#5a372a}
-  .button-container{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
-  button{background:#ffad8f;color:#5a372a;border:none;border-radius:8px;padding:10px 16px;cursor:pointer} button:hover{background:#e69c7a}
-  .image-container{text-align:center;margin:10px 0}.image-container img{width:100%;height:200px;object-fit:contain;border-radius:10px}
-</style></head><body><div id="chat-container"></div><script>
-const box=document.getElementById('chat-container'); const IMG="./g150-daily.png";
-let concern=null, scent=null;
-const convo=[
-  {type:'bot', text:'안녕하세요! 제가 도와드려도 될까요? 저는 모발을 조금 더 편안하게 돌봐드릴 부들봇이에요 😊',
-   buttons:[{label:'좋아요, 시작할게요', next:1}]},
-  {type:'bot', text:'가장 신경 쓰이는 부분부터 살펴볼게요. 편하신 걸 골라 주세요—제가 부드럽게 맞춰 드릴게요.',
-   buttons:[{label:'건조해요',next:2,onClick:()=>concern='건조함'},{label:'푸석해요',next:2,onClick:()=>concern='푸석함'},{label:'윤기가 부족해요',next:2,onClick:()=>concern='윤기 부족'}]},
-  {type:'bot', text:'향은 어떤 느낌이 좋으세요? 일상에서 부담 없이 쓰실 수 있도록 고객님이 좋아하실 향으로 준비해드릴게요.',
-   buttons:[{label:'무향에 가까운 향',next:3,onClick:()=>scent='무향에 가까운'},{label:'은은하고 포근한 향',next:3,onClick:()=>scent='은은한 향'}]},
-  {type:'bot', text:()=>`그럼 <b>G150 Daily Shampoo</b>를 함께 보실까요? ${concern?`요즘 ${concern} 때문에 마음 쓰이셨죠. `:''}세정 후 촉감이 한결 편안했다는 보고가 있어요. 향도 ${scent||'은은한 톤'}이라 매일 쓰기 좋아요.`,
-   image:IMG, buttons:[{label:'사용 꿀팁 알려줘', next:4}]},
-  {type:'bot', text:'샴푸는 주 3–4회가 좋아요. 미온수로 충분히 적신 뒤 두피를 부드럽게 마사지하고, 1–2분 머금었다가 편하게 헹궈 주세요. 끝부분은 살살 쓸어주면 촉촉함이 오래가요.',
-   buttons:[{label:'혹시 자극이 걱정돼요', next:5}]},
-  {type:'bot', text:'저자극 시험을 통과했지만, 개인차는 있을 수 있어요. 안심하고 쓰실 수 있도록 제품 라벨과 요약 문서도 함께 안내드릴게요.',
-   buttons:[]}
-];
-function addRow(kind,html){const r=document.createElement('div');r.className=kind==='bot'?'bot-message':'user-message';
- const m=document.createElement('div');m.className='message';m.innerHTML=html;r.appendChild(m);box.appendChild(r);box.scrollTop=box.scrollHeight;}
-function addImage(u){const d=document.createElement('div');d.className='image-container';const i=document.createElement('img');i.src=u;i.alt='G150 Daily Shampoo bottle';i.loading='eager';d.appendChild(i);box.appendChild(d);box.scrollTop=box.scrollHeight;}
-function addBtns(btns){const w=document.createElement('div');w.className='button-container';btns.forEach(b=>{const el=document.createElement('button');el.textContent=b.label;
- el.onclick=()=>{addRow('user',b.label); if(b.onClick) b.onClick(); if(b.next!==null&&b.next!==undefined) step(b.next)}; w.appendChild(el)}); box.appendChild(w); box.scrollTop=box.scrollHeight;}
-function clearBtns(){document.querySelectorAll('.button-container').forEach(n=>n.remove());}
-function step(i){clearBtns();const s=convo[i]; if(!s) return; const t=typeof s.text==='function'?s.text():s.text; addRow('bot',t); if(s.image) addImage(s.image); if(s.buttons) addBtns(s.buttons);}
-new Image().src=IMG; step(0);
-</script></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>G150 부들봇 – Warm Mockup</title>
+  <style>
+    :root{
+      --bg:#fff7f5;            /* 페이지 배경(살구톤) */
+      --panel:#ffece5;         /* 채팅 패널 */
+      --bot:#ffc9b8;           /* 봇 말풍선 */
+      --user:#ffd6cc;          /* 유저 말풍선 */
+      --line:#ffd9bf;          /* 테두리 */
+      --text:#4e342e;          /* 본문 텍스트 */
+      --text-sub:#5a372a;
+      --cta:#ff8a65;
+      --cta-hover:#ff7043;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; background:var(--bg);
+      font-family: "Pretendard","Apple SD Gothic Neo","Noto Sans KR", Arial, sans-serif;
+      color:var(--text); display:flex; justify-content:center; align-items:center;
+      min-height:100vh;
+    }
+    .wrap{ width:420px; max-width:92%; }
+    .top{
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;
+      color:#7a5a4b; font-size:12px;
+    }
+    .top .badge{
+      padding:4px 10px; border:1px solid var(--line);
+      background:#fffaf6; border-radius:999px;
+    }
+    .chat{
+      background:var(--panel); border:1px solid var(--line); border-radius:14px;
+      box-shadow:0 4px 8px rgba(0,0,0,.08);
+      padding:16px; line-height:1.75;
+    }
+    .row{ display:flex; gap:10px; margin:12px 0; }
+    .row.bot{ justify-content:flex-start; }
+    .row.user{ justify-content:flex-end; }
+    .bubble{
+      max-width:78%; padding:12px 14px; border-radius:18px;
+      position:relative; box-shadow:0 1px 1px rgba(0,0,0,.05);
+      word-break:keep-all;
+    }
+    .row.bot .bubble{ background:var(--bot); }
+    .row.user .bubble{ background:var(--user); text-align:right; }
+    /* 말풍선 꼬리 */
+    .row.bot .bubble:after{
+      content:""; position:absolute; left:-6px; top:14px;
+      border-width:8px; border-style:solid;
+      border-color:transparent var(--bot) transparent transparent;
+    }
+    .row.user .bubble:after{
+      content:""; position:absolute; right:-6px; top:14px;
+      border-width:8px; border-style:solid;
+      border-color:transparent transparent transparent var(--user);
+    }
+
+    /* 제품 카드 */
+    .card{
+      background:#fff; border:1px solid var(--line); border-radius:12px;
+      padding:12px; box-shadow:0 2px 6px rgba(0,0,0,.05);
+      color:var(--text-sub);
+    }
+    .card h4{ margin:0 0 8px; color:var(--text); }
+    .prod{
+      display:grid; grid-template-columns: 1fr; gap:10px;
+    }
+    .prod img{
+      width:100%; border-radius:10px; border:1px solid var(--line);
+      display:block; background:#fff;
+    }
+    .cta{
+      margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .cta a{
+      text-decoration:none; color:#fff; background:var(--cta);
+      padding:8px 12px; border-radius:8px; font-weight:700; font-size:14px;
+    }
+    .cta a:hover{ background:var(--cta-hover); }
+    .caption{ font-size:12px; color:#8a6a5b; margin-top:2px; }
+    @media(min-width:460px){
+      .prod{ grid-template-columns: 140px 1fr; align-items:center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div><strong>G150 부들봇</strong> • Warm Mockup</div>
+      <div class="badge">목업 • 자극물</div>
+    </div>
+
+    <div class="chat" aria-label="채팅 목업">
+      <!-- G150부들 — 인사 -->
+      <div class="row bot">
+        <div class="bubble">
+          안녕하세요, 저는 <strong>부들봇</strong>이라고 해요. 😊<br/>
+          샴푸 쇼핑을 도와드려도 될까요?<br/>
+          어떤 샴푸를 찾고 계신지 편하게 말씀해 주세요.<br/>
+          질문이 있으시면 언제든 물어보세요!
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="row user">
+        <div class="bubble">부드러운 머릿결을 위한 샴푸를 추천해줘.</div>
+      </div>
+
+      <!-- G150부들 — 공감/안내 -->
+      <div class="row bot">
+        <div class="bubble">
+          말씀해 주셔서 감사드려요. 머릿결이 푸석하고 건조하신가봐요.<br/>
+          안심할 수 있는 순한 성분과 부드러운 향기로 매일매일 기분 좋게 샴푸하실 수 있도록 제가 도와드릴게요. :)<br/><br/>
+          일단, <strong>매일 쓰기 좋은 구성</strong>으로 가볼까요?
+        </div>
+      </div>
+
+      <!-- 제품 카드 (Daily) -->
+      <div class="row bot">
+        <div class="bubble card" role="group" aria-label="추천 제품 카드">
+          <h4>추천: G150 Daily Shampoo</h4>
+          <div class="prod">
+            <img
+              src="https://raw.githubusercontent.com/zhmoon35/chatbot-test/main/G150-Daily-shampoo.png"
+              alt="G150 Daily Shampoo"
+              onerror="this.onerror=null;this.src='https://zhmoon35.github.io/chatbot-test/G150-Daily-shampoo.png';"
+            />
+            <div>
+              이 샴푸는 일반 샴푸보다 <strong>자연유래 성분</strong>이 더 많이 포함되어 안심할 수 있고
+              <strong>머릿결과 두피를 개선</strong>하는 효과가 좋습니다.
+              또 G150의 <strong>시그니처 향</strong>을 담아 매일 샴푸하며 힐링되는 기분을 선사해드립니다.<br/><br/>
+              이젠, 집에서 편안하게 샴푸하며 힐링해보실까요?
+              <div class="cta">
+                <a href="#" aria-label="바로 선택하기">바로 선택하기</a>
+                <a href="#" aria-label="다른 추천 보기">다른 추천 보기</a>
+              </div>
+              <div class="caption">*목업 화면: 버튼은 예시이며 동작하지 않습니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="row user">
+        <div class="bubble">완벽해! 추천 고마워~</div>
+      </div>
+
+      <!-- G150부들 — 브랜드 한 줄 + 마무리 -->
+      <div class="row bot">
+        <div class="bubble">
+          G150은 매일 사용해도 편안한 사용감을 지향하고, 부드러운 향으로 샴푸 시간을 <strong>작은 힐링</strong>으로 만들어 드려요. 🌸<br/>
+          지금 추천이 맘에 드시나요? 선호하는 향이나 기능을 말씀주시면 다른 제품도 알려드릴게요.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
