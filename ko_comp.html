@@ -2,105 +2,108 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G150 샴푸추천 · 프로봇(유능)</title>
+<title>G150 샴푸추천 · 프로봇(유능) – 목업</title>
 <link rel="preload" as="image" href="./g150-daily.png">
 <style>
   :root{
     --bg:#edf5ff; --panel:#ffffff; --bot:#e8f1ff; --user:#dbeaff; --text:#0f1a2b;
-    --accent1:#7ab8ff; --accent2:#60a5ff; --glow:rgba(66,153,255,.22);
-    --radius:20px; --w:400px;
+    --line:#cfe3ff; --glow:rgba(66,153,255,.22);
   }
-  body{font-family:Arial,sans-serif;background:var(--bg);margin:0;display:flex;justify-content:center;align-items:center;height:100vh}
-  #chat-container{width:var(--w);max-height:90vh;background:var(--panel);border-radius:12px;border:1px solid #cfe3ff;
-    box-shadow:0 10px 28px var(--glow),0 2px 8px rgba(0,0,0,.06);padding:20px;overflow-y:auto;line-height:1.8}
-  .bot-message,.user-message{margin:10px 0;display:flex}.bot-message{justify-content:flex-start}.user-message{justify-content:flex-end}
-  .message{padding:10px 15px;border-radius:var(--radius);max-width:72%;color:var(--text);border:1px solid #cfe3ff}
-  .bot-message .message{background:var(--bot)} .user-message .message{background:var(--user)}
-  .button-container{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}
-  button{background:linear-gradient(135deg,var(--accent1),var(--accent2));color:#fff;border:none;border-radius:12px;padding:10px 16px;cursor:pointer}
-  button:hover{filter:brightness(.97)}
-  .image-container{text-align:center;margin:10px 0}
-  .image-container img{width:100%;height:200px;object-fit:contain;border-radius:12px;border:1px solid #cfe3ff;box-shadow:0 6px 18px var(--glow)}
+  *{box-sizing:border-box}
+  body{
+    font-family:Arial,sans-serif;background:var(--bg);margin:0;
+    display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--text);
+  }
+  .wrap{width:430px;max-width:92%}
+  .chat{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 10px 28px var(--glow),0 2px 8px rgba(0,0,0,.06);
+    padding:16px;line-height:1.75;
+  }
+  .row{display:flex;gap:10px;margin:12px 0}
+  .row.bot{justify-content:flex-start}
+  .row.user{justify-content:flex-end}
+  .bubble{
+    max-width:78%;padding:12px 14px;border-radius:18px;position:relative;
+    border:1px solid var(--line);box-shadow:0 1px 1px rgba(0,0,0,.05)
+  }
+  .row.bot .bubble{background:var(--bot)}
+  .row.user .bubble{background:var(--user);text-align:right}
+  .row.bot .bubble:after{
+    content:"";position:absolute;left:-6px;top:14px;border-width:8px;border-style:solid;
+    border-color:transparent var(--bot) transparent transparent
+  }
+  .row.user .bubble:after{
+    content:"";position:absolute;right:-6px;top:14px;border-width:8px;border-style:solid;
+    border-color:transparent transparent transparent var(--user)
+  }
+
+  /* 제품 카드 (이미지 상단 1/2, 제품명 크게) */
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+  .card h4{
+    margin:0 0 10px;font-size:22px;font-weight:800;letter-spacing:.2px;text-align:center
+  }
+  .prod img{
+    width:50%;display:block;margin:0 auto 12px;border-radius:10px;border:1px solid var(--line);
+    background:#fff
+  }
+  .note{font-size:12px;color:#45556f;opacity:.75;margin-top:4px}
 </style>
 </head>
 <body>
-<div id="chat-container" aria-live="polite"></div>
+  <div class="wrap">
+    <div class="chat" aria-label="프로봇 유능 목업">
+      <!-- Bot 인사 -->
+      <div class="row bot">
+        <div class="bubble">
+          안녕하세요. <strong>프로봇</strong>입니다.<br/>
+          찾으시는 샴푸 용도를 한 문장으로 알려주시면 정확한 추천을 제공하겠습니다.
+        </div>
+      </div>
 
-<script>
-const box = document.getElementById('chat-container');
-const IMG_URL = "./g150-daily.png";
+      <!-- User -->
+      <div class="row user">
+        <div class="bubble">자극이 없고 세정감 좋은 제품을 찾고 있어요.</div>
+      </div>
 
-/* 대화: 모든 항목을 'text' 키로 통일(문자열) */
-const convo = [
-  { type:'bot',
-    text:'안녕하세요. 프로봇입니다. 찾으시는 샴푸 용도를 알려주시면 신속하고 정확하게 안내하겠습니다.',
-    buttons:[{label:'두피 문제 해결',next:1},{label:'건강한 모발 관리',next:1}]
-  },
-  { type:'bot',
-    text:'원하시는 항목을 선택해 주세요. 핵심 정보를 순서대로 제공하겠습니다.',
-    buttons:[{label:'효능/근거',next:2},{label:'성분/기전',next:2},{label:'사용 가이드',next:2}]
-  },
-  { type:'bot',
-    text:'추천 제품은 <b>G150 Daily Shampoo</b>입니다. 내부 시험 요약에서 2주 사용 후 자극 민감도 지표 감소가 관찰되었습니다.',
-    image:IMG_URL,
-    buttons:[{label:'계속',next:3}]
-  },
-  { type:'bot',
-    text:'주요 활성 성분은 판테놀·알란토인으로 각질층 보습·진정에 기여합니다. 계면활성제 블렌드는 세정력 대비 자극도를 낮추도록 최적화되었습니다.',
-    buttons:[{label:'계속',next:4}]
-  },
-  { type:'bot',
-    text:'일반 권장 빈도는 주 3–4회입니다. 도포 후 1–2분 유지한 뒤 충분히 헹굽니다. 사용 주기를 표준화하면 결과의 재현성이 높아집니다.',
-    buttons:[{label:'자극이 걱정됩니다',next:5}]
-  },
-  { type:'bot',
-    text:'저자극 관련 항목은 피부과적 테스트를 통과했습니다. 상세 내용은 제품 라벨과 시험 요약본에서 확인 가능합니다.',
-    buttons:[]
-  }
-];
+      <!-- Bot 요약/진단 -->
+      <div class="row bot">
+        <div class="bubble">
+          요구 요약: <strong>세정(효율) + 저자극(성분)</strong> 중심.<br/>
+          해당 조건에 적합한 라인을 제시하겠습니다.
+        </div>
+      </div>
 
-function addRow(kind, html){
-  const row=document.createElement('div');
-  row.className = (kind==='bot') ? 'bot-message' : 'user-message';
-  const msg=document.createElement('div'); msg.className='message';
-  msg.innerHTML = html;
-  row.appendChild(msg); box.appendChild(row); box.scrollTop = box.scrollHeight;
-}
-function addImage(url){
-  const div=document.createElement('div'); div.className='image-container';
-  const img=document.createElement('img'); img.src=url; img.alt='G150 Daily Shampoo bottle'; img.loading='eager';
-  div.appendChild(img); box.appendChild(div); box.scrollTop = box.scrollHeight;
-}
-function addButtons(btns){
-  const wrap=document.createElement('div'); wrap.className='button-container';
-  btns.forEach(b=>{
-    const el=document.createElement('button'); el.textContent=b.label;
-    el.onclick=()=>{ addRow('user', b.label); if(b.next!==undefined && b.next!==null) step(b.next); };
-    wrap.appendChild(el);
-  });
-  box.appendChild(wrap); box.scrollTop = box.scrollHeight;
-}
-function clearButtons(){ box.querySelectorAll('.button-container').forEach(n=>n.remove()); }
+      <!-- 제품 카드 (Daily 고정) -->
+      <div class="row bot">
+        <div class="bubble card" role="group" aria-label="제품 카드">
+          <h4>G150 Daily Shampoo</h4>
+          <div class="prod">
+            <img src="./g150-daily.png" alt="G150 Daily Shampoo">
+            <div>
+              내부 임상 시험 기준, <strong>2주 사용</strong> 후 자극 민감도 지표 감소가 관찰되었습니다.<br/>
+              주요 활성 성분은 <strong>판테놀·알란토인</strong>으로 각질층 보습·진정에 기여합니다.<br/>
+              파라벤 계열 유해 성분을 배제하고<strong>세정력 대비 자극도 저감</strong>을 목표로 최적화되었습니다.
+            </div>
+          </div>
+        </div>
+      </div>
 
-/* ✅ 견고한 step: text → message 순 폴백 + 비어있으면 경고 */
-function step(i){
-  clearButtons();
-  const s = convo[i];
-  if(!s){ console.warn('[Probot] missing step', i); return; }
-  const raw = (typeof s.text==='function') ? s.text() : (s.text ?? s.message ?? '');
-  if(!raw){ console.warn('[Probot] empty text at step', i, s); }
-  addRow('bot', raw);
-  if(s.image) addImage(s.image);
-  if(s.buttons && s.buttons.length) addButtons(s.buttons);
-}
+      <!-- 사용 가이드 -->
+      <div class="row bot">
+        <div class="bubble">
+          일반 권장 빈도는 <strong>주 4-5회</strong>입니다. 도포 후 <strong>1–2분</strong> 유지한 뒤 충분히 헹궈 주세요.<br/>
+          매일 사용하시면 깔끔한 두피의 지속력이 높아집니다.
+        </div>
+      </div>
 
-/* 이미지 프리로드 후 시작(깃허브페이지 캐시 이슈 예방) */
-(function init(){
-  const img = new Image();
-  img.onload = ()=>{ step(0); };
-  img.onerror = ()=>{ console.warn('[Probot] image preload failed, starting anyway'); step(0); };
-  img.src = IMG_URL;
-})();
-</script>
+      <!-- 저자극 참고 -->
+      <div class="row bot">
+        <div class="bubble">
+          저자극 관련 항목은 <strong>2만건 이상의 피부과 테스트</strong>를 통과했습니다. 상세 내용은 제품 라벨과 시험 요약본에서 확인 가능합니다.
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
