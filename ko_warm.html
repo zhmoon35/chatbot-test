@@ -1,163 +1,197 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>G150 부들봇 – Warm Mockup</title>
-  <style>
-    :root{
-      --bg:#fff7f5;            /* 페이지 배경(살구톤) */
-      --panel:#ffece5;         /* 채팅 패널 */
-      --bot:#ffc9b8;           /* 봇 말풍선 */
-      --user:#ffd6cc;          /* 유저 말풍선 */
-      --line:#ffd9bf;          /* 테두리 */
-      --text:#4e342e;          /* 본문 텍스트 */
-      --text-sub:#5a372a;
-      --cta:#ff8a65;
-      --cta-hover:#ff7043;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; background:var(--bg);
-      font-family: "Pretendard","Apple SD Gothic Neo","Noto Sans KR", Arial, sans-serif;
-      color:var(--text); display:flex; justify-content:center; align-items:center;
-      min-height:100vh;
-    }
-    .wrap{ width:420px; max-width:92%; }
-    .top{
-      display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;
-      color:#7a5a4b; font-size:12px;
-    }
-    .top .badge{
-      padding:4px 10px; border:1px solid var(--line);
-      background:#fffaf6; border-radius:999px;
-    }
-    .chat{
-      background:var(--panel); border:1px solid var(--line); border-radius:14px;
-      box-shadow:0 4px 8px rgba(0,0,0,.08);
-      padding:16px; line-height:1.75;
-    }
-    .row{ display:flex; gap:10px; margin:12px 0; }
-    .row.bot{ justify-content:flex-start; }
-    .row.user{ justify-content:flex-end; }
-    .bubble{
-      max-width:78%; padding:12px 14px; border-radius:18px;
-      position:relative; box-shadow:0 1px 1px rgba(0,0,0,.05);
-      word-break:keep-all;
-    }
-    .row.bot .bubble{ background:var(--bot); }
-    .row.user .bubble{ background:var(--user); text-align:right; }
-    /* 말풍선 꼬리 */
-    .row.bot .bubble:after{
-      content:""; position:absolute; left:-6px; top:14px;
-      border-width:8px; border-style:solid;
-      border-color:transparent var(--bot) transparent transparent;
-    }
-    .row.user .bubble:after{
-      content:""; position:absolute; right:-6px; top:14px;
-      border-width:8px; border-style:solid;
-      border-color:transparent transparent transparent var(--user);
-    }
-
-    /* 제품 카드 */
-    .card{
-      background:#fff; border:1px solid var(--line); border-radius:12px;
-      padding:12px; box-shadow:0 2px 6px rgba(0,0,0,.05);
-      color:var(--text-sub);
-    }
-    .card h4{ margin:0 0 8px; color:var(--text); }
-    .prod{
-      display:grid; grid-template-columns: 1fr; gap:10px;
-    }
-    .prod img{
-      width:100%; border-radius:10px; border:1px solid var(--line);
-      display:block; background:#fff;
-    }
-    .cta{
-      margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;
-    }
-    .cta a{
-      text-decoration:none; color:#fff; background:var(--cta);
-      padding:8px 12px; border-radius:8px; font-weight:700; font-size:14px;
-    }
-    .cta a:hover{ background:var(--cta-hover); }
-    .caption{ font-size:12px; color:#8a6a5b; margin-top:2px; }
-    @media(min-width:460px){
-      .prod{ grid-template-columns: 140px 1fr; align-items:center; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G150 샴푸추천 부들봇</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff8f0; /* 연한 살구색 배경 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #chat-container {
+            width: 400px;
+            background-color: #fff3e6; /* 부드러운 살구 톤 */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 90%;
+            line-height: 1.8; /* 줄 간격 조정 */
+        }
+        .bot-message, .user-message {
+            margin: 10px 0;
+            display: flex;
+        }
+        .bot-message {
+            justify-content: flex-start;
+        }
+        .user-message {
+            justify-content: flex-end;
+        }
+        .message {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+        .bot-message .message {
+            background-color: #ffd8b1; /* 살구빛 말풍선 */
+            color: #5a372a; /* 따뜻한 브라운 텍스트 */
+        }
+        .user-message .message {
+            background-color: #ffcba4; /* 밝은 살구빛 */
+            color: #5a372a; /* 따뜻한 브라운 텍스트 */
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #ffad8f; /* 버튼에 따뜻한 살구빛 */
+            color: #5a372a;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e69c7a;
+        }
+        .image-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div><strong>G150 부들봇</strong> • Warm Mockup</div>
-      <div class="badge">목업 • 자극물</div>
+    <div id="chat-container">
+        <!-- Chat will be dynamically added here -->
     </div>
 
-    <div class="chat" aria-label="채팅 목업">
-      <!-- G150부들 — 인사 -->
-      <div class="row bot">
-        <div class="bubble">
-          안녕하세요, 저는 <strong>부들봇</strong>이라고 해요. 😊<br/>
-          샴푸 쇼핑을 도와드려도 될까요?<br/>
-          어떤 샴푸를 찾고 계신지 편하게 말씀해 주세요.<br/>
-          질문이 있으시면 언제든 물어보세요!
-        </div>
-      </div>
+    <script>
+        const chatContainer = document.getElementById('chat-container');
 
-      <!-- User -->
-      <div class="row user">
-        <div class="bubble">부드러운 머릿결을 위한 샴푸를 추천해줘.</div>
-      </div>
+        const conversation = [
+            {
+                type: 'bot',
+                message:
+                  '안녕하세요, 저는 <strong>부들봇</strong>이라고 해요. 😊<br>' +
+                  '샴푸 쇼핑을 도와드려도 될까요?<br>' +
+                  '어떤 샴푸를 찾고 계신지 편하게 말씀해 주세요.<br>' +
+                  '질문이 있으시면 언제든 물어보세요!',
+                buttons: [
+                    { text: '부드러운 머릿결을 위한 샴푸를 추천해줘.', nextIndex: 1 }
+                ]
+            },
+            {
+                type: 'bot',
+                message:
+                  '말씀해 주셔서 감사드려요. 머릿결이 푸석하고 건조하신가봐요.<br>' +
+                  '안심할 수 있는 순한 성분과 부드러운 향기로 매일매일 기분 좋게 샴푸하실 수 있도록 제가 도와드릴게요. :)<br><br>' +
+                  '일단, <strong>매일 쓰기 좋은 구성</strong>으로 가볼까요?',
+                buttons: [
+                    { text: '추천 샴푸 보기', nextIndex: 2 }
+                ]
+            },
+            {
+                type: 'bot',
+                message:
+                  '<strong>추천: G150 Daily Shampoo</strong><br><br>' +
+                  '이 샴푸는 일반 샴푸보다 <strong>자연유래 성분</strong>이 더 많이 포함되어 안심할 수 있고 ' +
+                  '<strong>머릿결과 두피를 개선</strong>하는 효과가 좋습니다. 또 G150의 <strong>시그니처 향</strong>을 담아 ' +
+                  '매일 샴푸하며 힐링되는 기분을 선사해드립니다.<br><br>' +
+                  '이젠, 집에서 편안하게 샴푸하며 힐링해보실까요?',
+                image: 'g150-daily.png',
+                buttons: [
+                    { text: '구매하러 가기', nextIndex: 3 },
+                    { text: '다른 추천 보기', nextIndex: null }
+                ]
+            },
+            {
+                type: 'bot',
+                message:
+                  'G150은 매일 사용해도 편안한 사용감을 지향하고, 부드러운 향으로 샴푸 시간을 <strong>작은 힐링</strong>으로 만들어 드려요. 🌸<br>' +
+                  '지금 추천이 맘에 드시나요? 선호하는 향이나 기능을 말씀주시면 다른 제품도 알려드릴게요.',
+                buttons: [
+                    { text: '완벽해! 추천 고마워~', nextIndex: null }
+                ]
+            }
+        ];
 
-      <!-- G150부들 — 공감/안내 -->
-      <div class="row bot">
-        <div class="bubble">
-          말씀해 주셔서 감사드려요. 머릿결이 푸석하고 건조하신가봐요.<br/>
-          안심할 수 있는 순한 성분과 부드러운 향기로 매일매일 기분 좋게 샴푸하실 수 있도록 제가 도와드릴게요. :)<br/><br/>
-          일단, <strong>매일 쓰기 좋은 구성</strong>으로 가볼까요?
-        </div>
-      </div>
+        let currentIndex = 0;
 
-      <!-- 제품 카드 (Daily) -->
-      <div class="row bot">
-        <div class="bubble card" role="group" aria-label="추천 제품 카드">
-          <h4>추천: G150 Daily Shampoo</h4>
-          <div class="prod">
-            <img
-              src="https://raw.githubusercontent.com/zhmoon35/chatbot-test/main/G150-Daily-shampoo.png"
-              alt="G150 Daily Shampoo"
-              onerror="this.onerror=null;this.src='https://zhmoon35.github.io/chatbot-test/G150-Daily-shampoo.png';"
-            />
-            <div>
-              이 샴푸는 일반 샴푸보다 <strong>자연유래 성분</strong>이 더 많이 포함되어 안심할 수 있고
-              <strong>머릿결과 두피를 개선</strong>하는 효과가 좋습니다.
-              또 G150의 <strong>시그니처 향</strong>을 담아 매일 샴푸하며 힐링되는 기분을 선사해드립니다.<br/><br/>
-              이젠, 집에서 편안하게 샴푸하며 힐링해보실까요?
-              <div class="cta">
-                <a href="#" aria-label="바로 선택하기">바로 선택하기</a>
-                <a href="#" aria-label="다른 추천 보기">다른 추천 보기</a>
-              </div>
-              <div class="caption">*목업 화면: 버튼은 예시이며 동작하지 않습니다.</div>
-            </div>
-          </div>
-        </div>
-      </div>
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add(type === 'bot' ? 'bot-message' : 'user-message');
 
-      <!-- User -->
-      <div class="row user">
-        <div class="bubble">완벽해! 추천 고마워~</div>
-      </div>
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message');
+            messageBubble.innerHTML = text.replace(/\\n/g, '<br>');
 
-      <!-- G150부들 — 브랜드 한 줄 + 마무리 -->
-      <div class="row bot">
-        <div class="bubble">
-          G150은 매일 사용해도 편안한 사용감을 지향하고, 부드러운 향으로 샴푸 시간을 <strong>작은 힐링</strong>으로 만들어 드려요. 🌸<br/>
-          지금 추천이 맘에 드시나요? 선호하는 향이나 기능을 말씀주시면 다른 제품도 알려드릴게요.
-        </div>
-      </div>
-    </div>
-  </div>
+            messageDiv.appendChild(messageBubble);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addImage(imageUrl) {
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('image-container');
+
+            const imageElement = document.createElement('img');
+            imageElement.src = imageUrl;
+            imageElement.alt = 'Product Image';
+
+            imageContainer.appendChild(imageElement);
+            chatContainer.appendChild(imageContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addButtons(buttons) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            buttons.forEach(button => {
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = button.text;
+                buttonElement.onclick = () => {
+                    addMessage('user', button.text);
+                    if (button.nextIndex !== null) {
+                        loadConversation(button.nextIndex);
+                    }
+                };
+                buttonContainer.appendChild(buttonElement);
+            });
+
+            chatContainer.appendChild(buttonContainer);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function loadConversation(index) {
+            const step = conversation[index];
+            currentIndex = index;
+            addMessage('bot', step.message);
+            if (step.image) {
+                addImage(step.image);
+            }
+            if (step.buttons) {
+                addButtons(step.buttons);
+            }
+        }
+
+        // Start the conversation
+        loadConversation(currentIndex);
+    </script>
 </body>
 </html>
 
