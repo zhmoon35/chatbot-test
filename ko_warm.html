@@ -3,18 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>G150 샴푸추천 부들봇 – 목업(정적)</title>
+  <title>G150 부들봇 – Warm Mockup</title>
   <style>
     :root{
-      --bg:#fff7f5;            /* 페이지 배경(살구톤) */
+      --bg:#fff7f5;            /* 살구 배경 */
       --panel:#ffece5;         /* 채팅 패널 */
       --bot:#ffc9b8;           /* 봇 말풍선 */
       --user:#ffd6cc;          /* 유저 말풍선 */
       --line:#ffd9bf;          /* 테두리 */
       --text:#4e342e;          /* 본문 텍스트 */
       --text-sub:#5a372a;
-      --cta:#ff8a65;
-      --cta-hover:#ff7043;
     }
     *{box-sizing:border-box}
     body{
@@ -24,14 +22,6 @@
       min-height:100vh;
     }
     .wrap{ width:430px; max-width:92%; }
-    .top{
-      display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;
-      color:#7a5a4b; font-size:12px;
-    }
-    .top .badge{
-      padding:4px 10px; border:1px solid var(--line);
-      background:#fffaf6; border-radius:999px;
-    }
     .chat{
       background:var(--panel); border:1px solid var(--line); border-radius:14px;
       box-shadow:0 4px 8px rgba(0,0,0,.08);
@@ -47,7 +37,6 @@
     }
     .row.bot .bubble{ background:var(--bot); }
     .row.user .bubble{ background:var(--user); text-align:right; }
-    /* 말풍선 꼬리 */
     .row.bot .bubble:after{
       content:""; position:absolute; left:-6px; top:14px;
       border-width:8px; border-style:solid;
@@ -58,41 +47,21 @@
       border-width:8px; border-style:solid;
       border-color:transparent transparent transparent var(--user);
     }
-
-    /* 제품 카드 */
+    /* 제품 카드 (이미지 상단, 설명 하단) */
     .card{
       background:#fff; border:1px solid var(--line); border-radius:12px;
       padding:12px; box-shadow:0 2px 6px rgba(0,0,0,.05);
       color:var(--text-sub);
     }
     .card h4{ margin:0 0 8px; color:var(--text); }
-    .prod{
-      display:grid; grid-template-columns: 1fr; gap:10px;
-    }
     .prod img{
       width:100%; border-radius:10px; border:1px solid var(--line);
-      display:block; background:#fff;
-    }
-    .caption{ font-size:12px; color:#8a6a5b; margin-top:2px; }
-    .cta{
-      margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;
-    }
-    .cta span{
-      background:var(--cta); color:#fff; padding:8px 12px; border-radius:8px;
-      font-weight:700; font-size:13px; user-select:none;
-    }
-    @media(min-width:460px){
-      .prod{ grid-template-columns: 140px 1fr; align-items:center; }
+      display:block; background:#fff; margin-bottom:10px;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="top">
-      <div><strong>G150 부들봇</strong> • Warm Mockup (정적)</div>
-      <div class="badge">실험 자극용</div>
-    </div>
-
     <div class="chat" aria-label="채팅 목업">
       <!-- Bot 인사 -->
       <div class="row bot">
@@ -104,7 +73,7 @@
         </div>
       </div>
 
-      <!-- User 1회 노출 (버튼 없음) -->
+      <!-- User -->
       <div class="row user">
         <div class="bubble">부드러운 머릿결을 위한 샴푸를 추천해줘.</div>
       </div>
@@ -118,7 +87,7 @@
         </div>
       </div>
 
-      <!-- 제품 카드 (Daily) -->
+      <!-- 제품 카드 (이미지 상단, 설명 하단) -->
       <div class="row bot">
         <div class="bubble card" role="group" aria-label="추천 제품 카드">
           <h4>추천: G150 Daily Shampoo</h4>
@@ -127,31 +96,26 @@
             <div>
               이 샴푸는 일반 샴푸보다 <strong>자연유래 성분</strong>이 더 많이 포함되어 안심할 수 있고
               <strong>머릿결과 두피를 개선</strong>하는 효과가 좋습니다.
-              또 G150의 <strong>시그니처 향</strong>을 담아 매일 샴푸하며 힐링되는 기분을 선사해드립니다.<br/><br/>
+              또 G150의 <strong>시그니처 향</strong>을 담아 매일 샴푸하며 힐링되는 기분을 선사해드립니다.<br/>
               이젠, 집에서 편안하게 샴푸하며 힐링해보실까요?
-              <div class="cta" aria-hidden="true">
-                <span>바로 선택하기</span>
-                <span>다른 추천 보기</span>
-              </div>
-              <div class="caption">*목업 화면: 버튼은 예시 스타일로만 표시됩니다.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- User 마무리 -->
-      <div class="row user">
-        <div class="bubble">완벽해! 추천 고마워~</div>
-      </div>
-
-      <!-- Bot 브랜드 한 줄 + 마무리 -->
+      <!-- Bot 브랜드 한 줄 -->
       <div class="row bot">
         <div class="bubble">
-          G150은 매일 사용해도 편안한 사용감을 지향하고, 부드러운 향으로 샴푸 시간을 <strong>작은 힐링</strong>으로 만들어 드려요. 🌸<br/>
-          지금 추천이 맘에 드시나요? 선호하는 향이나 기능을 말씀주시면 다른 제품도 알려드릴게요.
+          G150은 매일 사용해도 편안한 사용감을 지향하고, 부드러운 향으로 샴푸 시간을 <strong>작은 힐링</strong>으로 만들어 드려요. 🌸
         </div>
+      </div>
+
+      <!-- User 최종 응답 (페이지 최하단) -->
+      <div class="row user">
+        <div class="bubble">완벽해! 정말 고마워</div>
       </div>
     </div>
   </div>
 </body>
 </html>
+
