@@ -51,7 +51,7 @@
     max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius);
     box-shadow:0 2px 6px rgba(24,50,75,.06);
   }
-  /* ✅ 말풍선: 봇=살구, 사용자=연한 살구 */
+  /* 말풍선: 봇=살구, 사용자=연한 살구 */
   .row.bot  .bubble{background:var(--apricot-300); color:#5a372a;}
   .row.user .bubble{background:var(--apricot-200); color:#5a372a;}
 
@@ -67,15 +67,8 @@
   .card h3{margin:10px 0 8px; font-size:18px}
   .card p{margin:8px 0; color:var(--muted)}
   .card .meta{font-size:13px; color:#46607a}
-  .cta{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    margin-top:12px; background:linear-gradient(135deg, var(--apricot), var(--blue-300));
-    color:#123; font-weight:700; border:none; border-radius:14px; padding:12px 16px; cursor:pointer;
-    box-shadow:0 6px 18px rgba(24,50,75,.12);
-  }
-  .cta:hover{filter:brightness(.98)}
 
-  /* ✅ 큰 제품 이미지 전용 규칙 (pill 썸네일과 분리) */
+  /* 큰 제품 이미지 */
   .card .product{
     display:block;
     width:min(85%, 320px);
@@ -85,6 +78,23 @@
     border:1px solid #f0c7a4;
     background:#fff;
   }
+
+  /* 액션 버튼 2개 (Try / Skip) */
+  .actions{
+    display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap;
+  }
+  .btn{
+    padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; border:none;
+  }
+  .btn.try{
+    background:linear-gradient(135deg, var(--apricot), var(--blue-300));
+    color:#123; box-shadow:0 6px 18px rgba(24,50,75,.12);
+  }
+  .btn.try:hover{filter:brightness(.98)}
+  .btn.skip{
+    background:#fff; color:#294055; border:1px solid var(--blue-200);
+  }
+  .btn.skip:hover{background:#f8fbff}
 </style>
 </head>
 <body>
@@ -131,7 +141,7 @@
       </div>`;
     chat.appendChild(ack);
 
-    // ✅ Product card (큰 메인 이미지 추가: img.product)
+    // Product card (큰 이미지 + 두 버튼)
     const cardRow = document.createElement('div');
     cardRow.className = 'row bot';
     cardRow.innerHTML = `
@@ -141,5 +151,28 @@
           G150 Daily Shampoo
         </span>
 
-        <!-- 큰 제품 이미지 -->
-        <img class="pr
+        <img class="product" src="./g150-daily.png" alt="G150 Daily Shampoo">
+
+        <h3>G150 Daily Shampoo</h3>
+        <p>🌿 Formulated with natural ingredients for gentle daily cleansing. Leaves your hair feeling fresh, clean, and revitalized without stripping natural oils.</p>
+        <p class="meta"><strong>Perfect for:</strong> Daily use, sensitive scalps, all hair types</p>
+
+        <div class="actions">
+          <button class="btn try"  onclick="recordClick('try')">✨ Try this</button>
+          <button class="btn skip" onclick="recordClick('skip')">Skip</button>
+        </div>
+      </div>`;
+    chat.appendChild(cardRow);
+
+    chat.scrollTop = chat.scrollHeight;
+  }, 800);
+
+  // 클릭 로깅 (타입 구분: 'try' | 'skip')
+  function recordClick(type){
+    alert((type==='try' ? 'Try' : 'Skip') + ' recorded. Thanks!');
+    // TODO: 필요 시 Google Form 미리채움/로깅에 type 전달
+    // 예) window.location.href = 'https://docs.google.com/forms/...&entry_try=' + encodeURIComponent(type);
+  }
+</script>
+</body>
+</html>
