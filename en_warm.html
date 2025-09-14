@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>B안 · 스마트폰 프레임 2장 (Warm)</title>
+<link rel="preload" as="image" href="./g150-daily.png">
+<style>
+  :root{
+    --lavender-100:#F3EAFF;  /* 매우 연한 보라 */
+    --lavender-200:#E9D7FF;  /* 연한 보라(사용자 말풍선) */
+    --lavender-700:#4A3B79;  /* 보라 계열 텍스트 */
+    --bot-bg:#ffffff;        /* 봇 말풍선은 화이트 */
+    --muted:#6b7280;
+    --ink:#233044;
+    --frame:#111722;
+    --shadow:0 10px 28px rgba(17,23,34,.10), 0 2px 8px rgba(17,23,34,.06);
+    --r:22px;
+    --w:420px;               /* 스마트폰 폭 */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:24px; background:linear-gradient(180deg,#f7f7fb,#f0f4ff);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    color:var(--ink);
+  }
+  h1{margin:0 0 6px 0; font-size:20px}
+  .note{color:var(--muted); font-size:13px; margin:0 0 16px}
+  .wrap{display:grid; gap:28px; max-width:980px; margin:0 auto}
+  .row-phones{display:grid; gap:24px}
+  @media (min-width:980px){ .row-phones{grid-template-columns:1fr 1fr} }
+
+  /* 스마트폰 프레임 */
+  .phone{
+    width:var(--w); height:780px; margin:0 auto;
+    border-radius:30px; background:#fff; overflow:hidden;
+    border:10px solid var(--frame); box-shadow:var(--shadow); position:relative;
+  }
+  .header{height:66px; display:flex; align-items:center; gap:10px; padding:0 16px;
+          background:linear-gradient(135deg,#d7e7ff,#efe8ff); color:#2b3850; font-weight:700; border-bottom:1px solid #e6eaf6;}
+  .header .dot{width:8px;height:8px;border-radius:50%;background:#0000001a}
+  .chat{height:calc(100% - 66px); overflow-y:auto; padding:16px; background:linear-gradient(180deg,#fbfcff,#fff);}
+  .bubble{max-width:78%; padding:14px 16px; border-radius:18px; line-height:1.6; box-shadow:0 2px 6px rgba(17,23,34,.05)}
+  .row{display:flex; margin:10px 0}
+  .row.bot{justify-content:flex-start}
+  .row.user{justify-content:flex-end}
+  /* 말풍선 색: 사용자=연보라, 봇=화이트 */
+  .row.user .bubble{background:var(--lavender-200); color:var(--lavender-700)}
+  .row.bot  .bubble{background:var(--bot-bg);     color:#374151}
+
+  /* 제품 카드 */
+  .card{background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:16px; box-shadow:0 4px 14px rgba(17,23,34,.06)}
+  .pill{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #e5e7eb;
+        padding:6px 10px; border-radius:999px; font-size:12px; color:#4b5563}
+  .pill img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+  .card h3{margin:10px 0 8px; font-size:18px}
+  .card p{margin:8px 0; color:#515c6b}
+  .meta{font-size:12px; color:#6b7280}
+
+  .product{display:block; width:min(85%, 320px); height:auto; margin:10px auto 12px;
+           border-radius:10px; border:1px solid #ece2ff; background:#fff}
+
+  .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap}
+  .btn{padding:10px 14px; border-radius:12px; font-weight:700; border:1px solid #e5e7eb; background:#fff; color:#2b3850}
+  .btn.try{background:linear-gradient(135deg,#cfdcff,#e8ddff); border:none; color:#1f2a44; box-shadow:0 6px 18px rgba(17,23,34,.12)}
+  .btn.skip{background:#fff}
+
+  /* 캡션/다운로드 */
+  .cap{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:4px auto 0; width:var(--w)}
+  .cap p{margin:0; font-size:13px; color:var(--muted)}
+  .dl{padding:8px 12px; border-radius:10px; border:1px solid #d1d5db; background:#fff; cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Warm 퍼소나 · 스마트폰 프레임 2장</h1>
+    <p class="note">PNG 2장을 다운로드해 구글폼 섹션에 각각 삽입하세요. 이미지는 같은 폴더의 <code>g150-daily.png</code>를 사용합니다.</p>
+  </header>
+
+  <section class="row-phones">
+    <!-- 프레임 A: 전체 흐름 -->
+    <div>
+      <div id="phone-full" class="phone" aria-label="Frame A · 전체">
+        <div class="header">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <span style="margin-left:8px">🧴 Shampoo Assistant</span>
+        </div>
+        <div class="chat">
+          <div class="row bot">
+            <div class="bubble">😊 안녕하세요! 쇼핑 도우미예요. 모발 상태와 기대하는 효과를 알려주시면 도와드릴게요.</div>
+          </div>
+          <div class="row user">
+            <div class="bubble">순하고 산뜻한 제품을 찾고 있어요.</div>
+          </div>
+          <div class="row bot">
+            <div class="bubble">좋아요! 일상 케어에 딱 맞는 옵션을 추천드릴게요.</div>
+          </div>
+          <div class="row bot">
+            <div class="bubble card" role="group" aria-label="G150 Daily Shampoo 카드">
+              <span class="pill"><img src="./g150-daily.png" alt=""><b>G150 데일리 샴푸</b></span>
+              <img class="product" src="./g150-daily.png" alt="G150 데일리 샴푸">
+              <h3>G150 데일리 샴푸</h3>
+              <p>🌿 순한 성분으로 매일 산뜻하게 세정. 천연 유래 성분으로 두피 자극은 낮추고 상쾌함은 높였어요.</p>
+              <p class="meta"><b>추천 대상:</b> 데일리 사용 · 민감성 두피 · 전 헤어타입</p>
+              <div class="actions">
+                <button class="btn try" disabled>지금 시작하기</button>
+                <button class="btn skip" disabled>지금은 사용하지 않음</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <p>프레임 A · 전체 대화</p>
+        <button class="dl" data-target="phone-full">PNG 다운로드</button>
+      </div>
+    </div>
+
+    <!-- 프레임 B: 추천/CTA 클로즈업 -->
+    <div>
+      <div id="phone-focus" class="phone" aria-label="Frame B · 클로즈업">
+        <div class="header">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <span style="margin-left:8px">🧴 Shampoo Assistant</span>
+        </div>
+        <div class="chat">
+          <!-- 클로즈업: 카드만 강조해 배치 -->
+          <div class="row bot">
+            <div class="bubble card" role="group" aria-label="G150 Daily Shampoo 카드(클로즈업)">
+              <span class="pill"><img src="./g150-daily.png" alt=""><b>G150 데일리 샴푸</b></span>
+              <img class="product" src="./g150-daily.png" alt="G150 데일리 샴푸">
+              <h3>지금 바로 사용해 볼까요?</h3>
+              <p>1분 내 시작 · 설치 불필요 · 언제든 취소 가능</p>
+              <div class="actions">
+                <button class="btn try" disabled>지금 시작하기</button>
+                <button class="btn skip" disabled>지금은 사용하지 않음</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">
+        <p>프레임 B · 추천부 클로즈업</p>
+        <button class="dl" data-target="phone-focus">PNG 다운로드</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- html2canvas: 동일 출처(statics) 이미지는 문제 없이 캡처됩니다 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  // PNG 저장(레티나 품질)
+  document.querySelectorAll('.dl').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.getAttribute('data-target');
+      const el = document.getElementById(id);
+      // 스크롤 위치 초기화
+      el.querySelector('.chat').scrollTop = 0;
+      const canvas = await html2canvas(el, {scale:2, backgroundColor:null});
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = id + '.png';
+      a.click();
+    });
+  });
+</script>
+</body>
+</html>
