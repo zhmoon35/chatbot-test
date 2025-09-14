@@ -51,12 +51,14 @@
     max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius);
     box-shadow:0 2px 6px rgba(24,50,75,.06);
   }
-  .row.bot .bubble{background:var(--blue-100)}
-  .row.user .bubble{background:var(--apricot-200)}
+  /* ✅ 말풍선: 봇=살구, 사용자=연한 살구 */
+  .row.bot  .bubble{background:var(--apricot-300); color:#5a372a;}
+  .row.user .bubble{background:var(--apricot-200); color:#5a372a;}
+
   .typing{font-size:13px; color:var(--muted); font-style:italic; padding-left:6px}
 
-  /* 제품 카드 */
-  .card{background:var(--blue-100); border:1px solid var(--blue-200); border-radius:16px; padding:16px; box-shadow:0 4px 14px rgba(24,50,75,.06)}
+  /* 카드 */
+  .card{background:#fff; border:1px solid var(--blue-200); border-radius:16px; padding:16px; box-shadow:0 4px 14px rgba(24,50,75,.06)}
   .pill{
     display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--blue-200);
     padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted); box-shadow:0 1px 2px rgba(24,50,75,.06)
@@ -72,18 +74,17 @@
     box-shadow:0 6px 18px rgba(24,50,75,.12);
   }
   .cta:hover{filter:brightness(.98)}
-/* Bigger product image */
-.card img{
-  width: min(85%, 300px);   /* 기존 50~60% → 85%/최대 300px */
-  height: auto;
-}
 
-/* (선택) 카드 상단의 작은 원형 썸네일도 조금 키우려면 */
-.pill img{
-  width: 22px;
-  height: 22px;            /* 기존 18px */
-}
-
+  /* ✅ 큰 제품 이미지 전용 규칙 (pill 썸네일과 분리) */
+  .card .product{
+    display:block;
+    width:min(85%, 320px);
+    height:auto;
+    margin:10px auto 12px;
+    border-radius:10px;
+    border:1px solid #f0c7a4;
+    background:#fff;
+  }
 </style>
 </head>
 <body>
@@ -130,7 +131,7 @@
       </div>`;
     chat.appendChild(ack);
 
-    // Product card
+    // ✅ Product card (큰 메인 이미지 추가: img.product)
     const cardRow = document.createElement('div');
     cardRow.className = 'row bot';
     cardRow.innerHTML = `
@@ -139,20 +140,6 @@
           <img src="./g150-daily.png" alt="" aria-hidden="true">
           G150 Daily Shampoo
         </span>
-        <h3>G150 Daily Shampoo</h3>
-        <p>🌿 Formulated with natural ingredients for gentle daily cleansing. Leaves your hair feeling fresh, clean, and revitalized without stripping natural oils.</p>
-        <p class="meta"><strong>Perfect for:</strong> Daily use, sensitive scalps, all hair types</p>
-        <button class="cta" onclick="recordClick()"><span>✨</span> This looks perfect!</button>
-      </div>`;
-    chat.appendChild(cardRow);
 
-    chat.scrollTop = chat.scrollHeight;
-  }, 800);
-
-  function recordClick(){
-    alert('Click recorded. Thanks!');
-    // TODO: connect to your logging/Google Form if needed
-  }
-</script>
-</body>
-</html>
+        <!-- 큰 제품 이미지 -->
+        <img class="pr
