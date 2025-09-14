@@ -72,6 +72,18 @@
     box-shadow:0 6px 18px rgba(24,50,75,.12);
   }
   .cta:hover{filter:brightness(.98)}
+/* Bigger product image */
+.card img{
+  width: min(85%, 300px);   /* 기존 50~60% → 85%/최대 300px */
+  height: auto;
+}
+
+/* (선택) 카드 상단의 작은 원형 썸네일도 조금 키우려면 */
+.pill img{
+  width: 22px;
+  height: 22px;            /* 기존 18px */
+}
+
 </style>
 </head>
 <body>
