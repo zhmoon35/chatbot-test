@@ -1,158 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Competent · Shampoo Shopping Assistant</title>
 <link rel="preload" as="image" href="./g150-daily.png">
 <style>
   :root{
-    /* 프로 톤 (블루 중심, 헤더 퍼플→블루 그라데이션) */
-    --blue-25:#f4f8ff;
-    --blue-50:#eef6ff;
-    --blue-100:#e4f0ff;
-    --blue-150:#d8e9ff;
-    --blue-200:#caddff;
-    --blue-300:#b9d1ff;
-    --blue-500:#5aa3ff;
-    --purple:#6f5df5;
-    --text:#0f1a2b;
-    --muted:#4a5b70;
-    --radius:18px;
-    --w:420px;
+    --blue-25:#f4f8ff; --blue-50:#eef6ff; --blue-100:#e4f0ff; --blue-150:#d8e9ff; --blue-200:#caddff; --blue-500:#5aa3ff; --purple:#6f5df5;
+    --text:#0f1a2b; --muted:#4a5b70; --w:420px; --radius:18px;
     --shadow:0 10px 28px rgba(15,26,43,.10), 0 2px 8px rgba(15,26,43,.06);
   }
   *{box-sizing:border-box}
-  body{
-    margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center;
-    background:linear-gradient(180deg, var(--blue-150), var(--blue-25));
-    font-family: Inter, ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    color:var(--text);
-  }
-  .phone{
-    width:var(--w); height:760px; border-radius:28px; overflow:hidden; background:#fff; box-shadow:var(--shadow);
-    border:10px solid #2c394a; position:relative;
-  }
-  .header{
-    height:72px; display:flex; align-items:center; padding:0 16px; gap:10px; color:#fff;
-    background:linear-gradient(135deg, var(--purple), var(--blue-500));
-    border-bottom:1px solid rgba(255,255,255,.25);
-  }
+  body{margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center;
+       background:linear-gradient(180deg,var(--blue-150),var(--blue-25));
+       font-family:Inter,Segoe UI,system-ui,Arial; color:var(--text);}
+  .phone{width:var(--w); height:760px; border-radius:28px; overflow:hidden; background:#fff; box-shadow:var(--shadow); border:10px solid #2c394a}
+  .header{height:72px; display:flex; align-items:center; gap:10px; padding:0 16px; color:#fff;
+          background:linear-gradient(135deg,var(--purple),var(--blue-500))}
   .header .dot{width:10px;height:10px;border-radius:50%;background:#fff3}
-  .header .title{font-weight:800;letter-spacing:.2px}
-  .chat{height:calc(100% - 72px); overflow-y:auto; padding:16px; background:linear-gradient(180deg,#f7fbff,#fff);}
-
-  .row{display:flex; margin:10px 0;}
-  .row.bot{justify-content:flex-start}
-  .row.user{justify-content:flex-end}
-
-  .bubble{
-    max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius);
-    box-shadow:0 2px 6px rgba(15,26,43,.06);
-  }
-  .row.bot .bubble{background:var(--blue-100)}
-  .row.user .bubble{background:#eac9f3} /* 사용자 말풍선 라일락 핑크 */
-  .typing{font-size:13px; color:var(--muted); font-style:italic; padding-left:6px}
-
-  /* 분석 블록 */
-  .analysis h4{margin:0 0 6px;font-size:15px;font-weight:800;color:#24364f}
-  .analysis ul{margin:6px 0 0 18px; padding:0; color:#2e4663}
+  .title{font-weight:800;letter-spacing:.2px}
+  .chat{height:calc(100% - 72px); overflow-y:auto; padding:16px; background:linear-gradient(180deg,#f7fbff,#fff)}
+  .row{display:flex; margin:10px 0}
+  .bot{justify-content:flex-start} .user{justify-content:flex-end}
+  .bubble{max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius); box-shadow:0 2px 6px rgba(15,26,43,.06)}
+  .bot .bubble{background:var(--blue-100)} .user .bubble{background:#eac9f3}
+  .analysis h4{margin:0 0 6px; font-size:15px; font-weight:800; color:#24364f}
+  .analysis ul{margin:6px 0 0 18px; color:#2e4663}
   .analysis p{margin:10px 0 0; color:#36506d}
-
-  /* 제품 카드 */
-  .card{background:var(--blue-100); border:1px solid var(--blue-200); border-radius:16px; padding:16px; box-shadow:0 4px 14px rgba(15,26,43,.06)}
-  .pill{
-    display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--blue-200);
-    padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted); box-shadow:0 1px 2px rgba(15,26,43,.06)
-  }
+  .card{background:#fff; border:1px solid var(--blue-200); border-radius:16px; padding:16px}
+  .pill{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--blue-200); padding:6px 10px; border-radius:999px; font-size:12px; color:#5a6a7a}
   .pill img{width:18px;height:18px;border-radius:50%;object-fit:cover}
   .card h3{margin:10px 0 8px; font-size:18px}
   .card p{margin:6px 0; color:#27445f}
-  .meta{color:#48637f; font-size:13px}
-  .cta{
-    display:inline-flex; align-items:center; justify-content:center;
-    margin-top:14px; background:linear-gradient(135deg, var(--blue-500), var(--purple));
-    color:#fff; font-weight:800; border:none; border-radius:14px; padding:12px 16px; cursor:pointer;
-    box-shadow:0 6px 18px rgba(15,26,43,.14);
-  }
-  .cta:hover{filter:brightness(.98)}
+  .product{display:block; width:min(85%,320px); height:auto; margin:10px auto 12px; border-radius:10px; border:1px solid #dfe8f7; background:#fff}
 </style>
 </head>
 <body>
-  <div class="phone" role="application" aria-label="Shampoo Shopping Assistant · Competent">
-    <div class="header">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      <div style="display:flex;align-items:center;gap:10px;margin-left:6px">
-        <span>🧴</span><span class="title">Shampoo Shopping Assistant</span>
-      </div>
-    </div>
-
-    <div class="chat" id="chatArea">
-      <!-- Competent greeting -->
-      <div class="row bot">
-        <div class="bubble">
-          Hello. ProBot here. Please describe your shampoo requirements in one sentence; I will provide a precise recommendation.
-        </div>
-      </div>
-
-      <!-- User -->
-      <div class="row user">
-        <div class="bubble">I'm looking for something gentle and refreshing.</div>
-      </div>
-
-      <!-- Typing -->
-      <div class="row bot typing" id="typingIndicator">Bot is typing…</div>
-    </div>
+<div class="phone" role="application" aria-label="Competent Shampoo Assistant">
+  <div class="header">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <span>🧴</span><span class="title">Shampoo Shopping Assistant</span>
   </div>
 
-<script>
-  // 0.8s 후: 구조화된 분석 → 제품 카드
-  setTimeout(() => {
-    const typing = document.getElementById('typingIndicator');
-    if (typing) typing.remove();
-    const chat = document.getElementById('chatArea');
-
-    // Analysis block (구조화/전문 톤)
-    const analysis = document.createElement('div');
-    analysis.className = 'row bot';
-    analysis.innerHTML = `
-      <div class="bubble analysis">
-        <h4>Analysis complete. Requirements identified:</h4>
-        <ul>
-          <li>Low irritation potential (mild surfactants required)</li>
-          <li>Effective cleansing without residue buildup</li>
-          <li>Refreshing sensory experience post-wash</li>
-        </ul>
-        <p>Optimal match located based on formulation profile.</p>
-      </div>`;
-    chat.appendChild(analysis);
-
-    // Product card
-    const cardRow = document.createElement('div');
-    cardRow.className = 'row bot';
-    cardRow.innerHTML = `
-      <div class="bubble card" role="group" aria-label="G150 Daily Shampoo card">
-        <span class="pill">
-          <img src="./g150-daily.png" alt="" aria-hidden="true">
-          G150 Daily Shampoo
-        </span>
-        <h3>G150 Daily Shampoo</h3>
-
-        <p class="meta"><strong>Key Active Ingredients:</strong> Natural cleansing agents, panthenol (Pro-Vitamin B5), allantoin</p>
-        <p class="meta"><strong>Clinical Profile:</strong> pH-balanced formula optimized for daily use with minimal scalp irritation. Proven efficacy in delivering a refreshing cleanse while maintaining hair’s natural moisture barrier.</p>
-        <p class="meta"><strong>Recommendation Confidence:</strong> 94% match to stated requirements</p>
-
-        <button class="cta" onclick="recordClick()">Select This Product</button>
-      </div>`;
-    chat.appendChild(cardRow);
-
-    chat.scrollTop = chat.scrollHeight;
-  }, 800);
-
-  function recordClick(){
-    alert('Click recorded. Thanks!');
-    // TODO: connect to logging / Google Form if needed
-  }
-</script>
+  <div class="chat">
+    <!-- Greeting -->
+    <div class="row bot"><div class="bubble">
+      Hello. ProBot here. Please describe your shampoo requirements in one sentence; I will provide a precise recommendation.
+    </div></div>
+    <!-- User -->
+    <div class="row user"><div class="bubble">
+      I'm looking for something gentle and refreshing.
+    </div></div>
+    <!-- Structured analysis -->
+    <div class="row bot"><div class="bubble analysis">
+      <h4>Analysis complete. Requirements identified:</h4>
+      <ul>
+        <li>Gentle care suitable for daily use</li>
+        <li>Fresh, clean feel after washing</li>
+      </ul>
+      <p>Proceeding with the optimal match based on formulation profile.</p>
+    </div></div>
+    <!-- Product card -->
+    <div class="row bot"><div class="bubble card" role="group" aria-label="G150 Daily Shampoo">
+      <span class="pill"><img src="./g150-daily.png" alt="" aria-hidden="true">G150 Daily Shampoo</span>
+      <img class="product" src="./g150-daily.png" alt="G150 Daily Shampoo">
+      <h3>G150 Daily Shampoo</h3>
+      <p>Formulated with natural-origin ingredients for comfortable daily cleansing. Leaves hair feeling fresh and clean while keeping it easy to use day to day.</p>
+      <p><strong>Usage</strong>: daily use · all hair types · comfortable on sensitive scalps.</p>
+    </div></div>
+  </div>
+</div>
 </body>
 </html>
