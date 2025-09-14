@@ -33,6 +33,19 @@
   .card h3{margin:10px 0 8px; font-size:18px}
   .card p{margin:6px 0; color:#27445f}
   .product{display:block; width:min(85%,320px); height:auto; margin:10px auto 12px; border-radius:10px; border:1px solid #dfe8f7; background:#fff}
+
+  /* 액션 버튼 */
+  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap; }
+  .btn{ padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; border:none; }
+  .btn.try{
+    background:linear-gradient(135deg, var(--blue-500), var(--purple));
+    color:#fff; box-shadow:0 6px 18px rgba(15,26,43,.14);
+  }
+  .btn.try:hover{filter:brightness(.98)}
+  .btn.skip{
+    background:#fff; color:#294055; border:1px solid var(--blue-200);
+  }
+  .btn.skip:hover{background:#f8fbff}
 </style>
 </head>
 <body>
@@ -67,6 +80,11 @@
       <h3>G150 Daily Shampoo</h3>
       <p>Formulated with natural-origin ingredients for comfortable daily cleansing. Leaves hair feeling fresh and clean while keeping it easy to use day to day.</p>
       <p><strong>Usage</strong>: daily use · all hair types · comfortable on sensitive scalps.</p>
+
+      <div class="actions">
+        <button class="btn try">Try this</button>
+        <button class="btn skip">Skip</button>
+      </div>
     </div></div>
   </div>
 </div>
