@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Study X · Lightweight Chatbot (Warm)</title>
+<style>
+  body {
+    background: #dbe8ff; /* 동일 UI 유지 */
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif;
+  }
+  .phone {
+    width: 390px; height: 780px; background: #fff;
+    border: 16px solid #111; border-radius: 40px;
+    box-shadow: 0 0 0 12px #444 inset, 0 15px 35px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .chat {
+    flex: 1; padding: 16px; overflow-y: auto; background: #f5f9ff;
+    display: flex; flex-direction: column;
+  }
+  .row { display: flex; margin: 8px 0; }
+  .bot { justify-content: flex-start; }
+  .user { justify-content: flex-end; }
+  .bubble {
+    padding: 12px 16px; border-radius: 18px; max-width: 70%;
+    line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  .bot .bubble { background: #e5efff; color: #000; }
+  .user .bubble { background: #d0e7ff; color: #000; }
+  .typing { font-style: italic; font-size: 13px; margin-left: 6px; opacity: 0.7; }
+  .card {
+    margin-top: 8px; background: #fff; border: 1px solid #ccc;
+    border-radius: 12px; padding: 12px; font-size: 14px;
+  }
+  .card img {
+    width: 60%; display: block; margin: 0 auto 10px; border-radius: 8px;
+  }
+  .card button {
+    margin-top: 10px; padding: 8px 12px; font-size: 14px;
+    border: none; border-radius: 6px; background: #337eff; color: #fff; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="chat" id="chatArea">
+    <!-- Warm tone greeting (사실 동일, 말투만 다정하게) -->
+    <div class="row bot">
+      <div class="bubble">Hi there! I’m here to help with your shampoo shopping—happy to assist. What kind of shampoo are you looking for?</div>
+    </div>
+
+    <!-- 고정 사용자 발화(조건 공통 유지 권장) -->
+    <div class="row user">
+      <div class="bubble">I'm looking for something gentle and refreshing.</div>
+    </div>
+
+    <!-- 0.8s 타이핑 인디케이터 (동일 타이밍 유지) -->
+    <div class="row bot typing" id="typingIndicator">Bot is typing...</div>
+  </div>
+</div>
+
+<script>
+  // 0.8s 지연 후 추천 제시
+  setTimeout(() => {
+    const typing = document.getElementById("typingIndicator");
+    if (typing) typing.remove();
+    const chatArea = document.getElementById("chatArea");
+
+    // Warm tone summary (사실: 동일한 두 포인트 유지)
+    const summary = document.createElement("div");
+    summary.className = "row bot";
+    summary.innerHTML = `
+      <div class="bubble">
+        Thanks for sharing—that really helps. <br>
+        <strong>Summary of your needs:</strong><br>
+        - Mild and gentle<br>
+        - Refreshing clean feeling
+      </div>
+    `;
+    chatArea.appendChild(summary);
+
+    // 제품 카드: 사실 문구는 원본과 동일(optimized for…, Contains panthenol and allantoin…)
+    const card = document.createElement("div");
+    card.className = "row bot";
+    card.innerHTML = `
+      <div class="bubble card">
+        <img src="./g150-daily.png" alt="G150 Daily Shampoo">
+        <div>
+          If you'd like something that feels comfortable day-to-day, this could be a nice match. 
+          <strong>G150 Daily Shampoo</strong> is optimized for cleansing without irritation. 
+          Contains panthenol and allantoin for soothing sensitive scalp.
+        </div>
+        <button onclick="recordClick()">Try this</button>
+      </div>
+    `;
+    chatArea.appendChild(card);
+  }, 800);
+
+  function recordClick() {
+    alert("Click recorded. Thanks!");
+    // 필요 시: 여기서 Google Form 미리채움 링크/로깅 함수 호출
+  }
+</script>
+</body>
+</html>
