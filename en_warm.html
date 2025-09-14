@@ -48,7 +48,7 @@
   <div class="chat" id="chatArea">
     <!-- Warm tone greeting (사실 동일, 말투만 다정하게) -->
     <div class="row bot">
-      <div class="bubble">Hi there! I’m here to help with your shampoo shopping—happy to assist. What kind of shampoo are you looking for?</div>
+      <div class="bubble">Hi there! I’m your shampoo-shopping assistant. May I help you today? What kind of shampoo are you looking for?</div>
     </div>
 
     <!-- 고정 사용자 발화(조건 공통 유지 권장) -->
@@ -69,29 +69,29 @@
     const chatArea = document.getElementById("chatArea");
 
     // Warm tone summary (사실: 동일한 두 포인트 유지)
-    const summary = document.createElement("div");
+   const summary = document.createElement("div");
     summary.className = "row bot";
     summary.innerHTML = `
       <div class="bubble">
-        Thanks for sharing. <br>
-        <strong>Summary of your needs:</strong><br>
-        - Mild and gentle<br>
-        - Refreshing clean feeling
+        Thank you for sharing — that really helps.<br>
+        <strong>What you’re hoping for:</strong><br>
+        - Mild, gentle care<br>
+        - A fresh, clean feeling after washing
       </div>
     `;
     chatArea.appendChild(summary);
 
-    // 제품 카드: 사실 문구는 원본과 동일(optimized for…, Contains panthenol and allantoin…)
+   // 제품 카드: 쉬운 일상어 + 천연 성분 강조 (전문용어 배제)
     const card = document.createElement("div");
     card.className = "row bot";
     card.innerHTML = `
       <div class="bubble card">
-        <img src="./g150-daily.png" alt="G150 Daily Shampoo">
-       <div class="row bot">
-  <div class="bubble">
-    Thanks for letting me know—that’s really helpful. You’re looking for something gentle on your scalp with a fresh, clean feel after washing.
-  </div>
-</div>
+        <img src="./g150-daily.png" alt="G150 Daily Shampoo" />
+        <div>
+          <strong>G150 Daily Shampoo</strong><br>
+          Made with plenty of natural ingredients, it feels gentle enough to use every day and leaves your hair feeling fresh and clean. 
+          If that sounds like what you want, this should be an easy, comfy choice.
+        </div>
         <button onclick="recordClick()">Try this</button>
       </div>
     `;
@@ -100,7 +100,7 @@
 
   function recordClick() {
     alert("Click recorded. Thanks!");
-    // 필요 시: 여기서 Google Form 미리채움 링크/로깅 함수 호출
+    // 여기서 Google Form 미리채움 링크로 pid/cond/clicked/rt 전달 가능
   }
 </script>
 </body>
