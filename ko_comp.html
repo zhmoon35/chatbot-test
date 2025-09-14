@@ -1,113 +1,93 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G150 샴푸추천 · 프로봇(유능) – 목업</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>유능 · 샴푸 쇼핑 도우미 (정적)</title>
 <link rel="preload" as="image" href="./g150-daily.png">
 <style>
   :root{
-    --bg:#edf5ff; --panel:#ffffff; --bot:#e8f1ff; --user:#dbeaff; --text:#0f1a2b;
-    --line:#cfe3ff; --glow:rgba(66,153,255,.22);
+    --blue-25:#f4f8ff; --blue-50:#eef6ff; --blue-100:#e4f0ff; --blue-150:#d8e9ff; --blue-200:#caddff; --blue-500:#5aa3ff; --purple:#6f5df5;
+    --text:#0f1a2b; --muted:#4a5b70; --w:420px; --radius:18px;
+    --shadow:0 10px 28px rgba(15,26,43,.10), 0 2px 8px rgba(15,26,43,.06);
   }
   *{box-sizing:border-box}
   body{
-    font-family:Arial,sans-serif;background:var(--bg);margin:0;
-    display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--text);
+    margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center;
+    background:linear-gradient(180deg,var(--blue-150),var(--blue-25));
+    font-family:Inter,Segoe UI,system-ui,Arial; color:var(--text);
   }
-  .wrap{width:430px;max-width:92%}
-  .chat{
-    background:var(--panel);border:1px solid var(--line);border-radius:14px;
-    box-shadow:0 10px 28px var(--glow),0 2px 8px rgba(0,0,0,.06);
-    padding:16px;line-height:1.75;
+  .phone{width:var(--w); height:760px; border-radius:28px; overflow:hidden; background:#fff; box-shadow:var(--shadow); border:10px solid #2c394a}
+  .header{height:72px; display:flex; align-items:center; gap:10px; padding:0 16px; color:#fff;
+          background:linear-gradient(135deg,var(--purple),var(--blue-500))}
+  .header .dot{width:10px;height:10px;border-radius:50%;background:#fff3}
+  .title{font-weight:800;letter-spacing:.2px}
+  .chat{height:calc(100% - 72px); overflow-y:auto; padding:16px; background:linear-gradient(180deg,#f7fbff,#fff)}
+  .row{display:flex; margin:10px 0}
+  .bot{justify-content:flex-start} .user{justify-content:flex-end}
+  .bubble{max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius); box-shadow:0 2px 6px rgba(15,26,43,.06)}
+  .bot .bubble{background:var(--blue-100)} .user .bubble{background:#eac9f3} /* 사용자 연보라 유지 */
+
+  .analysis h4{margin:0 0 6px; font-size:15px; font-weight:800; color:#24364f}
+  .analysis ul{margin:6px 0 0 18px; color:#2e4663}
+  .analysis p{margin:10px 0 0; color:#36506d}
+
+  .card{background:#fff; border:1px solid var(--blue-200); border-radius:16px; padding:16px}
+  .pill{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--blue-200); padding:6px 10px; border-radius:999px; font-size:12px; color:#5a6a7a}
+  .pill img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+  .card h3{margin:10px 0 8px; font-size:18px}
+  .card p{margin:6px 0; color:#27445f}
+  .product{display:block; width:min(85%,320px); height:auto; margin:10px auto 12px; border-radius:10px; border:1px solid #dfe8f7; background:#fff}
+
+  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap }
+  .btn{ padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; border:none }
+  .btn.try{
+    background:linear-gradient(135deg, var(--blue-500), var(--purple));
+    color:#fff; box-shadow:0 6px 18px rgba(15,26,43,.14)
   }
-  .row{display:flex;gap:10px;margin:12px 0}
-  .row.bot{justify-content:flex-start}
-  .row.user{justify-content:flex-end}
-  .bubble{
-    max-width:78%;padding:12px 14px;border-radius:18px;position:relative;
-    border:1px solid var(--line);box-shadow:0 1px 1px rgba(0,0,0,.05)
-  }
-  .row.bot .bubble{background:var(--bot)}
-  .row.user .bubble{background:var(--user);text-align:right}
-  .row.bot .bubble:after{
-    content:"";position:absolute;left:-6px;top:14px;border-width:8px;border-style:solid;
-    border-color:transparent var(--bot) transparent transparent
-  }
-  .row.user .bubble:after{
-    content:"";position:absolute;right:-6px;top:14px;border-width:8px;border-style:solid;
-    border-color:transparent transparent transparent var(--user)
-  }
-  /* 제품 카드 (이미지 상단 1/2, 제품명 일반 크기) */
-  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
-  .card h4{
-    margin:0 0 10px;font-size:16px;font-weight:700;text-align:center;letter-spacing:.2px
-  }
-  .prod img{
-    width:50%;display:block;margin:0 auto 12px;border-radius:10px;border:1px solid var(--line);background:#fff
-  }
+  .btn.try:hover{filter:brightness(.98)}
+  .btn.skip{ background:#fff; color:#294055; border:1px solid var(--blue-200) }
+  .btn.skip:hover{ background:#f8fbff }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="chat" aria-label="프로봇 유능 목업">
-      <!-- Bot 인사 -->
-      <div class="row bot">
-        <div class="bubble">
-          안녕하세요. <strong>프로봇</strong>입니다.<br/>
-          찾으시는 샴푸 용도를 한 문장으로 알려주시면 신속하고 정확하게 안내하겠습니다.
-        </div>
-      </div>
-
-      <!-- User -->
-      <div class="row user">
-        <div class="bubble">자극 없고 세정감 좋은 제품을 찾아줘.</div>
-      </div>
-
-      <!-- Bot 요약/진단 -->
-      <div class="row bot">
-        <div class="bubble">
-          <strong>고객 요구 요약</strong>:<br/>
-          - 세정 효율<br/>
-          - 저자극(성분)<br/><br/>
-          해당 조건에 적합한 저자극 제품 라인을 제안드리겠습니다.
-        </div>
-      </div>
-
-      <!-- 제품 카드 (Daily 고정) -->
-      <div class="row bot">
-        <div class="bubble card" role="group" aria-label="제품 카드">
-          <h4>G150 Daily Shampoo</h4>
-          <div class="prod">
-            <img src="./g150-daily.png" alt="G150 Daily Shampoo">
-            <div>
-              데이터 임상 요약 기준, <strong>2주 사용</strong> 후 자극 민감도 지표 감소가 관찰되었습니다.<br/>
-              세정력과 보습을 위한 주요 활성 성분은 <strong>판테놀·알란토인</strong>으로 각질층 보습·진정에 효과가 있습니다.<br/>
-              특히, 본 제품은 인공향료 등 유해 성분을 배제하였고. 계면활성제 블렌드는 <strong>세정력 대비 자극도 저감</strong>을 목표로 최적화되었습니다.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 사용 가이드 -->
-      <div class="row bot">
-        <div class="bubble">
-          권장 빈도는 <strong>주 4-5회</strong>입니다. 도포 후 <strong>1–2분</strong> 유지한 뒤 충분히 헹궈 주세요.<br/>
-          매일 사용하시면 깔끔한 두피의 지속성이 향상됩니다.
-        </div>
-      </div>
-
-      <!-- 저자극 참고 -->
-      <div class="row bot">
-        <div class="bubble">
-          저자극 관련 항목은 <strong>피부과 테스트</strong>를 통과하였습니다. 상세한 내용은 제품 라벨과 시험 요약본에서 확인 가능합니다.
-        </div>
-      </div>
-
-      <!-- User 마지막 멘트 -->
-      <div class="row user">
-        <div class="bubble">유용한 정보 고마워.</div>
-      </div>
-    </div>
+<div class="phone" role="application" aria-label="유능 샴푸 도우미">
+  <div class="header">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <span>🧴</span><span class="title">샴푸 쇼핑 도우미</span>
   </div>
+
+  <div class="chat">
+    <!-- Greeting -->
+    <div class="row bot"><div class="bubble">
+      안녕하세요. <strong>헤어케어 전문 프로봇</strong>입니다. 샴푸 요구 사항을 말해주시면 <strong>정확한 추천</strong>을 제공하겠습니다.
+    </div></div>
+    <!-- User -->
+    <div class="row user"><div class="bubble">
+      자극 없고 세정감 좋은 제품을 찾고 있어요.
+    </div></div>
+    <!-- Structured analysis -->
+    <div class="row bot"><div class="bubble analysis">
+      <h4>요구 요약</h4>
+      <ul>
+        <li>샴푸 빈도가 증가해도 자극이 없는 저자극 헤어 케어</li>
+        <li>샴푸 후 깨끗한 클렌징 효과 및 우수한 사용감</li>
+      </ul>
+      <p>성분/제형 프로파일을 기준으로 최적의 포뮬레이션을 제시드립니다.</p>
+    </div></div>
+    <!-- Product card -->
+    <div class="row bot"><div class="bubble card" role="group" aria-label="G150 Daily Shampoo">
+      <span class="pill"><img src="./g150-daily.png" alt="" aria-hidden="true">G150 Daily Shampoo</span>
+      <img class="product" src="./g150-daily.png" alt="G150 Daily Shampoo">
+      <h3>G150 Daily Shampoo</h3>
+      <p>식물 추출물과 컨디셔닝 성분으로 전문 처방된 순한 데일리 클렌징 제품입니다. 민감한 두피를 자극시키지 않으면서도 깨끗하고 상쾌한 결과를 제공합니다. .</p>
+      <p><strong>권장 사용</strong>: 일상 사용 · 모든 모발 타입 · 민감성 두피 관리</p>
+
+      <div class="actions">
+        <button class="btn try">Try this</button>
+        <button class="btn skip">Skip</button>
+      </div>
+    </div></div>
+  </div>
+</div>
 </body>
 </html>
