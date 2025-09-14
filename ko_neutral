@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>중립 · 샴푸 쇼핑 도우미 (정적)</title>
+<link rel="preload" as="image" href="./g150-daily.png">
+<style>
+  body{
+    background:#eef2f5; margin:0; min-height:100vh;
+    display:flex; justify-content:center; align-items:center;
+    font-family:Segoe UI,Inter,system-ui,Arial; color:#0f1a2b
+  }
+  .phone{
+    width:390px; height:780px; background:#fff; border:16px solid #111; border-radius:40px;
+    box-shadow:0 0 0 12px #444 inset, 0 15px 35px rgba(0,0,0,.3);
+    display:flex; flex-direction:column; overflow:hidden
+  }
+  .chat{flex:1; padding:16px; overflow-y:auto; background:#f7f8fa}
+  .row{display:flex; margin:8px 0} .bot{justify-content:flex-start} .user{justify-content:flex-end}
+  .bubble{padding:12px 16px; border-radius:18px; max-width:70%; line-height:1.55; box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .bot .bubble{background:#e9ecef} .user .bubble{background:#dee2e6}
+
+  .card{background:#fff; border:1px solid #d7dce1; border-radius:12px; padding:16px; font-size:14px}
+  .pill{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #d7dce1; padding:6px 10px; border-radius:999px; font-size:12px; color:#495057}
+  .pill img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+  .card h3{margin:10px 0 8px; font-size:18px} .card p{margin:8px 0; color:#2f3e4d}
+  .product{display:block; width:min(85%,320px); height:auto; margin:10px auto 12px; border-radius:10px; border:1px solid #d7dce1; background:#fff}
+
+  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap }
+  .btn{ padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; border:none }
+  .btn.try{ background:#3a7bff; color:#fff }
+  .btn.try:hover{ filter:brightness(.98) }
+  .btn.skip{ background:#fff; color:#2b3c4f; border:1px solid #d7dce1 }
+  .btn.skip:hover{ background:#f4f7fb }
+</style>
+</head>
+<body>
+<div class="phone" role="application" aria-label="중립 샴푸 도우미">
+  <div class="chat">
+    <!-- Greeting -->
+    <div class="row bot"><div class="bubble">안녕하세요. 찾으시는 샴푸 유형을 입력해 주세요.</div></div>
+    <!-- User -->
+    <div class="row user"><div class="bubble">자극 없고 상쾌한 제품을 찾고 있어요.</div></div>
+    <!-- Neutral summary -->
+    <div class="row bot"><div class="bubble">
+      입력 확인: 매일 사용 가능한 순한 세정, 세정 후 상쾌한 사용감.
+    </div></div>
+    <!-- Product card -->
+    <div class="row bot"><div class="bubble card" role="group" aria-label="G150 Daily Shampoo">
+      <span class="pill"><img src="./g150-daily.png" alt="" aria-hidden="true">G150 Daily Shampoo</span>
+      <img class="product" src="./g150-daily.png" alt="G150 Daily Shampoo">
+      <h3>G150 Daily Shampoo</h3>
+      <p>자연 유래 성분 포함. 매일 사용하기에 순하며, 세정 후 상쾌한 느낌을 제공함.</p>
+
+      <div class="actions">
+        <button class="btn try">이 제품 선택</button>
+        <button class="btn skip">건너뛰기</button>
+      </div>
+    </div></div>
+  </div>
+</div>
+</body>
+</html>
