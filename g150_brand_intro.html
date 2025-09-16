@@ -19,33 +19,107 @@
   .hero h2 { font-size: 2.5rem; color: #2c3e50; margin-bottom: 20px; }
   .hero-description { font-size: 1.2rem; color: #666; max-width: 800px; margin: 0 auto 40px; line-height: 1.8; }
 
-  /* Product Line */
-  .product-line { padding: 80px 0; background: #f8f9fa; }
-  .section-title { text-align: center; font-size: 2.5rem; color: #2c3e50; margin-bottom: 60px; }
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-bottom: 60px; }
+ <!-- Product Line -->
+<section class="product-line">
+  <div class="container">
+    <h2 class="section-title">Our Product Line</h2>
+    <div class="products-grid">
 
-  .product-card { background: #fff; border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform .3s ease, box-shadow .3s ease; position: relative; overflow: hidden; }
-  .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-  .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(135deg, #8bc34a 0%, #689f38 100%); }
+      <!-- Daily -->
+      <div class="product-card daily">
+        <div class="product-image">
+          <img
+            class="product-photo"
+            src="g150-daily.png?v=1"
+            alt="G150 Daily Shampoo"
+            loading="lazy" decoding="async"
+            data-fallbacks="G150%20Daily%20Shampoo.png,G150_Daily_Shampoo.png,g150-daily.PNG"
+          />
+        </div>
+        <h3 class="product-name">Daily Shampoo</h3>
+        <p class="product-description">
+          For balanced scalp & hair care. Perfect for everyday use with gentle cleansing power and refreshing finish.
+        </p>
+        <div class="product-features">
+          <h4>Key Benefits:</h4>
+          <ul class="features-list">
+            <li>Natural botanical extracts</li>
+            <li>Gentle daily cleansing</li>
+            <li>Suitable for all hair types</li>
+          </ul>
+        </div>
+      </div>
 
-  .product-image { width: 220px; height: 300px; border-radius: 15px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 8px 25px rgba(139,195,74,.3); padding: 8px; overflow: hidden; }
-  .daily   .product-image { background: linear-gradient(135deg,#e8f5e9,#f1f8e9); }
-  .balance .product-image { background: linear-gradient(135deg,#e3f2fd,#e1f5fe); }
-  .scalp   .product-image { background: linear-gradient(135deg,#f3e8ff,#ede9fe); }
+      <!-- Balance -->
+      <div class="product-card balance">
+        <div class="product-image">
+          <img
+            class="product-photo"
+            src="g150-balance.png?v=1"
+            alt="G150 Balance Shampoo"
+            loading="lazy" decoding="async"
+            data-fallbacks="G150_Balance_white_bg.png,G150%20Balance%20Shampoo.png,g150-balance.PNG"
+          />
+        </div>
+        <h3 class="product-name">Balance Shampoo</h3>
+        <p class="product-description">
+          Restores natural balance to oily and combination hair types. Controls excess oil while maintaining moisture.
+        </p>
+        <div class="product-features">
+          <h4>Key Benefits:</h4>
+          <ul class="features-list">
+            <li>Oil control formula</li>
+            <li>pH-balanced cleansing</li>
+            <li>Lightweight hydration</li>
+          </ul>
+        </div>
+      </div>
 
-  /* 실제 이미지 */
-  .product-photo { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+      <!-- Scalp -->
+      <div class="product-card scalp">
+        <div class="product-image">
+          <img
+            class="product-photo"
+            src="g150-scalp.png?v=1"
+            alt="G150 Scalp Shampoo"
+            loading="lazy" decoding="async"
+            data-fallbacks="G150%20Scalp%20Shampoo.png,g150-scalp.PNG"
+          />
+        </div>
+        <h3 class="product-name">Scalp Shampoo</h3>
+        <p class="product-description">
+          Specialized treatment for sensitive and problematic scalps. Soothes irritation and promotes healthy scalp environment.
+        </p>
+        <div class="product-features">
+          <h4>Key Benefits:</h4>
+          <ul class="features-list">
+            <li>Allantoin for soothing</li>
+            <li>Anti-inflammatory properties</li>
+            <li>Reduces irritation</li>
+          </ul>
+        </div>
+      </div>
 
-  .product-name { font-size: 1.5rem; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+    </div>
+  </div>
+</section>
 
-  /* (요청) 작은 카테고리 텍스트 제거 → 관련 스타일도 미사용 */
-
-  .product-description { color: #666; line-height: 1.6; margin-bottom: 20px; }
-  .product-features { text-align: left; margin-bottom: 25px; }
-  .product-features h4 { color: #2c3e50; margin-bottom: 10px; font-size: 1rem; }
-  .features-list { list-style: none; padding: 0; }
-  .features-list li { padding: 3px 0; font-size: 0.9rem; color: #666; }
-  .features-list li:before { content: "✓"; color: #8bc34a; font-weight: bold; margin-right: 8px; }
+<script>
+/* 이미지 로드 실패 시 data-fallbacks의 후보들을 순차적으로 시도 */
+(function(){
+  document.querySelectorAll('img.product-photo').forEach(function(img){
+    const fallbacks = (img.dataset.fallbacks || '')
+      .split(',').map(s => s.trim()).filter(Boolean);
+    let i = 0;
+    img.addEventListener('error', function onErr(){
+      if (i < fallbacks.length) {
+        // 캐시 우회를 위해 쿼리스트링 붙여 재시도
+        const nextSrc = fallbacks[i++] + '?v=' + Date.now();
+        img.src = nextSrc;
+      } else {
+        img.removeEventListener('error', onErr);
+        img.style.opacity = .4;
+        img.alt += ' (image
 
   /* Brand Story */
   .brand-story { background: #fff; padding: 80px 0; }
