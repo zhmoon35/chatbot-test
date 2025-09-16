@@ -123,39 +123,16 @@
     justify-content: center;
     position: relative;
     box-shadow: 0 8px 25px rgba(139, 195, 74, 0.3);
+    padding: 10px; /* 이미지 여백 */
   }
-  
-  .bottle {
-    width: 120px;
-    height: 200px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 15px;
-    position: relative;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
-  }
-  
-  .bottle::before {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 30px;
-    background: rgba(255,255,255,0.8);
-    border-radius: 10px 10px 5px 5px;
-  }
-  
-  .bottle::after {
-    content: 'G150';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
+
+  /* 실제 제품 이미지 표시 */
+  .product-photo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    display: block;
   }
   
   .daily .product-image { 
@@ -163,12 +140,11 @@
   }
   .balance .product-image { 
     background: linear-gradient(135deg, #29b6f6 0%, #0288d1 100%); 
+    box-shadow: 0 8px 25px rgba(41, 182, 246, 0.3);
   }
   .scalp .product-image { 
     background: linear-gradient(135deg, #ab47bc 0%, #7b1fa2 100%); 
-  }
-  .volume .product-image { 
-    background: linear-gradient(135deg, #ff7043 0%, #d84315 100%); 
+    box-shadow: 0 8px 25px rgba(171, 71, 188, 0.3);
   }
   
   .product-name {
@@ -189,7 +165,6 @@
   
   .balance .product-category { color: #29b6f6; }
   .scalp .product-category { color: #ab47bc; }
-  .volume .product-category { color: #ff7043; }
   
   .product-description {
     color: #666;
@@ -228,7 +203,6 @@
   
   .balance .features-list li:before { color: #29b6f6; }
   .scalp .features-list li:before { color: #ab47bc; }
-  .volume .features-list li:before { color: #ff7043; }
   
   /* Brand Story Section */
   .brand-story {
@@ -383,7 +357,7 @@
       <!-- Daily Shampoo -->
       <div class="product-card daily">
         <div class="product-image">
-          <div class="bottle"></div>
+          <img src="g150-daily.png" alt="G150 Daily Shampoo" class="product-photo" />
         </div>
         <div class="product-category">Chlorella</div>
         <h3 class="product-name">Daily Shampoo</h3>
@@ -404,7 +378,7 @@
       <!-- Balance Shampoo -->
       <div class="product-card balance">
         <div class="product-image">
-          <div class="bottle"></div>
+          <img src="g150-balance.png" alt="G150 Balance Shampoo" class="product-photo" />
         </div>
         <div class="product-category">Balance</div>
         <h3 class="product-name">Balance Shampoo</h3>
@@ -425,7 +399,7 @@
       <!-- Scalp Shampoo -->
       <div class="product-card scalp">
         <div class="product-image">
-          <div class="bottle"></div>
+          <img src="g150-scalp.png" alt="G150 Scalp Shampoo" class="product-photo" />
         </div>
         <div class="product-category">Scalp Care</div>
         <h3 class="product-name">Scalp Shampoo</h3>
@@ -443,26 +417,7 @@
         </div>
       </div>
 
-      <!-- Volume Shampoo -->
-      <div class="product-card volume">
-        <div class="product-image">
-          <div class="bottle"></div>
-        </div>
-        <div class="product-category">Volume</div>
-        <h3 class="product-name">Volume Shampoo</h3>
-        <p class="product-description">
-          Adds body and lift to fine, flat hair. Creates fuller-looking hair with lightweight, non-weighing formula.
-        </p>
-        <div class="product-features">
-          <h4>Key Benefits:</h4>
-          <ul class="features-list">
-            <li>Volumizing technology</li>
-            <li>Lightweight formula</li>
-            <li>Adds body and bounce</li>
-            <li>Long-lasting lift</li>
-          </ul>
-        </div>
-      </div>
+      <!-- Volume Shampoo card removed as requested -->
     </div>
   </div>
 </section>
@@ -492,49 +447,4 @@
           <div class="value-item">
             <div class="value-icon">🔬</div>
             <div class="value-title">Scientific</div>
-            <div class="value-desc">Research-backed formulations</div>
-          </div>
-          <div class="value-item">
-            <div class="value-icon">🌱</div>
-            <div class="value-title">Gentle</div>
-            <div class="value-desc">Safe for daily use and sensitive scalps</div>
-          </div>
-          <div class="value-item">
-            <div class="value-icon">✨</div>
-            <div class="value-title">Effective</div>
-            <div class="value-desc">Professional-quality results</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA Section -->
-<section class="cta-section">
-  <div class="container">
-    <h2>Ready to Transform Your Hair Care?</h2>
-    <p>Experience the G150 difference with our personalized shopping assistant.</p>
-    
-    <div class="study-note">
-      <strong>Study Information:</strong> You will now interact with a shopping assistant chatbot to learn more about G150 products. Please engage naturally with the chatbot as if you were genuinely shopping for shampoo.
-    </div>
-    
-    <button class="cta-button" onclick="proceedToChatbot()">
-      Start Shopping with Our Assistant
-    </button>
-  </div>
-</section>
-
-<script>
-function proceedToChatbot() {
-  // This would typically redirect to your chatbot page
-  alert("Proceeding to chatbot interaction...");
-  
-  // In your actual survey, you would redirect like:
-  // window.location.href = "chatbot-page.html";
-  // or trigger the next section of your survey platform
-}
-</script>
-</body>
-</html>
+            <div class="value-desc">Research-backed
