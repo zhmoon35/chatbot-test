@@ -1,62 +1,389 @@
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>G150 - Product Line</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>G150 - Natural Hair Care Solutions</title>
 <style>
-  :root { --bg:#f5f7fa; --ink:#2c3e50; --muted:#6b7280; }
-  *{ box-sizing:border-box; }
-  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR',Arial,sans-serif; background:var(--bg); color:var(--ink); }
-  .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
-  header{ padding:56px 0 24px; text-align:center; }
-  header h2{ font-size:2.2rem; letter-spacing:-.02em; margin:0; }
-  /* cards */
-  .products-grid{
-    display:grid; gap:40px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    padding:24px 0 80px;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-  .product-card{
-    background:#fff; border-radius:20px; padding:28px;
-    box-shadow:0 12px 32px rgba(0,0,0,.08);
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #f8f9fa;
   }
-  .product-image{
-    width:100%; height:340px; border-radius:16px;
-    display:flex; align-items:center; justify-content:center; overflow:hidden;
-    background:linear-gradient(135deg,#e8f5e9,#f1f8e9);
-    border: 6px solid #d1e7d1;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
-  .product-photo{ width:100%; height:100%; object-fit:contain; display:block; }
-  .product-name{ margin:18px 2px 10px; font-size:1.35rem; font-weight:800; }
-  .product-description{ color:var(--muted); line-height:1.7; margin:0 2px 14px; }
-  .product-features h4{ margin:0 0 8px; font-size:1rem; }
-  .features-list{ margin:0; padding:0; list-style:none; }
-  .features-list li{ padding:3px 0; color:#4b5563; font-size:.95rem; }
-  .features-list li::before{ content:"✓"; margin-right:8px; color:#22c55e; font-weight:700; }
-  /* 상태 표시(이미지 불러오기 실패시) */
-  .broken-msg{ display:none; color:#b91c1c; font-size:.9rem; margin-top:8px; }
-  .is-broken .broken-msg{ display:block; }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+  }
+  
+  .brand-logo {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    letter-spacing: -3px;
+  }
+  
+  .brand-tagline {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    font-weight: 300;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background: white;
+    padding: 80px 0;
+    text-align: center;
+  }
+  
+  .hero h2 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  .hero-description {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+  
+  /* Product Line Section */
+  .product-line {
+    padding: 80px 0;
+    background: #f8f9fa;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 60px;
+  }
+  
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+  
+  .product-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  }
+  
+  .product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #8bc34a 0%, #689f38 100%);
+  }
+  
+  .product-image {
+    width: 200px;
+    height: 280px;
+    background: linear-gradient(135deg, #8bc34a 0%, #689f38 100%);
+    border-radius: 15px;
+    margin: 0 auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(139, 195, 74, 0.3);
+  }
+  
+  .bottle {
+    width: 120px;
+    height: 200px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 15px;
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  
+  .bottle::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 30px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px 10px 5px 5px;
+  }
+  
+  .bottle::after {
+    content: 'G150';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .daily .product-image { 
+    background: linear-gradient(135deg, #8bc34a 0%, #689f38 100%); 
+  }
+  .balance .product-image { 
+    background: linear-gradient(135deg, #29b6f6 0%, #0288d1 100%); 
+  }
+  .scalp .product-image { 
+    background: linear-gradient(135deg, #ab47bc 0%, #7b1fa2 100%); 
+  }
+   
+  .product-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .product-category {
+    font-size: 1rem;
+    color: #8bc34a;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .balance .product-category { color: #29b6f6; }
+  .scalp .product-category { color: #ab47bc; }
+  .volume .product-category { color: #ff7043; }
+  
+  .product-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .product-features {
+    text-align: left;
+    margin-bottom: 25px;
+  }
+  
+  .product-features h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  
+  .features-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .features-list li {
+    padding: 3px 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .features-list li:before {
+    content: "✓";
+    color: #8bc34a;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  .balance .features-list li:before { color: #29b6f6; }
+  .scalp .features-list li:before { color: #ab47bc; }
+  .volume .features-list li:before { color: #ff7043; }
+  
+  /* Brand Story Section */
+  .brand-story {
+    background: white;
+    padding: 80px 0;
+  }
+  
+  .story-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  
+  .story-text h3 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 25px;
+  }
+  
+  .story-text p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+  
+  .story-visual {
+    text-align: center;
+  }
+  
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+  }
+  
+  .value-item {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .value-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+  
+  .value-title {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .value-desc {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    background: #8bc34a;
+    color: white;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  
+  .cta-button:hover {
+    background: #689f38;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 195, 74, 0.4);
+  }
+  
+  .study-note {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+    font-size: 0.95rem;
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .story-content {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .brand-logo {
+      font-size: 3rem;
+    }
+    
+    .hero h2 {
+      font-size: 2rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+  }
 </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h2>Our Product Line</h2>
-    </header>
 
-    <section class="products-grid">
-      <!-- Daily -->
-      <article class="product-card" id="card-daily">
+<!-- Header -->
+<header class="header">
+  <div class="container">
+    <div class="brand-logo">G150</div>
+    <div class="brand-tagline">Natural Hair Care Solutions</div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <h2>Discover Your Perfect Hair Care</h2>
+    <p class="hero-description">
+      G150 combines the power of nature with advanced hair science to create premium formulations 
+      that nourish, protect, and revitalize your hair. From daily care to specialized treatments, 
+      find the perfect solution for your unique hair needs.
+    </p>
+  </div>
+</section>
+
+<!-- Product Line -->
+<section class="product-line">
+  <div class="container">
+    <h2 class="section-title">Our Product Line</h2>
+    
+    <div class="products-grid">
+      <!-- Daily Shampoo -->
+      <div class="product-card daily">
         <div class="product-image">
-          <img
-            class="product-photo"
-            src="g150-daily.png"
-            alt="G150 Daily Shampoo"
-            loading="lazy" decoding="async"
-            data-fallbacks="G150%20Daily%20Shampoo.png,g150-daily.PNG,G150_Daily.png,G150_Daily_Shampoo.png"
-            />
+          <div class="bottle"></div>
         </div>
+       
         <h3 class="product-name">Daily Shampoo</h3>
         <p class="product-description">
           For balanced scalp & hair care. Perfect for everyday use with gentle cleansing power and refreshing finish.
@@ -65,25 +392,18 @@
           <h4>Key Benefits:</h4>
           <ul class="features-list">
             <li>Natural botanical extracts</li>
-            <li>Panthenol (Pro-Vitamin B5)</li>
-            <li>Gentle daily cleansing</li>
+                   <li>Gentle daily cleansing</li>
             <li>Suitable for all hair types</li>
           </ul>
         </div>
-        <div class="broken-msg">이미지를 불러오지 못했습니다. 파일명을 확인해주세요.</div>
-      </article>
+      </div>
 
-      <!-- Balance -->
-      <article class="product-card" id="card-balance">
-        <div class="product-image" style="background:linear-gradient(135deg,#e3f2fd,#e1f5fe); border-color:#cfe8ff">
-          <img
-            class="product-photo"
-            src="g150-balance.png"
-            alt="G150 Balance Shampoo"
-            loading="lazy" decoding="async"
-            data-fallbacks="G150%20Balance%20shampoo.png,G150%20Balance%20Shampoo.png,g150-balance.PNG,G150_Balance.png"
-            />
+      <!-- Balance Shampoo -->
+      <div class="product-card balance">
+        <div class="product-image">
+          <div class="bottle"></div>
         </div>
+       
         <h3 class="product-name">Balance Shampoo</h3>
         <p class="product-description">
           Restores natural balance to oily and combination hair types. Controls excess oil while maintaining moisture.
@@ -94,57 +414,103 @@
             <li>Oil control formula</li>
             <li>pH-balanced cleansing</li>
             <li>Lightweight hydration</li>
-            <li>Fresh, clean feeling</li>
+          
           </ul>
         </div>
-        <div class="broken-msg">이미지를 불러오지 못했습니다. 파일명을 확인해주세요.</div>
-      </article>
+      </div>
 
-      <!-- Scalp -->
-      <article class="product-card" id="card-scalp">
-        <div class="product-image" style="background:linear-gradient(135deg,#f3e8ff,#ede9fe); border-color:#e6d8ff">
-          <img
-            class="product-photo"
-            src="g150-scalp.png"
-            alt="G150 Scalp Shampoo"
-            loading="lazy" decoding="async"
-            data-fallbacks="G150%20Scalp%20Shampoo.png,g150-scalp.PNG,G150_Scalp.png"
-            />
+      <!-- Scalp Shampoo -->
+      <div class="product-card scalp">
+        <div class="product-image">
+          <div class="bottle"></div>
         </div>
+        <div class="product-category">Scalp Care</div>
         <h3 class="product-name">Scalp Shampoo</h3>
         <p class="product-description">
-          Specialized treatment for sensitive and problematic scalps. Soothes irritation and promotes a healthy scalp environment.
+          Specialized treatment for sensitive and problematic scalps. Soothes irritation and promotes healthy scalp environment.
         </p>
         <div class="product-features">
           <h4>Key Benefits:</h4>
           <ul class="features-list">
             <li>Allantoin for soothing</li>
             <li>Anti-inflammatory properties</li>
-            <li>Gentle on sensitive scalp</li>
             <li>Reduces irritation</li>
           </ul>
         </div>
-        <div class="broken-msg">이미지를 불러오지 못했습니다. 파일명을 확인해주세요.</div>
-      </article>
-    </section>
+      </div>
+
+        </div>
   </div>
+</section>
+
+<!-- Brand Story -->
+<section class="brand-story">
+  <div class="container">
+    <div class="story-content">
+      <div class="story-text">
+        <h3>Our Commitment to Natural Beauty</h3>
+        <p>
+          G150 was founded on the belief that effective hair care doesn't require harsh chemicals. 
+          We carefully select natural ingredients that work in harmony with your hair's natural structure.
+        </p>
+        <p>
+          Each product is formulated with precision, combining traditional botanical knowledge 
+          with modern hair science to deliver professional-quality results you can trust.
+        </p>
+      </div>
+      <div class="story-visual">
+        <div class="values-grid">
+          <div class="value-item">
+            <div class="value-icon">🌿</div>
+            <div class="value-title">Natural</div>
+            <div class="value-desc">Botanical extracts and natural ingredients</div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">🔬</div>
+            <div class="value-title">Scientific</div>
+            <div class="value-desc">Research-backed formulations</div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">🌱</div>
+            <div class="value-title">Gentle</div>
+            <div class="value-desc">Safe for daily use and sensitive scalps</div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">✨</div>
+            <div class="value-title">Effective</div>
+            <div class="value-desc">Professional-quality results</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to Transform Your Hair Care?</h2>
+    <p>Experience the G150 difference with our personalized shopping assistant.</p>
+    
+    <div class="study-note">
+      <strong>Study Information:</strong> You will now interact with a shopping assistant chatbot to learn more about G150 products. Please engage naturally with the chatbot as if you were genuinely shopping for shampoo.
+    </div>
+    
+    <button class="cta-button" onclick="proceedToChatbot()">
+      Start Shopping with Our Assistant
+    </button>
+  </div>
+</section>
 
 <script>
-/* 이미지 로드 실패 시, data-fallbacks 목록을 순차 시도 */
-document.querySelectorAll('img.product-photo').forEach(function(img){
-  const fallbacks = (img.dataset.fallbacks || '').split(',').map(s=>s.trim()).filter(Boolean);
-  let idx = 0;
-
-  img.addEventListener('error', function onErr(){
-    if(idx < fallbacks.length){
-      img.src = fallbacks[idx++];        // 다음 후보 시도
-    }else{
-      img.removeEventListener('error', onErr);
-      const card = img.closest('.product-card');
-      if(card) card.classList.add('is-broken');
-    }
-  });
-});
+function proceedToChatbot() {
+  // This would typically redirect to your chatbot page
+  alert("Proceeding to chatbot interaction...");
+  
+  // In your actual survey, you would redirect like:
+  // window.location.href = "chatbot-page.html";
+  // or trigger the next section of your survey platform
+}
 </script>
 </body>
 </html>
