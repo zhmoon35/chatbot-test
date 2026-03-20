@@ -2,64 +2,63 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Competent · Shampoo Shopping Assistant</title>
+<title>Smart · Shampoo Shopping Assistant</title>
 <link rel="preload" as="image" href="./g150-daily.png">
 <style>
   :root{
-    --blue-25:#f4f8ff; --blue-50:#eef6ff; --blue-100:#e4f0ff; --blue-150:#d8e9ff; --blue-200:#caddff; --blue-500:#5aa3ff; --purple:#6f5df5;
+    --blue-25:#f4f8ff; --blue-50:#eef6ff; --blue-100:#e4f0ff; --blue-200:#caddff; --blue-500:#5aa3ff; --purple:#6f5df5;
     --text:#0f1a2b; --muted:#4a5b70; --w:420px; --radius:18px;
-    --shadow:0 10px 28px rgba(15,26,43,.10), 0 2px 8px rgba(15,26,43,.06);
-    /* 현대적인 네이비 색상 정의 */
+    --shadow:0 10px 28px rgba(15,26,43,.10);
+    /* 현대적인 네이비 포인트 */
     --modern-navy: #1a2b4b;
   }
   *{box-sizing:border-box}
   body{margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center;
-       background:linear-gradient(180deg,var(--blue-150),var(--blue-25));
+       background:linear-gradient(180deg, #dce9f9, #f4f8ff);
        font-family:Inter,Segoe UI,system-ui,Arial; color:var(--text);}
   .phone{width:var(--w); height:760px; border-radius:28px; overflow:hidden; background:#fff; box-shadow:var(--shadow); border:10px solid #2c394a}
+  
+  /* 헤더: Smart Assistant로 변경 및 전문적인 네이비 그라데이션 */
   .header{height:72px; display:flex; align-items:center; gap:10px; padding:0 16px; color:#fff;
-          background:linear-gradient(135deg,var(--purple),var(--blue-500))}
+          background:linear-gradient(135deg, #3a4a63, #1a2b4b)}
   .header .dot{width:10px;height:10px;border-radius:50%;background:#fff3}
   .title{font-weight:800;letter-spacing:.2px}
-  .chat{height:calc(100% - 72px); overflow-y:auto; padding:16px; background:linear-gradient(180deg,#f7fbff,#fff)}
-  .row{display:flex; margin:10px 0}
+  
+  .chat{height:calc(100% - 72px); overflow-y:auto; padding:16px; background:#f8fafc;}
+  .row{display:flex; margin:12px 0}
   .bot{justify-content:flex-start} .user{justify-content:flex-end}
   
-  /* 텍스트 크기 및 간격 따뜻함 버전과 1:1 매칭 */
+  /* 말풍선: 따뜻함 버전과 1:1 대응 (15px, 1.6 line-height) */
   .bubble{max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius); box-shadow:0 2px 6px rgba(15,26,43,.06); font-size: 15px;}
   
-  /* 봇 말풍선 스타일 */
-  .bot .bubble{background:var(--blue-100) !important; color:var(--text) !important; border:none !important;} 
+  /* 봇 말풍선: 전문적 느낌의 연블루 */
+  .bot .bubble{background:#eef6ff !important; color:var(--text) !important; border:1px solid #d0e1f9 !important;} 
   
-  /* 사용자 말풍선: 현대적 네이비 강제 적용 */
-  .user .bubble{background-color: var(--modern-navy) !important; color:#ffffff !important;}
+  /* 사용자 말풍선: 요청하신 현대적 남색 */
+  .user .bubble{background-color: var(--modern-navy) !important; color:#ffffff !important; box-shadow: 0 4px 12px rgba(26,43,75,0.2);}
 
-  .analysis h4{margin:0 0 6px; font-size:15px; font-weight:800; color:#24364f}
-  .analysis ul{margin:6px 0 0 18px; color:#4a5b70; font-size:13px;}
-  .analysis p{margin:10px 0 0; color:#36506d}
-  .card{background:#fff; border:1px solid var(--blue-200); border-radius:16px; padding:16px}
-  .pill{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--blue-200); padding:6px 10px; border-radius:999px; font-size:12px; color:#5a6a7a}
+  .analysis h4{margin:0 0 8px; font-size:15px; font-weight:800; color:#1a2b4b}
+  .analysis ul{margin:6px 0 0 18px; color:#4a5b70; font-size:14px;}
+  .analysis p{margin:12px 0 0; color:#1a2b4b; font-weight:700;}
+
+  .card{background:#fff; border:1px solid #d0e1f9; border-radius:16px; padding:20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
+  .pill{display:inline-flex; align-items:center; gap:8px; background:#f1f5f9; padding:6px 12px; border-radius:999px; font-size:12px; font-weight:700; color:#1a2b4b}
   .pill img{width:18px;height:18px;border-radius:50%;object-fit:cover}
-  .card h3{margin:10px 0 8px; font-size:18px}
-  .card p{margin:6px 0; color:#27445f}
-  .product{display:block; width:min(85%,320px); height:auto; margin:10px auto 12px; border-radius:10px; border:1px solid #dfe8f7; background:#fff}
+  .card h3{margin:15px 0 8px; font-size:18px; color:#1a2b4b}
+  .card p{margin:8px 0; color:#4a5b70; font-size:14px;}
+  .product{display:block; width:min(85%,320px); height:auto; margin:15px auto 15px; border-radius:12px; border:1px solid #eef2f8;}
 
-  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap; }
-  .btn{ padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; border:none; }
-  .btn.try{
-    background:linear-gradient(135deg, var(--blue-500), var(--purple));
-    color:#fff; box-shadow:0 6px 18px rgba(15,26,43,.14);
-  }
-  .btn.skip{
-    background:#fff; color:#294055; border:1px solid var(--blue-200);
-  }
+  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:16px; }
+  .btn{ padding:10px 18px; border-radius:10px; font-weight:800; cursor:pointer; border:none;}
+  .btn.try{ background: var(--modern-navy); color:#fff; }
+  .btn.skip{ background:#fff; color:#64748b; border:1px solid #d1d9e6; }
 </style>
 </head>
 <body>
-<div class="phone" role="application">
+<div class="phone">
   <div class="header">
     <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    <span>🧴</span><span class="title">Shopping Assistant</span>
+    <span>🔍</span><span class="title">Smart Assistant</span>
   </div>
 
   <div class="chat">
