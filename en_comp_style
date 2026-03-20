@@ -1,64 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Competent · Shampoo Shopping Assistant</title>
 <link rel="preload" as="image" href="./g150-daily.png">
 <style>
-  :root{
-    --blue-25:#f4f8ff; --blue-100:#e4f0ff; --blue-200:#caddff; --blue-500:#5aa3ff; --purple:#6f5df5;
-    --text:#0f1a2b; --muted:#4a5b70; --w:420px; --radius:12px;
-    --shadow:0 10px 28px rgba(15,26,43,.10);
+  :root {
+    --blue-25: #f4f8ff; --blue-100: #e4f0ff; --blue-200: #caddff; --blue-500: #5aa3ff; --purple: #6f5df5;
+    --text: #0f1a2b; --muted: #4a5b70; --w: 420px; --radius: 12px;
+    --shadow: 0 10px 28px rgba(15,26,43,.10);
   }
-  *{box-sizing:border-box}
-  body{margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center;
-       background:linear-gradient(180deg,#d8e9ff,#f4f8ff);
-       font-family:Inter,Segoe UI,system-ui,Arial; color:var(--text);}
-  .phone{width:var(--w); height:760px; border-radius:28px; overflow:hidden; background:#fff; box-shadow:var(--shadow); border:10px solid #2c394a}
-  .header{height:72px; display:flex; align-items:center; gap:10px; padding:0 16px; color:#fff;
-          background:linear-gradient(135deg,var(--purple),var(--blue-500))}
-  .header .dot{width:10px;height:10px;border-radius:50%;background:#fff3}
-  .title{font-weight:800;}
-  .chat{height:calc(100% - 72px); overflow-y:auto; padding:16px; background:#f8fafc;}
-  .row{display:flex; margin:10px 0}
-  .bot{justify-content:flex-start} .user{justify-content:flex-end}
-  .bubble{max-width:80%; padding:14px 16px; line-height:1.5; border-radius:var(--radius); box-shadow:0 2px 4px rgba(0,0,0,.05)}
-  .bot .bubble{background:#fff; border:1px solid var(--blue-200); color:var(--text)} 
-  .user .bubble{background:#2c394a; color:#fff}
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+    background: linear-gradient(180deg, #d8e9ff, #f4f8ff);
+    font-family: Inter, Segoe UI, system-ui, Arial; color: var(--text);
+  }
+  .phone {
+    width: var(--w); height: 760px; border-radius: 28px; overflow: hidden;
+    background: #fff; box-shadow: var(--shadow); border: 10px solid #2c394a;
+  }
+  .header {
+    height: 72px; display: flex; align-items: center; gap: 10px; padding: 0 16px; color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--blue-500));
+  }
+  .header .dot { width: 10px; height: 10px; border-radius: 50%; background: #fff3; }
+  .title { font-weight: 800; }
+  .chat { height: calc(100% - 72px); overflow-y: auto; padding: 16px; background: #f8fafc; }
+  .row { display: flex; margin: 10px 0; }
+  .bot { justify-content: flex-start; }
+  .user { justify-content: flex-end; }
+  .bubble {
+    max-width: 80%; padding: 14px 16px; line-height: 1.5; border-radius: var(--radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+  }
+  .bot .bubble { background: #fff; border: 1px solid var(--blue-200); color: var(--text); } 
+  .user .bubble { background: #2c394a; color: #fff; }
 
-  .analysis h4{margin:0 0 6px; font-size:14px; font-weight:800; color:#1a3a5f;}
-  .analysis ul{margin:6px 0 0 18px; color:#4a5b70; font-size:13px;}
-  .analysis p{margin:10px 0 0; color:#2c394a; font-weight:600;}
+  .analysis h4 { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: #1a3a5f; }
+  .analysis ul { margin: 6px 0 0 18px; color: #4a5b70; font-size: 13px; }
+  .analysis p { margin: 10px 0 0; color: #2c394a; font-weight: 600; }
 
-  .card{background:#fff; border:1px solid var(--blue-200); border-radius:12px; padding:16px}
-  .pill{display:inline-flex; align-items:center; gap:8px; background:#f1f5f9; padding:4px 10px; border-radius:4px; font-size:11px; font-weight:700; color:#475569}
-  .pill img{width:18px;height:18px;border-radius:2px;object-fit:cover}
-  .card h3{margin:12px 0 8px; font-size:17px;}
-  .card p{margin:6px 0; color:#334155; font-size:14px}
-  .product{display:block; width:min(85%,300px); height:auto; margin:10px auto 12px; border-radius:6px; border:1px solid #e2e8f0;}
+  .card { background: #fff; border: 1px solid var(--blue-200); border-radius: 12px; padding: 16px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9;
+    padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; color: #475569;
+  }
+  .pill img { width: 18px; height: 18px; border-radius: 2px; object-fit: cover; }
+  .card h3 { margin: 12px 0 8px; font-size: 17px; }
+  .card p { margin: 6px 0; color: #334155; font-size: 14px; }
+  .product {
+    display: block; width: min(85%, 300px); height: auto; margin: 10px auto 12px;
+    border-radius: 6px; border: 1px solid #e2e8f0;
+  }
 
-  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:14px; }
-  .btn{ padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer; border:none; }
-  .btn.try{ background:#2c394a; color:#fff; }
-  .btn.skip{ background:#fff; color:#64748b; border:1px solid #e2e8f0; }
+  .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+  .btn { padding: 10px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; }
+  .btn.try { background: #2c394a; color: #fff; }
+  .btn.skip { background: #fff; color: #64748b; border: 1px solid #e2e8f0; }
 </style>
 </head>
 <body>
-<div class="phone" role="application">
+<div class="phone">
   <div class="header">
     <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     <span>🧴</span><span class="title">Shopping Assistant</span>
   </div>
-
   <div class="chat">
     <div class="row bot"><div class="bubble">
       Please describe your product requirements for a precise recommendation based on formulation data.
     </div></div>
-
     <div class="row user"><div class="bubble">
       I'm looking for something gentle and refreshing.
     </div></div>
-
     <div class="row bot"><div class="bubble analysis">
       <h4>Analysis results:</h4>
       <ul>
@@ -67,13 +82,11 @@
       </ul>
       <p>Identifying optimal match based on product profile.</p>
     </div></div>
-
     <div class="row bot"><div class="bubble card">
-      <span class="pill">G150 Daily Shampoo</span>
+      <span class="pill"><img src="./g150-daily.png" alt="">G150 Daily Shampoo</span>
       <img class="product" src="./g150-daily.png" alt="Daily Shampoo">
       <h3>Daily Shampoo</h3>
       <p><b>Optimal match identified.</b> This product is formulated with natural-origin ingredients verified for daily use. It provides efficient cleansing with a fresh finish.</p>
-      
       <div class="actions">
         <button class="btn try">Select Item</button>
         <button class="btn skip">Skip</button>
