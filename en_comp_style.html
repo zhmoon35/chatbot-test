@@ -44,4 +44,54 @@
   .card p{margin:6px 0; color:#27445f}
   .product{display:block; width:min(85%,320px); height:auto; margin:10px auto 12px; border-radius:10px; border:1px solid #dfe8f7; background:#fff}
 
-  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px
+  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; flex-wrap:wrap; }
+  .btn{ padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; border:none; }
+  .btn.try{
+    background:linear-gradient(135deg, var(--blue-500), var(--purple));
+    color:#fff; box-shadow:0 6px 18px rgba(15,26,43,.14);
+  }
+  .btn.skip{
+    background:#fff; color:#294055; border:1px solid var(--blue-200);
+  }
+</style>
+</head>
+<body>
+<div class="phone" role="application">
+  <div class="header">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <span>🧴</span><span class="title">Shopping Assistant</span>
+  </div>
+
+  <div class="chat">
+    <div class="row bot"><div class="bubble">
+      Please describe your product requirements. <b>This system will analyze your criteria</b> and provide a precise recommendation based on formulation data.
+    </div></div>
+
+    <div class="row user"><div class="bubble">
+      I'm looking for something gentle and refreshing.
+    </div></div>
+
+    <div class="row bot"><div class="bubble analysis">
+      <h4>Analysis results:</h4>
+      <ul>
+        <li>Objective: Hypoallergenic daily cleansing</li>
+        <li>Feature: Scalp refresh formulation</li>
+      </ul>
+      <p><b>Identifying optimal match based on clinical profile.</b></p>
+    </div></div>
+
+    <div class="row bot"><div class="bubble card">
+      <span class="pill"><img src="./g150-daily.png" alt="">G150 Daily Shampoo</span>
+      <img class="product" src="./g150-daily.png" alt="Daily Shampoo">
+      <h3>Daily Shampoo</h3>
+      <p><b>Optimal match identified.</b> This product is formulated with natural-origin ingredients <b>scientifically verified for daily use.</b> It provides <b>high-efficiency cleansing</b> with a fresh finish.</p>
+      
+      <div class="actions">
+        <button class="btn try">Select Item</button>
+        <button class="btn skip">Dismiss</button>
+      </div>
+    </div></div>
+  </div>
+</div>
+</body>
+</html>
