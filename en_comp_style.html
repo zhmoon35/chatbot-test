@@ -9,8 +9,8 @@
     --blue-25:#f4f8ff; --blue-50:#eef6ff; --blue-100:#e4f0ff; --blue-150:#d8e9ff; --blue-200:#caddff; --blue-500:#5aa3ff; --purple:#6f5df5;
     --text:#0f1a2b; --muted:#4a5b70; --w:420px; --radius:18px;
     --shadow:0 10px 28px rgba(15,26,43,.10), 0 2px 8px rgba(15,26,43,.06);
-    /* 확실한 짙은 남색 정의 */
-    --navy-dark: #1a2b4b;
+    /* 현대적인 네이비 색상 정의 */
+    --modern-navy: #1a2b4b;
   }
   *{box-sizing:border-box}
   body{margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center;
@@ -25,17 +25,17 @@
   .row{display:flex; margin:10px 0}
   .bot{justify-content:flex-start} .user{justify-content:flex-end}
   
-  /* 글자 크기와 레이아웃 따뜻함 버전과 동일하게 통일 */
+  /* 텍스트 크기 및 간격 따뜻함 버전과 1:1 매칭 */
   .bubble{max-width:78%; padding:14px 16px; line-height:1.6; border-radius:var(--radius); box-shadow:0 2px 6px rgba(15,26,43,.06); font-size: 15px;}
   
-  /* 봇 말풍선: 따뜻함 버전과 동일한 하늘색 */
+  /* 봇 말풍선 스타일 */
   .bot .bubble{background:var(--blue-100) !important; color:var(--text) !important; border:none !important;} 
   
-  /* 사용자 말풍선: 요청하신 짙은 남색 반영 */
-  .user .bubble{background:var(--navy-dark) !important; color:#ffffff !important;}
+  /* 사용자 말풍선: 현대적 네이비 강제 적용 */
+  .user .bubble{background-color: var(--modern-navy) !important; color:#ffffff !important;}
 
   .analysis h4{margin:0 0 6px; font-size:15px; font-weight:800; color:#24364f}
-  .analysis ul{margin:6px 0 0 18px; color:#2e4663}
+  .analysis ul{margin:6px 0 0 18px; color:#4a5b70; font-size:13px;}
   .analysis p{margin:10px 0 0; color:#36506d}
   .card{background:#fff; border:1px solid var(--blue-200); border-radius:16px; padding:16px}
   .pill{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--blue-200); padding:6px 10px; border-radius:999px; font-size:12px; color:#5a6a7a}
@@ -84,7 +84,7 @@
       <span class="pill"><img src="./g150-daily.png" alt="">G150 Daily Shampoo</span>
       <img class="product" src="./g150-daily.png" alt="Daily Shampoo">
       <h3>Daily Shampoo</h3>
-      <p><b>Optimal match identified.</b> This product is formulated with natural-origin ingredients <b>scientifically verified for daily use.</b> It provides <b>high-efficiency cleansing</b> with a fresh finish.</p>
+      <p><b>Optimal match identified.</b> This product is formulated with natural-origin ingredients <b>scientifically verified for daily use.</b> It provides <b>optimized low-irritation cleansing</b> with a fresh finish.</p>
       
       <div class="actions">
         <button class="btn try">Select Item</button>
