@@ -46,3 +46,54 @@
   .pill img{width:18px;height:18px;border-radius:50%;object-fit:cover}
   .card h3{margin:12px 0 8px; font-size:18px; color:#5a372a}
   .card p{margin:8px 0; color:var(--muted); font-size:14px}
+
+  .product{
+    display:block; width:min(85%,320px); height:auto; margin:10px auto 14px;
+    border-radius:15px; border:1px solid #f0c7a4; background:#fff
+  }
+
+  .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:14px }
+  .btn{ padding:10px 16px; border-radius:12px; font-weight:700; cursor:pointer; border:none }
+  .btn.try{
+    background:linear-gradient(135deg, var(--apricot), #ffbb8e);
+    color:#5a372a; box-shadow:0 4px 12px rgba(255,187,142,.4)
+  }
+  .btn.skip{ background:#fff; color:#5a6a7a; border:1px solid var(--blue-200) }
+</style>
+</head>
+<body>
+<div class="phone" role="application">
+  <div class="header">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <span>🧴</span><span class="title">Friendly Hair Assistant</span>
+  </div>
+
+  <div class="chat">
+    <div class="row bot"><div class="bubble">
+      👋 Greetings!^^ This is your personal hair care assistant by G150. I am so happy to welcome you! I'll take great care of you. How may I help you today?
+    </div></div>
+
+    <div class="row user"><div class="bubble">
+      I'm looking for something gentle and refreshing.
+    </div></div>
+
+    <div class="row bot"><div class="bubble">
+      <b>Wow! 😊</b> Thanks so much for sharing—that really helps me a lot! <b>Oh, it sounds like</b> you’d love something that’s kind to your scalp and leaves your hair feeling fresh. I’ve got a gentle option I think you’ll really like! ✨
+    </div></div>
+
+    <div class="row bot"><div class="bubble card">
+      <span class="pill">
+        <img src="./g150-daily.png" alt="">Daily Shampoo
+      </span>
+      <img class="product" src="./g150-daily.png" alt="Daily Shampoo">
+      <h3>Daily Shampoo</h3>
+      <p>🌿 <b>Wow, this is it!</b> Made with plenty of natural ingredients, it feels gentle enough to use every day and leaves your hair feeling wonderfully fresh.</p>
+      <div class="actions">
+        <button class="btn try">Try this</button>
+        <button class="btn skip">Skip</button>
+      </div>
+    </div></div>
+  </div>
+</div>
+</body>
+</html>
